@@ -42,7 +42,7 @@ class Real extends Common
         foreach ($real as $value){
             $realdata[$value['NAME']] = $value['VALUE'];
         }*/
-        $conn=odbc_connect('KingHistorian','sa','sa');
+        $conn=odbc_connect('kinghistory','sa','sa');
         if (!$conn)
         {
             exit("连接失败: " . $conn);
@@ -119,7 +119,7 @@ class Real extends Common
 //        echo json_encode($realdata,JSON_UNESCAPED_UNICODE);die;
 
         $pars = 'QS_'.$name.'_'.$zone;  //区分 T LT
-        $conn=odbc_connect('KingHistorian','sa','sa');
+        $conn=odbc_connect('kinghistory','sa','sa');
         if (!$conn)
         {
             exit("连接失败: " . $conn);
@@ -200,7 +200,7 @@ class Real extends Common
 //        echo json_encode($realdata,JSON_UNESCAPED_UNICODE);die;
 
         $pars = 'QS_'.$name.'_'.$zone;  //区分 T LT
-        $conn=odbc_connect('KingHistorian','sa','sa');
+        $conn=odbc_connect('kinghistory','sa','sa');
         if (!$conn)
         {
             exit("连接失败: " . $conn);
@@ -250,7 +250,7 @@ class Real extends Common
         $zone = $this->request->param('zone');
         $name = $this->request->param('name');
         $pars = 'QS_'.$name.'_'.$zone; //区分 T LT
-        $conn=odbc_connect('KingHistorian','sa','sa');
+        $conn=odbc_connect('kinghistory','sa','sa');
         if (!$conn)
         {
             exit("连接失败: " . $conn);
@@ -485,7 +485,7 @@ class Real extends Common
     public function get_s_logs()
     {
         $sensor = $this->request->param('sensor');
-        $conn=odbc_connect('KingHistorian','sa','sa');
+        $conn=odbc_connect('kinghistory','sa','sa');
         if (!$conn)
         {
             exit("连接失败: " . $conn);
@@ -524,7 +524,7 @@ class Real extends Common
     public function get_sensor()
     {
         $sensor = $this->request->param('sensor');
-        $conn=odbc_connect('KingHistorian','sa','sa');
+        $conn=odbc_connect('kinghistory','sa','sa');
         if (!$conn)
         {
             exit("连接失败: " . $conn);
