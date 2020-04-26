@@ -813,7 +813,7 @@
         var realtime_IP = $('#realtime_IP').val();
         $.ajax({
             // url:realtime_IP+"/real/real_time?zone="+zones,
-            url:"http://192.168.10.18/real/real_time?zone="+zones,
+            url:"http://192.168.10.18:9000/real/real_time?zone="+zones,
             async:false,
             success:function(result){
                 result = JSON.parse(result);
@@ -891,7 +891,7 @@
         // console.dir(name);
         $.ajax({
             // url:realtime_IP+"/real/real_times?name=QS_O2_XC13S",
-            url:"http://192.168.10.18/real/real_times?zone="+zone+"&name="+name,
+            url:"http://192.168.10.18:9000/real/real_times?zone="+zone+"&name="+name,
             async:false,
             success:function(result){
                 let jsonObj = $.parseJSON(result);
@@ -913,8 +913,8 @@
         // console.dir(realtime_IP);
         $.ajax({
             // url:realtime_IP+"/real/get_last_real?name=QS_O2_XC13S",
-            // url:"http://192.168.10.18/real/get_last_real?name=QS_O2_XC13S",
-            url:"http://192.168.10.18/real/get_last_real?zone="+zone+"&name="+name,
+            // url:"http://192.168.10.18:9000/real/get_last_real?name=QS_O2_XC13S",
+            url:"http://192.168.10.18:9000/real/get_last_real?zone="+zone+"&name="+name,
             async:false,
             success:function(result){
 
