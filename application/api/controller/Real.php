@@ -48,7 +48,7 @@ class Real extends Common
             exit("连接失败: " . $conn);
         }
 
-        $sql="SELECT * FROM realtime where TagName like 'T_%".$zone."%'";
+        $sql="SELECT * FROM realtime where TagName like 'WIN-JR1ULRL6E5T_%%".$zone."%'";
         $rs=odbc_exec($conn,$sql);
 
         if (!$rs)
