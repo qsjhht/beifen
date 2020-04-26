@@ -48,7 +48,7 @@ class Real extends Common
             exit("连接失败: " . $conn);
         }
 
-        $sql="SELECT * FROM realtime where TagName like 'WIN-JR1ULRL6E5T_%%".$zone."%'";
+        $sql="SELECT * FROM realtime where TagName like 'WIN-JR1ULRL6E5T_%".$zone."%'";
         $rs=odbc_exec($conn,$sql);
 
         if (!$rs)
@@ -118,7 +118,7 @@ class Real extends Common
 //        }
 //        echo json_encode($realdata,JSON_UNESCAPED_UNICODE);die;
 
-        $pars = 'T_'.$name.'_'.$zone;  //区分 T LT
+        $pars = 'WIN-JR1ULRL6E5T_'.$name.'_'.$zone;  //区分 T LT
         $conn=odbc_connect('kinghistory','sa','sa');
         if (!$conn)
         {
@@ -199,7 +199,7 @@ class Real extends Common
 //        }
 //        echo json_encode($realdata,JSON_UNESCAPED_UNICODE);die;
 
-        $pars = 'T_'.$name.'_'.$zone;  //区分 T LT
+        $pars = 'WIN-JR1ULRL6E5T_'.$name.'_'.$zone;  //区分 T LT
         $conn=odbc_connect('kinghistory','sa','sa');
         if (!$conn)
         {
@@ -249,7 +249,7 @@ class Real extends Common
     {
         $zone = $this->request->param('zone');
         $name = $this->request->param('name');
-        $pars = 'T_'.$name.'_'.$zone; //区分 T LT
+        $pars = 'WIN-JR1ULRL6E5T_'.$name.'_'.$zone; //区分 T LT
         $conn=odbc_connect('kinghistory','sa','sa');
         if (!$conn)
         {
@@ -491,7 +491,7 @@ class Real extends Common
             exit("连接失败: " . $conn);
         }
 
-        $sql="SELECT top 7200 * FROM history where TagName like 'T_".$sensor."%' and DataTime > '2019-10-10' order by DataTime desc";
+        $sql="SELECT top 7200 * FROM history where TagName like 'WIN-JR1ULRL6E5T_".$sensor."%' and DataTime > '2019-10-10' order by DataTime desc";
         $rs=odbc_exec($conn,$sql);
 
         if (!$rs)
@@ -529,7 +529,7 @@ class Real extends Common
         {
             exit("连接失败: " . $conn);
         }
-        $sql="SELECT * FROM realtime where TagName like 'T_".$sensor."%'";
+        $sql="SELECT * FROM realtime where TagName like 'WIN-JR1ULRL6E5T_".$sensor."%'";
         $rs=odbc_exec($conn,$sql);
 
         if (!$rs)
