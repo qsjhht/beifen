@@ -491,7 +491,7 @@ class Real extends Common
             exit("连接失败: " . $conn);
         }
 
-        $sql="SELECT top 7200 * FROM history where TagName like 'WIN-JR1ULRL6E5T_".$sensor."%' and DataTime > '2019-10-10' order by DataTime desc";
+        $sql="SELECT top 500 * FROM history where TagName like '".$sensor."_%' and DataTime > '2019-10-10' order by DataTime desc";
         $rs=odbc_exec($conn,$sql);
 
         if (!$rs)
