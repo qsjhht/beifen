@@ -490,8 +490,12 @@ class Real extends Common
         {
             exit("连接失败: " . $conn);
         }
+        //一天所有数据
+        $count="SELECT * FROM realtime where TagName like '".$sensor."_%'";
+        $num = odbc_num_rows (odbc_exec($conn,$count));
+        $nums = $num * 60 * 24;
 
-        $sql="SELECT top 500 * FROM history where TagName like '".$sensor."_%' order by DataTime desc";
+        $sql="SELECT top $nums * FROM history where TagName like '".$sensor."_%' order by DataTime desc";
         $rs=odbc_exec($conn,$sql);
 
         if (!$rs)
@@ -502,10 +506,12 @@ class Real extends Common
         while (odbc_fetch_row($rs))
         {
 //            dump(odbc_result($rs,"DataValue"));
-            $water_arr[odbc_result($rs,"DataTime")][] =odbc_result($rs,"DataValue");
-            $logs['l_max'][odbc_result($rs,"DataTime")] = max($water_arr[odbc_result($rs,"DataTime")]);
-            $logs['l_min'][odbc_result($rs,"DataTime")] = min($water_arr[odbc_result($rs,"DataTime")]);
-            $logs['l_avg'][odbc_result($rs,"DataTime")] = array_sum($water_arr[odbc_result($rs,"DataTime")])/count($water_arr[odbc_result($rs,"DataTime")]);
+            if (odbc_result($rs,"DataValue") < 9000){
+                $water_arr[odbc_result($rs,"DataTime")][] =odbc_result($rs,"DataValue");
+                $logs['l_max'][odbc_result($rs,"DataTime")] = max($water_arr[odbc_result($rs,"DataTime")]);
+                $logs['l_min'][odbc_result($rs,"DataTime")] = min($water_arr[odbc_result($rs,"DataTime")]);
+                $logs['l_avg'][odbc_result($rs,"DataTime")] = array_sum($water_arr[odbc_result($rs,"DataTime")])/count($water_arr[odbc_result($rs,"DataTime")]);
+            }
         }
         odbc_close($conn);
         foreach ($logs['l_max'] as $time => $l_max) {
@@ -539,8 +545,10 @@ class Real extends Common
         $water_arr = array();
         while (odbc_fetch_row($rs))
         {
-            $water_arr[] =odbc_result($rs,"DataValue");
-            $date_time = odbc_result($rs,"DataTime");
+            if(odbc_result($rs,"DataValue") < 9000){
+                $water_arr[] =odbc_result($rs,"DataValue");
+                $date_time = odbc_result($rs,"DataTime");
+            }
         }
         odbc_close($conn);
 
