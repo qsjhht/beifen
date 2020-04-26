@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>报警日志详情</title>
+    <link rel="stylesheet" href="__STATIC__/new/inno/common.css">
+    <link rel="stylesheet" href="__STATIC__/layui/css/layui.css">
+    <link rel="stylesheet" href="__STATIC__/new/inno/police.css">
+</head>
+<body class="backg">
+<div class="wrap">
+    <div class='main'>
+        <!-- 弹窗 -->
+        <div class="mask">
+            <div class="layer">
+                <!-- header -->
+                <!-- 内容 -->
+                <div class="layerMiddle scrollber" style="overflow-y:auto;">
+                    <ul class="layerUl" >
+
+                            <li class="layui-row policeBorder">
+                            <ul class="layui-row">
+                                <li class="layui-col-md3">
+                                    时间：<span>{$details['alarm_time']}</span>
+                                </li>
+                                <li class="layui-col-md3">
+                                    类型：<span>{$details['typecontent']}</span>
+                                </li>
+                                <li class="layui-col-md3">
+                                    系统：<span>{$details['parent']}</span>
+                                </li>
+                                <li class="layui-col-md3">
+                                    设备：<span>{$details['cate_name']}</span>
+                                </li>
+                            </ul>
+                            <ul class="layui-row">
+                                <li class="layui-col-md3">
+                                    报警编码：<span>{$details['alarm_code']}</span>
+                                </li>
+                                <li class="layui-col-md3">
+                                    报警内容：<span>{$details['codecontent']}</span>
+                                </li>
+                                <li class="layui-col-md3">
+                                    报警级别：<span>{$details['lvlcontent']}</span>
+                                </li>
+                                <li class="layui-col-md3">
+                                    处置方法：<span>{$details['manage_type']}</span>
+                                </li>
+                            </ul>
+                            <ul class="layui-row">
+                                <li class="layui-col-md3">
+                                    处置状态：<span>{$details['is_manage']}</span>
+                                </li>
+                                <li class="layui-col-md3">
+                                    GIS位置：<span>{$details['eqpt_site']}</span>
+                                </li>
+                                <li class="layui-col-md6">
+                                    处置说明：<span>{$details['rec_details']}</span>
+                                </li>
+                            </ul>
+                            <ul class="layui-row">
+                                <li class="layui-col-md3">
+                                    详细说明：<span>{$details['remark']}</span>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

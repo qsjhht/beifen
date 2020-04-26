@@ -1,0 +1,482 @@
+body,html{
+    height:100%;
+}
+*{
+    margin:0;
+    padding:0;
+    font-size:14px;
+    color:#00FFFF;
+    font-weight:400;
+}
+a{
+    text-decoration: none
+}
+/*背景图*/
+.backg{
+    background:url(../image/a.jpg);
+    width:100%;
+    height:100%;
+    background-size:100%;
+    overflow:hidden;
+}
+/*内容*/
+.wrap{
+    margin:0.3% auto;
+    width:98%;
+    height:99%;
+}
+/*一级菜单*/
+.header{
+    background:url(../image/b.png);
+    width:100%;
+    background-size:100% 100%;
+    position:relative;
+}
+/*文本居中*/
+
+
+/*设置*/
+.header .headerUl{
+    font-size:0;
+}
+.header .headerUl li{
+    display:inline-block;
+    vertical-align: top;
+    width:3.6%;
+    text-align:center;
+    margin-top:0.3%;
+    cursor:pointer;
+}
+.header .headerUl li img{
+    width:17px;
+    height:17px;
+    position:relative;
+    top:-1px;
+}
+.header .headerUl li:nth-child(1){
+    margin-left:88.5%;
+}
+.header .headerUl span{
+    display:inline;
+    position:relative;
+    top:5px;
+}
+/*一级菜单-----------------------------------------------------------------------------------------------------*/
+.headerNav{
+    padding:1.2% 0;
+    font-size:0;
+    border:1px
+}
+.headerNav li{
+    font-size:16px;
+    display:inline-block;
+    vertical-align: top;
+    width:7.3%;
+    text-align:center;
+    /* list-style:none; */
+    cursor:pointer;
+    margin-top:0.1%
+}
+.headerNav li a{
+    display:inline-block;
+    padding:4px 0;
+    width:100%;
+}
+.headerNav li:nth-child(1){
+    width:24.3%;
+    border:0;
+    font-size:18px;
+    cursor:default;
+    position:relative;
+    top:-7px;
+}
+.headerNav li:nth-child(20){
+    width:6%;
+}
+.img0{
+    width:33px;
+    height:25px;
+    position:relative;
+    top:-1px;
+    right:3px;
+}
+.img1{
+    width:18px;
+    height:18px;
+}
+.headerNav span{
+    display:inline;
+    position:relative;
+    top:8px;
+}
+.headerNav li:nth-child(n+2):nth-child(-n+19):hover{
+    outline:1px solid #247998;
+    box-shadow: 0 0 6px #247998 inset;
+}
+.outline{
+    outline:1px solid #247998;
+    box-shadow: 0 0 6px #247998 inset;
+}
+/*动画--------------------------------------------------------------------------------------*/
+.wire{
+    width:80px;
+    height:1px;
+    position:absolute;
+    background:linear-gradient(to right, #247998,#00FFFF, #247998);
+}
+#wire1{
+    left:26%;
+    top:23%;
+    animation:myWire1 5s ease 0s infinite ;
+}
+#wire2{
+    left:5%;
+    top:92%;
+    animation:myWire2 4s ease 0s infinite ;
+}
+#wire3{
+    left:69%;
+    top:92%;
+    animation:myWire3 3s ease 0s infinite ;
+}
+
+@keyframes myWire1{
+    0%{left:26%;top:23%}
+    50%{left:50%;top:23%}
+    100%{left:26%;top:23%}
+}
+@keyframes myWire2{
+    0%{left:5%;top:92%}
+    50%{left:25%;top:92%}
+    100%{left:5%;top:92%}
+}
+@keyframes myWire3{
+    0%{left:69%;top:92%}
+    50%{left:82%;top:92%}
+    100%{left:69%;top:92%}
+}
+
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+/*外边框*/
+.main{
+    margin-top:0.5%;
+    width:100%;
+    height:89%;
+    font-size:0;
+}
+/*背景*/
+.mainBor{
+    border:1px solid #113c58;
+    background:rgba(00,03,11,0.4)
+}
+
+/*左边框------------------------------------------------------------------------------------------------------------------*/
+.mainLeft{
+    height:100%;
+    width:15.6%;
+    display:inline-block;
+    vertical-align: top;
+}
+.main .mainLeft ul{
+    margin:5%;
+}
+.main .mainLeft ul li{
+    width:100%;
+    height:45px;
+    line-height: 45px;
+    text-align:center;
+    cursor:pointer;
+}
+
+.main .mainLeft ul li:hover{
+    outline:1px solid #247998;
+    box-shadow: 0 0 6px #247998 inset;
+}
+.main .mainLeft ul span{
+    margin:0 auto;
+    display:block;
+    width:70%;
+    height:1px;
+    background: linear-gradient(to right,#010a18,#00ffff,#010a18)
+}
+/*----------------内容--------------------------------------------------------------------------------*/
+
+.main .mainMiddle{
+    width:83%;
+    height:100%;
+    /*display:inline-block;*/
+    vertical-align: top;
+    margin-left:1%;
+    display:none;
+}
+
+/*标题*/
+.middleNav{
+    padding:1%;
+}
+
+/*筛选页面*/
+.middleScreen{
+    border:0;
+    width:100%;
+    height:40px;
+    margin:0 0 1% 0;
+    cursor:pointer;
+}
+
+.middleScreen .middleAdd i{
+    color:#ffffff;
+}
+/*清除浮动*/
+.clear{
+    clear:both;
+}
+/*-----------------------------------------------下拉框格式-------------------------------------*/
+
+/*搜索图标*/
+.circle{
+    width:35px;
+    height:35px;
+    border-radius:100%;
+    background-color:#237a98;
+    display:inline-block;
+    vertical-align: top;
+    margin:3px 0;
+}
+.circle i{
+    font-weight:bold;
+    color:#ffffff;
+    line-height: 35px;
+    font-size:23px;
+}
+
+/*表格------------------------------------------------------------------------------------------*/
+.mainTable{
+    width:96%;
+    margin:0 auto;
+    overflow-y:auto;
+    height:82.7%;
+}
+
+/*-------------------------------------------滚动条样式-------------------------------------------------------*/
+.scrollber::-webkit-scrollbar{
+    width:5px;
+}
+/*方块的样式*/
+.scrollber::-webkit-scrollbar-thumb{
+    border-radius: 5px;
+    background-color:#001e29;
+}
+.scrollber{
+    scrollbar-base-color:#001e29;
+}
+
+
+.mainTable table{
+    width:99%;
+}
+
+.mainTable table tr{
+    height:40px;
+}
+
+.mainTable table tr th{
+    color:#ffffff;
+    font-weight:400;
+}
+.mainTable table tr:nth-child(even){
+    background-color:rgba(47,69,84,0.3);
+}
+.mainTable table .tableNav {
+    background-color:rgba(47,69,84,0.3);
+}
+.mainTable table .tableNav th{
+    color:#00FFFF;
+}
+.mainTable table tbody:nth-child(2) tr:hover{
+    background-color:#237b99;
+}
+
+.mainMiddle .mainTable table tr th:last-child{
+    width:20%;
+}
+
+.butAsk{
+    color:#57bef6;
+    cursor:pointer;
+}
+.butRedact{
+    color:#96e471;
+    cursor:pointer;
+}
+.butRemove{
+    color:#e66d6f;
+    cursor:pointer;
+}
+ .butClear{
+    color:#b87b1e;
+    cursor:pointer;
+}
+.butWhite{
+    color:#ffffff;
+    cursor:pointer;
+}
+
+.mainMiddle .mainTable table tr th:last-child button{
+    background:0;
+    border:0;
+    margin: 0 15px;
+}
+
+/*---------------------------------分页面------------------------------------*/
+
+.page{
+    margin:0 auto;
+    text-align:center;
+    width:96%;
+    height:6%;
+}
+
+/*---------------------------------弹窗--------------------------------*/
+
+.mask{
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background-color:rgba(00,00,00,0.4);
+    display:none;
+}
+
+.layer{
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    margin:auto;
+    width:1080px;
+    height:700px;
+    background:url(../image/b1.png);
+    background-size:100% 100%;
+    border:1px solid #048ab6;
+    display:none
+}
+
+.layerMiddle{
+    height:650px;
+    width:100%;
+    overflow-y:auto;
+
+}
+
+.layerMiddle::-webkit-scrollbar {
+    width:10px;
+}
+
+/*方块的样式*/
+.layerMiddle::-webkit-scrollbar-thumb{
+    border-radius: 5px;
+    background-color:#001e29;
+}
+
+.layerMiddle form fieldset legend{
+    padding:1%;
+    color:#ffffff;
+    margin:auto;
+    font-size:16px;
+}
+/*头部*/
+.layerNav{
+    position:relative;
+    height:50px;
+    line-height:50px;
+    border-bottom:1px solid #048ab6;
+    padding-left:20px;
+}
+.layerNav .close{
+    position:absolute;
+    right:15px;
+    color:#ffffff;
+    cursor:pointer;
+    font-size:20px;
+    font-weight:bold;
+}
+
+/*---------------------------动画-----------------------------*/
+
+.animation{
+    animation:myAnim 2s linear 0s 1 normal;
+}
+
+@keyframes myAnim{
+    from{width:100%;height:0}
+    to{width:100%;height:250px}
+}
+/*----------------------------公用格式-------------------------------*/
+
+.cen{
+    text-align:left;
+    color:#ffffff;
+    padding-left:5px;
+}
+
+/*display*/
+.display{
+    display:inline-block;
+    vertical-align: top;
+}
+/*input*/
+.input{
+    height:30px;
+    width:172px;
+    border-radius: 10px;
+    border:1px solid #00FFFF;
+    background-color:#cccfd1;
+    color:#000000;
+    margin:5px 0 0 0;
+    padding:0 14px;
+}
+/*select*/
+.select{
+    height:30px;
+    width:200px;
+    border-radius: 10px;
+    border:1px solid #00FFFF;
+    color:#000000;
+    margin-top:5px;
+    padding:0 14px;
+    appearance:none;
+    -moz-appearance:none;
+    -webkit-appearance:none;
+    background: url("../image/sanjiao.png") no-repeat right center;
+    background-color:#cccfd1;
+}
+
+.select::-ms-expand{
+    display:none;
+}
+.select optgroup{
+    color:#3e4147;
+}
+.select option{
+    color:#000000;
+}
+
+/*button*/
+.middleAdd{
+    border:0;
+    width:85px;
+    height:30px;
+    border-radius:35px;
+    background-color: #cb8624;
+    color:#ffffff;
+    cursor:pointer;
+    float:right;
+}
+.middleAdd i{
+    color:#ffffff;
+}
+

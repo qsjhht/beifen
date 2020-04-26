@@ -1,0 +1,211 @@
+{extend name="eqpt_layout"/}
+
+{block name="main"}
+<link rel="stylesheet" href="/static/css/eqpt.css">
+
+<div class="mainMiddle mainBor"  style="display:inline-block;width: 100%;border: 0px">
+    <!--标题-->
+    <div class="middleNav">
+        <i class="layui-icon">&#xe653;</i> &nbsp;
+        值班考勤
+    </div>
+    <div class="mainTable scrollber">
+        <div>
+            <div id="nowTime" style="font-size: 25px;color: #00FFFF;font-weight: 400;"></div>
+        </div>
+
+        <input type="hidden" id="u_id" class="layui-input" value="{$Uid}">
+        <input type="hidden" id="u_name" class="layui-input" value="{$Uname}">
+
+        <table lay-filter="parse-table-demo">
+            <thead>
+            <tr>
+                <th lay-data="{field:'order', width:300}">登记次序</th>
+                <th lay-data="{field:'type', width:300}">登记类型</th>
+                <th lay-data="{field:'time_range', width:300}">值班时间</th>
+                <th lay-data="{field:'d_line', Width: 300}">打卡规定时间</th>
+                <th lay-data="{field:'c_time', minWidth: 300}">登记时间</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>第一次登记</td>
+                <td>上班签到</td>
+
+                <td>{$Time_range}</td>
+                <td>{$S_range}</td>
+
+                <td>{$Info.m_time}</td>
+
+
+            </tr>
+            <tr>
+                <td>第二次登记</td>
+                <td>下班签到</td>
+                <td>{$Time_range}</td>
+                <td>{$E_range}</td>
+
+                <td>{$Info.n_time}</td>
+
+
+            </tr>
+            </tbody>
+
+        </table>
+        <div align="center">
+            {if $Info.m_c}
+            <div class="layui-btn-group demoTable" style="margin-bottom: 10px;">
+                <button class="layui-btn" data-type="m_check">上班登记</button>
+            </div>
+            {else/}
+            <div class="layui-btn-group demoTable" style="margin-bottom: 10px;">
+            <button type="button" disabled class="layui-btn layui-btn-disabled"  lay-filter="m_check">上班登记</button>
+            </div>
+            {/if}
+
+            {if $Info.n_c}
+            <div class="layui-btn-group demoTable" style="margin-bottom: 10px;">
+                <button class="layui-btn" data-type="n_check">下班签退</button>
+            </div>
+            {else/}
+            <div class="layui-btn-group demoTable" style="margin-bottom: 10px;">
+            <button type="button" disabled class="layui-btn layui-btn-disabled" >下班签退</button>
+            </div>
+            {/if}
+        </div>
+
+    </div>
+</div>
+{/block}
+
+{block name="script"}
+<script>
+    layui.use(['table','form','layer'], function(){
+        var table = layui.table,
+            form = layui.form,
+            layer = layui.layer;
+
+        var $ = layui.$, active = {
+            n_check: function(){
+                console.dir('adf');
+                $.post('{:url("attendance/sign")}', { 'check': 'n_check'}, function(data) {
+                    //layer.msg(data.msg);
+                    if (data.code == 1) {
+                        if (data.url) {
+                            layer.msg(data.msg + ' 页面即将自动跳转~');
+                        } else {
+                            layer.msg(data.msg);
+                        }
+                        setTimeout(function() {
+                            if (data.url) {
+                                location.href = data.url;
+                            } else {
+                                location.reload();
+                            }
+                        }, 1500);
+                    } else {
+                        layer.msg(data.msg + ' 页面即将自动刷新~');
+                        setTimeout(function() {
+                            location.reload();
+                        }, 1000);
+                    }
+
+                });
+            },
+
+            m_check: function(){
+                // var start = $('#start').val();
+                // console.dir(start);
+                $.post('{:url("attendance/sign")}', { 'check': 'm_check'}, function(data) {
+                    //layer.msg(data.msg);
+                    if (data.code == 1) {
+                        if (data.url) {
+                            layer.msg(data.msg + ' 页面即将自动跳转~');
+                        } else {
+                            layer.msg(data.msg);
+                        }
+                        setTimeout(function() {
+                            if (data.url) {
+                                location.href = data.url;
+                            } else {
+                                location.reload();
+                            }
+                        }, 1500);
+                    } else {
+                        layer.msg(data.msg + ' 页面即将自动刷新~');
+                        setTimeout(function() {
+                            location.reload();
+                        }, 1000);
+                    }
+
+                });
+            }
+        };
+        $('.demoTable .layui-btn').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+
+
+
+        $(function () {
+            table.init('parse-table-demo', { //转化静态表格
+                //height: 'full-500'
+            });
+        });
+
+        /*$('#set_add').on('click', function() {
+            layer.open({
+
+                title:"新增排班信息",
+                type: 2,
+                offset: ['15px', '60px'],
+                area: ['1070px', '655px'],
+                fixed: true, //不固定
+                maxmin: true,
+                content: ['{:url("attendance/set_add")}', 'no'],
+                shade: [0.8, '#393D49']
+                /!*cancel: function(){
+                    //右上角关闭回调  刷新父页面
+                    window.parent.location.reload();
+                    //return false 开启该代码可禁止点击该按钮关闭
+                }*!/
+            })
+        });*/
+    });
+    var newDate = '';
+    getLangDate();
+    //值小于10时，在前面补0
+    function dateFilter(date) {
+        if (date < 10) { return "0" + date; }
+        return date;
+    }
+
+    var u_name = $('#u_name').val();
+
+
+    function getLangDate() {
+        var dateObj = new Date(); //表示当前系统时间的Date对象
+        var year = dateObj.getFullYear(); //当前系统时间的完整年份值
+        var month = dateObj.getMonth() + 1; //当前系统时间的月份值
+        var date = dateObj.getDate(); //当前系统时间的月份中的日
+        var day = dateObj.getDay(); //当前系统时间中的星期值
+        var weeks = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
+        var week = weeks[day]; //根据星期值，从数组中获取对应的星期字符串
+        var hour = dateObj.getHours(); //当前系统时间的小时值
+        var minute = dateObj.getMinutes(); //当前系统时间的分钟值
+        var second = dateObj.getSeconds(); //当前系统时间的秒钟值
+        var timeValue = "" + ((hour >= 12) ? (hour >= 18) ? "晚上" : "下午" : "上午"); //当前时间属于上午、晚上还是下午
+        newDate = dateFilter(year) + "年" + dateFilter(month) + "月" + dateFilter(date) + "日 " + " " + dateFilter(hour) + ":" + dateFilter(minute) + ":" + dateFilter(second);
+        console.dir(u_name);
+        if(u_name == undefined || u_name == ''){
+            document.getElementById("nowTime").innerHTML = timeValue + "好！请先登录！ 本地时间为： " + newDate + "　" + week;
+        }else{
+            document.getElementById("nowTime").innerHTML = u_name+ "&nbsp;,&nbsp;  " + timeValue + "好！ 本地时间为： " + newDate + "　" + week;
+        }
+        setTimeout("getLangDate()", 1000);
+    }
+</script>
+{/block}

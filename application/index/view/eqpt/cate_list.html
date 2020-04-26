@@ -1,0 +1,214 @@
+{extend name="sub_layout"/}
+{block name="main"}
+<link rel="stylesheet" href="/static/css/eqpt.css">
+<style>
+    ::-webkit-scrollbar {
+        display: block;
+        width:15px;
+    }
+    ::-webkit-scrollbar-thumb{
+        border-radius: 5px;
+        background-color:#001e29;
+    }
+    .scrollber{
+        scrollbar-base-color:#001e29;
+    }
+</style>
+<div class="layui-card">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div class="mainMiddle mainBor"  style="display:inline-block;width: 100%;border: 0px">
+                <div class="middleNav">
+                    <i class="layui-icon">&#xe653;</i> &nbsp;
+                    设备设置
+                </div>
+
+                <div class="layui-form-item" style="margin-top: 35px">
+                    <div class="layui-inline">
+                    </div>
+                </div>
+
+                <!--<div class="middleScreen" style="top: 65px;right: 20px">-->
+                    <!--<button class="middleAdd" style="margin-right:20vh;" id="cate_add"><i class="layui-icon">&#xe654</i>&nbsp;添加</button>-->
+                <!--</div>-->
+                <div class="middleScreen" style="position: absolute;top: 65px;right: 20px">
+                    <button class="middleAdd" id="cate_add"><i class="layui-icon">&#xe654</i>&nbsp;添加</button>
+                </div>
+                <div class="mainTable scrollber">
+                    <div>
+                        <!--<div class="layui-inline">-->
+                            <table class="layui-table" id="table" lay-filter="table"></table>
+                        <!--</div>-->
+                    </div>
+
+                    <!--<table class="layui-hide" id="table" lay-filter="table"></table>-->
+                    <script type="text/html" id="barTool">
+                        {{#  if(d.has_sub ==0){ }}
+                        <a class="layui-btn layui-btn-xs operBtn" lay-event="details">详情</a>
+                        <a class="layui-btn layui-btn-xs operBtn" lay-event="cate_edit">编辑</a>
+                        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+                        {{# }if(d.has_sub !==0) { }}
+                        <a class="layui-btn layui-btn-xs operBtn" lay-event="details">详情</a>
+                        <a class="layui-btn layui-btn-xs operBtn" lay-event="cate_edit">编辑</a>
+                        {{#  } }}
+                    </script>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{/block}
+{block name="script"}
+<script type="text/html" id="forlvl">
+    {{#  if(d.has_sub !==0){ }}
+    <span style="color: #00F000;">{{d.has_sub}}</span>
+    {{#  } }}
+</script>
+<script type="text/html" id="forshow">
+    {{#  if(d.isShow ==1){ }}
+    <span style="color: #00F000;">显示</span>
+    {{# }if(d.isShow ==0) { }}
+    <span style="color: #F00000;">隐藏</span>
+    {{#  } }}
+</script>
+<script type="text/html" id="foralarm">
+    {{#  if(d.is_alarm ==1){ }}
+    <span style="color: #00F000;">是</span>
+    {{# }if(d.is_alarm ==0) { }}
+    <span style="color: #F00000;">否</span>
+    {{#  } }}
+</script>
+<script>
+    layui.use('table', function() {
+        var table = layui.table,
+            $ = layui.$;
+        table.render({
+            elem: '#table',
+            url: '{:url("index/eqpt/cate_list")}',
+            // width: 1200,
+            cols: [
+                [
+                    // { field: 'listorder', width: 70, title: '排序', edit: 'text' },
+                    { field: 'id', width: '5%', title: 'ID' },
+                    { align: 'right',width: '30%', field: 'cate_name', title: '系统/设备名称' },
+                    { field: 'isShow', width: '25%', title: '状态',templet:'#forshow' },
+                    { field: 'is_alarm', width: '10%', title: '是否报警',templet:'#foralarm' },
+                    { field: 'has_sub', width: '10%', title: '下属设备个数',templet:'#forlvl' },
+                    { fixed: 'right', width: '20%', title: '操作', toolbar: '#barTool' }
+                ]
+            ],
+        });
+        $('#Table-Refresh').on('click', function() {
+            table.reload("table");
+        });
+
+        //监听单元格编辑
+        table.on('edit(table)', function(obj) {
+            var value = obj.value,data = obj.data;
+            $.post('{:url("menu/listorder")}', { 'id': data.id,'value':value }, function(data) {
+                if (data.code == 1) {
+                    layer.msg(data.msg);
+                }else{
+                    layer.msg(data.msg);
+                }
+
+            })
+        });
+
+        $('#cate_add').on('click', function() {
+            layer.open({
+
+                title:"系统/设备新增",
+                type: 2,
+                offset: ['30px', '60px'],
+                area: ['1070px', '850px'],
+                fixed: true, //不固定
+                maxmin: true,
+                content: ['{:url("eqpt/cate_add")}', 'no'],
+                shade: [0.8, '#393D49'],
+                cancel: function(){
+                    //右上角关闭回调  刷新父页面
+                    var index = layer.open();
+                    layer.close(index);
+                    window.location.reload();
+                }
+            })
+        });
+
+        //监听行工具事件
+        table.on('tool(table)', function(obj) {
+            var data = obj.data;
+            //console.log(obj);
+            if (obj.event === 'del') {
+                layer.confirm('确定删除这条数据？', { icon: 3, title: '提示' }, function(index) {
+                    layer.close(index);
+                    $.post('{:url("eqpt/cate_del")}', { 'id': data.id }, function(data) {
+                        if (data.code == 1) {
+                            if (data.url) {
+                                layer.msg(data.msg + ' 页面即将自动跳转~');
+                            } else {
+                                layer.msg(data.msg);
+                            }
+                            setTimeout(function() {
+                                if (data.url) {
+                                    location.href = data.url;
+                                } else {
+                                    location.reload();
+                                }
+                            }, 1500);
+                        } else {
+                            layer.msg(data.msg);
+                            setTimeout(function() {
+                                if (data.url) {
+                                    location.href = data.url;
+                                }
+                            }, 1500);
+                        }
+
+                    });
+                });
+            } else if (obj.event === 'details') {
+                layer.open({
+
+                    title:"查看详情",
+                    type: 2,
+                    offset: ['30px', '60px'],
+                    area: ['1070px', '850px'],
+                    fixed: true, //不固定
+                    maxmin: true,
+                    content: ['{:url("eqpt/cate_details")}' + "?id=" + data.id],
+                    shade: [0.8, '#393D49'],
+                    // cancel: function(){
+                    //     //右上角关闭回调  刷新父页面
+                    //     var index = layer.open();
+                    //     layer.close(index);
+                    //     window.location.reload();
+                    // }
+                })
+
+            } else if (obj.event === 'cate_edit') {
+                layer.open({
+
+                    title:"编辑 系统/设备",
+                    type: 2,
+                    offset: ['30px', '60px'],
+                    area: ['1070px', '850px'],
+                    fixed: true, //不固定
+                    maxmin: true,
+                    content: ['{:url("eqpt/cate_edit")}' + "?id=" + data.id],
+                    shade: [0.8, '#393D49'],
+                    cancel: function(){
+                        //右上角关闭回调  刷新父页面
+                        var index = layer.open();
+                        layer.close(index);
+                        window.location.reload();
+                    }
+                })
+            }
+        });
+    });
+</script>
+{/block}

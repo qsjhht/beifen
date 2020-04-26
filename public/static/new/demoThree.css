@@ -1,0 +1,240 @@
+*{
+        margin:0;
+        padding:0;
+    }
+    .mainBor{
+	/*border:1px solid red;*/
+        border:1px solid #113c58;
+        background:rgba(00,03,11,0.4)
+	
+    }
+    body{
+        background:url('../../../static/new/image/back.png');
+        background-size:100%;
+        overflow:hidden;
+        color:#FFFFFF;
+    }
+    /*��Ч*/
+    .special{
+        height:2vh;
+    }
+    .special div{
+        position:absolute;
+        margin-top:1.5vh;
+        width:45%;
+        height:2px;
+        background-color:#00ffff;
+     }
+    /*top*/
+    .mainTop{
+        display:flex;
+        width:100vw;
+        height:49.5vh;
+    }
+    .topLeft{
+        width:48.5vw;
+        margin:1.2vh 0 1.2vh 0.9vw;
+    }
+    .topRight{
+        width:48.5vw;
+        margin:1.2vh 0 1.2vh 0.9vw;
+    }
+    .contentRobot{
+        height:15vh
+    }
+    .contentFirm{
+        margin-top:1.2vh;
+        height:30.5vh;
+    }
+        /*������*/
+        .robot{
+            padding:10px 10px;
+            color:#00ffff;
+            position:relative;
+            font-size:16px;
+        }
+        .robotTob{
+            width:90%;
+            height:10vh;
+            margin:0 auto;
+            position:relative;
+            top:-10px;
+            overflow-y: auto;
+        }
+        .robotToble{
+            width:100%;
+        }
+        .robotToble tr{
+            height:23px;
+        }
+        .robotToble tr:hover{
+            background-color: #237b99;
+        }
+        .robotToble tr th{
+            font-weight:400;
+        }
+        .robotHide{
+            margin-top:2.5vh;
+            width:48.3vw;
+            position:absolute;
+            height:30.5vh;
+            border:1px solid #00ffff;
+            background-color:#000000;
+            z-index: 50;
+        }
+	.robotClass{
+	    colo:#ffffff;
+	}
+        /*������ҵ*/
+        .firmContent{
+            display:flex;
+            width:90%;
+            height:24vh;
+            margin:0 auto;
+            justify-content:center;
+        }
+        /* ��� */
+        .firmLeft{
+            width:48%;
+        }
+        .firmConLeft{
+            width:100%;
+            height:50px;
+            margin:4px 0;
+            position:relative;
+            padding-top:3vh;
+	
+        }
+        .firmConText{
+            padding:10px 0;
+        }
+        .firmConMain{
+            width:100%; 
+            height:12px;
+            font-size:0;
+        }
+        .firmConBack{
+            margin-left:2px;
+            background-color:#00ffff;
+            height:12px;
+        }
+        .firmConMain span{
+            font-size:11px;
+        }
+        .display{
+            display:inline-block;
+            vertical-align: top;
+        }
+
+        /* �ֽ��� */
+        .firmMiddle{
+            width:1px;
+            background-color:#ffffff;
+            margin:0 5px;
+        }
+        /* �ұ� */
+        .firmRight{
+            width:48%;
+        }
+        /* �ϱ� */
+        #firmConTop{
+            position:absolute;
+            width:100px;
+            height:100px;
+            background-color:rgba(99,99,99,1);
+            display:none;
+            border-radius:3px;
+            padding:5px;
+	    z-index:20;
+        }
+    /*bottom*/
+    .mainBot{
+        display:flex;
+        width:100vw;
+        height:48.5vh;
+    }
+    .borLeft{
+        width:48.5vw;
+        height: 47.2vh;
+        margin-left:0.9vw;
+    }
+        .borTitle{
+            padding:10px;
+            position:relative;
+            color:#00ffff;
+        }
+        .borTitle select{
+            position:absolute;
+            right:10px;
+            height:30px;
+            width:120px;
+            border-radius:3px;
+            border:1px solid #00ffff;
+            appearance:none;
+            -moz-appearance:none;
+            -webkit-appearance:none;
+            background-color:#000000;
+            color:#FFFFFF;
+	    text-align:center;
+	    text-align-last:center;
+        }
+        .borCont{
+            height:43vh;
+        }
+    .borRight{
+        width:48.5vw;
+        height: 47.2vh;
+        margin-left:0.9vw;
+    }
+    .borUl{
+        font-size:0.8rem;
+        position:absolute;
+        right:0;
+        display:inline-block;
+        vertical-align: top;
+        color:#999999;
+        margin-right:1vw;
+    }
+    .borUl li{
+        display:inline-block;
+        vertical-align: top;
+        padding:0 4px;
+        cursor:pointer;
+    }
+    .borUl li:hover{
+        color:#00ffff;
+        border-bottom: 2px solid #00ffff;
+    }
+    .borUlClass{
+        border-bottom: 2px solid #00ffff;
+        color:#00ffff;
+    }
+    .patrolTob{
+        width:90%;
+        height:10vh;
+        margin:0 auto;
+        position:relative;
+        top:-10px;
+        overflow-y: auto;
+        visibility: hidden;
+        display: none;
+    }
+    .isshow{
+        visibility: visible;
+        display: block;
+    }
+    /*��������ʽ*/
+    .scrollber::-webkit-scrollbar{
+        width:5px;
+    }
+    /*�������ʽ*/
+    .scrollber::-webkit-scrollbar-thumb{
+        border-radius: 5px;
+        background-color:#001e29;
+    }
+    .scrollber{
+        scrollbar-base-color:#001e29;
+    }
+    .vidicon{
+        cursor:pointer;
+    }

@@ -1,0 +1,322 @@
+{extend name="eqpt_layout"/}
+<style type="text/css">
+    .my-skin .layui-layer-btn a {
+        background-color: #84c101;
+        border: 1px solid #84c101;
+        color: #FFF;
+    }
+</style>
+{block name="main"}
+<link rel="stylesheet" href="/static/css/eqpt.css">
+
+<div class="mainMiddle mainBor"  style="display:inline-block;width: 100%;border: 0px">
+    <!--标题-->
+    <div class="middleNav">
+        <i class="layui-icon">&#xe653;</i> &nbsp;
+        排班管理
+    </div>
+
+    <div class="middleScreen" style="top: 65px;right: 20px">
+        <button class="middleAdd" id="set_add"><i class="layui-icon">&#xe654</i>&nbsp;添加</button>
+    </div>
+
+
+    <div class="mainTable scrollber">
+
+        <table class="layui-table" id="ledger" lay-filter="eqpt_show"></table>
+        <script type="text/html" id="barDemo">
+            <a class="layui-btn layui-btn-xs operBtn" lay-event="details">详情</a>
+            <a class="layui-btn layui-btn-xs operBtn" lay-event="edit">编辑</a>
+            <a class="layui-btn layui-btn-danger layui-btn-xs operBtn" lay-event="del">删除</a>
+        </script>
+    </div>
+</div>
+{/block}
+
+{block name="script"}
+<script>
+    layui.use(['table','form','layer'], function(){
+        var table = layui.table,
+            form = layui.form,
+            layer = layui.layer;
+        //创建arr对象  ps：关联数组无法转换成json
+        //arr = {"Installed":true,"unerected":true,"normal":true,"fault":true,"scrap":true};
+        //监听提交
+
+        /*form.on('checkbox(check)', function(obj){
+            //将checkbox 值遍历后转为json 待传值
+            for(var item in arr){
+                if(item == this.name){
+                    arr[item] = obj.elem.checked;
+                }
+            }
+            console.dir(arr);
+            console.dir('Installed :'+arr['Installed']);
+            console.dir('unerected :'+arr['unerected']);
+            console.dir('normal :'+arr['normal']);
+            console.dir('fault :'+arr['fault']);
+            console.dir('scrap :'+arr['scrap']);
+            table.reload('ledger', {
+                where: {
+                    Installed:arr['Installed'],
+                    unerected:arr['unerected'],
+                    normal:arr['normal'],
+                    fault:arr['fault'],
+                    scrap:arr['scrap']
+                } //设定异步数据接口的额外参数
+            });
+            return false;
+            //console.log(JSON.stringify(arr).toString());
+            //console.log(data.elem.checked); //是否被选中，true或者false
+            //console.log(data.value); //复选框value值，也可以通过data.elem.value得到
+            //console.log(data.othis); //得到美化后的DOM对象
+        });*/
+        //监听表格复选框选择
+        /*table.on('checkbox(switch_lamp)', function(obj){
+         //console.log(obj);
+         layer.tips(this.value + ' ' + this.name + '：'+ obj.elem.checked, obj.othis);
+        });*/
+//变更设备状态
+        /*form.on('switch(switch_lamp)', function(obj){
+          //layer.tips(this.name + '：'+ obj.elem.checked, obj.othis);
+          var id = eval(this.name);
+          var status;
+          obj.elem.checked ? status="1" : status="0";
+          //var status = eval(obj.elem.checked);
+              //console.log(id);
+              //console.log("////");
+              //console.log(status);
+              var loding = layer.load(0);
+          $.post('{:url("eqpt_management/changestatus")}', { 'id': id,'status':status}, function(data) {
+                console.log(data);
+                if (data.code == 1) {
+                    if (data.url) {
+                        layer.close(loding);
+                        layer.msg(data.msg + ' 页面即将自动刷新~');
+                    } else {
+                        layer.close(loding);
+                        layer.msg(data.msg);
+                    }
+                    setTimeout(function() {
+                        if (data.url) {
+                            location.href = data.url;
+                        } else {
+                            location.reload();
+                        }
+                    }, 1500);
+                } else {
+                    layer.close(loding);
+                    layer.msg(data.msg);
+                    setTimeout(function() {
+                       location.reload();
+                    }, 1500);
+                }
+            });
+        });*/
+        //监听工具条
+        table.render({
+            elem: '#ledger' //指定原始表格元素选择器（推荐id选择器）
+            ,height:  'full-140' //容器高度
+            ,url: '{:url("index/attendance/set")}'
+            ,page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
+                //layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] //自定义分页布局
+                //,curr: 5 //设定初始在第 5 页
+                groups: 5 //只显示 1 个连续页码
+                //,first: false //不显示首页
+                ,limit: 10 //每页显示数量
+                ,limits: [5, 10, 20, 30, 40]  //每页条数的选择项
+                //,last: false //不显示尾页
+//                ,theme:'#00ffff'
+            }
+            ,cols: [[
+                //,{field:'floor_id',title:'分层ID', width:110, sort: true}
+                {field:'p_name',title:'计划名称'/*,width:180*/}
+                ,{field:'d_name',width:180,align:'center',title:'值班室'}
+                /*,{field:'co_linker_post',align:'center', title: '联系人职务', width: 100}*/
+                ,{field:'date_range',/*width:120,*/align:'center',title:'日期'}
+                ,{field:'time_range',/*width:120,*/align:'center',title:'时间'}
+                ,{field:'producer',width:90,align:'center',title:'计划人'}
+                ,{align:'center',title:'操作', toolbar: '#barDemo'}
+            ]
+            ] //设置表头
+            //,…… //更多参数参考右侧目录：基本参数选项
+            /*,done:function(res,curr,count){
+                var img_show = null; // tips提示
+                $("td span p").hover(function(){
+                    img_show = layer.tips('点击修改设备状态！', this,{
+                        tips:[1, 'rgba(41,41,41,.8)']
+                    });
+                },function(){
+                    layer.close(img_show);
+                });
+            }*/
+        });
+        table.on('tool(eqpt_show)', function(obj) {
+            var data = obj.data;
+            if (obj.event === 'edit') {
+                //console.dir('aaaa');
+                //window.open('{:url("eqpt/eqpt_details")}' + "?id=" + data.eqpt_id, '_self');
+                layer.open({
+                    title:"编辑排班信息",
+                    type: 2,
+                    offset: ['100px', '130px'],
+                    area: ['1070px', '655px'],
+                    fixed: true, //不固定
+                    maxmin: true,
+                    content: ['{:url("attendance/set_edit")}' + "?p_id=" + data.p_id],
+                    shade: [0.8, '#393D49'],
+                    /*cancel: function(){
+                        //右上角关闭回调  刷新父页面
+                        window.parent.location.reload();
+                        //return false 开启该代码可禁止点击该按钮关闭
+                    }*/
+                });
+            }else if (obj.event === 'details') {
+                /*window.open('{:url("eqpt_management/details")}' + "?id=" + data.id, '_self');*/
+                //iframe层-父子操作
+                //alert(data.id);
+                layer.open({
+                    title:"排班详情",
+                    type: 2,
+                    offset: ['100px', '130px'],
+                    area: ['1070px', '655px'],
+                    fixed: true, //不固定
+                    maxmin: true,
+                    content: ['{:url("attendance/set_details")}' + "?p_id=" + data.p_id],
+                    shade: [0.8, '#393D49'],
+                    /* cancel: function(){
+                     //右上角关闭回调  刷新父页面
+                     window.parent.location.reload();
+                     //return false 开启该代码可禁止点击该按钮关闭
+                     }*/
+                });
+
+            }else if(obj.event === 'del'){
+                layer.confirm('确定删除该排班信息？', { icon: 3, title: '提示' }, function(index) {
+                    // console.dir(data.co_id);
+                    $.post('{:url("attendance/set_del")}', { 'p_id': data.p_id }, function(data) {
+                        //layer.msg(data.msg);
+                        if (data.code == 1) {
+                            if (data.url) {
+                                layer.msg(data.msg + ' 页面即将自动跳转~');
+                            } else {
+                                layer.msg(data.msg);
+                            }
+                            setTimeout(function() {
+                                if (data.url) {
+                                    location.href = data.url;
+                                } else {
+                                    location.reload();
+                                }
+                            }, 1500);
+                        } else {
+                            layer.msg(data.msg + ' 页面即将自动刷新~');
+                            setTimeout(function() {
+                                location.reload();
+                            }, 1000);
+                        }
+
+                    });
+                });
+
+            }
+        });
+        /*var $ = layui.$, active = {
+            reload: function(){
+                var demoReload = $('#demoReload');
+                console.dir(demoReload.val());
+                table.reload('ledger', {
+                    where: {
+                        id:demoReload.val()
+                    } //设定异步数据接口的额外参数
+                });
+            }
+        };*/
+        /*$('.demoTable .layui-btn').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });*/
+        /*   //获取选中信息
+           function getCheckData(){
+               //获取分组设备数据
+               var closeSelect = table.checkStatus('idTest')
+                   ,data = closeSelect.data;
+               for (var i = data.length - 1; i >= 0; i--) {
+                   lamps += data[i]['lamp_ids'].substring(1);
+               }
+               lamps = lamps.substring(0, lamps.length - 1);
+           }*/
+        /*//分组变更设备状态
+        function changeGroup(status)
+        {
+            //console.log(lamps+'///////'+status);
+            var loding = layer.load(0);
+            $.post('{:url("eqpt_management/changegroup")}', { 'ids': lamps ,'status': status }, function(data) {
+                //console.log(data);
+                if (data.code == 1) {
+                    layer.close(loding);
+                    if (data.url) {
+                        layer.msg(data.msg,
+                            {
+                                icon: 1,
+                                time: 1000 //1秒关闭（如果不配置，默认是3秒）
+                            });
+                    } else {
+                        layer.msg(data.msg,
+                            {
+                                icon: 1,
+                                time: 2000 //1秒关闭（如果不配置，默认是3秒）
+                            });
+                    }
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1000);
+                } else {
+                    layer.close(loding);
+                    layer.msg(data.msg,
+                        {
+                            icon: 2,
+                            time: 1000 //1秒关闭（如果不配置，默认是3秒）
+                        });
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1000);
+                }
+            });
+        };
+        $('#Table-Refresh').on('click', function() {
+            layer.confirm('此操作耗时较久，请耐心等待！', { icon: 3, title: '提示' }, function(index) {
+                var loding = layer.load(0);
+                $.post('{:url("eqpt_management/refresh")}', { }, function(data) {
+                    layer.close(loding);
+                    layer.msg(data.msg);
+                    location.reload();
+                });
+            });
+        });
+        $('.demoTable .layui-btn').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+*/
+        $('#set_add').on('click', function() {
+            layer.open({
+
+                title:"新增排班信息",
+                type: 2,
+                offset: ['15px', '60px'],
+                area: ['1070px', '655px'],
+                fixed: true, //不固定
+                maxmin: true,
+                content: ['{:url("attendance/set_add")}', 'no'],
+                shade: [0.8, '#393D49']
+                /*cancel: function(){
+                    //右上角关闭回调  刷新父页面
+                    window.parent.location.reload();
+                    //return false 开启该代码可禁止点击该按钮关闭
+                }*/
+            })
+        });
+    });
+</script>
+{/block}

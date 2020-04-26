@@ -1,0 +1,203 @@
+{extend name="eqpt_layout"/}
+<body class="backg">
+{block name="main"}
+<link rel="stylesheet" href="/static/css/equipment.css">
+<link rel="stylesheet" href="/static/css/eqpt.css">
+<style>
+    .layui-form-label{width:90px;}
+</style>
+<div class="mainMiddle mainBor"  style="display:inline-block;width: 100%;border: 0px;background-image: url('/static/image/bgSmall.png')">
+    <!--设备台账-->
+    <div class="layerMiddle divCenter">
+        <div class="layerNav">
+            <div class="floatLeft">
+                <i class="layui-icon">&#xe653;</i> &nbsp;
+                入廊施工详情
+            </div>
+        </div>
+        <div class="scrollber" >
+            <form class="layui-form" action="" method="post">
+                <!--&lt;!&ndash;左上角图片&ndash;&gt;
+                <div class="layerImage"  id="test1">
+                    <div class="image3D" id="image3D" >
+                        <p>点击上传设备图片</p>
+                        <img src="/static/image/camera.png" alt="" width="120" height="120" id="demo2">
+                    </div>
+                    &lt;!&ndash; <button type="button" class="layui-btn" id="test1">
+                         <i class="layui-icon">&#xe67c;</i>上传图片
+                     </button>&ndash;&gt;
+
+                    <div class="canvas">
+                        <img src="/static/image/camera_1.png" alt="" width="17" height="15" id="img1">
+                        <canvas id="3D"></canvas>
+                    </div>
+                </div>-->
+                <!--<div class="layui-upload-drag" id="test10">
+                    <i class="layui-icon"></i>
+                    <p>点击上传，或将文件拖拽到此处</p>
+                </div>-->
+                <!--右上角信息-->
+                <div class="layui-show-md-inline-block">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label" style="float: left">入廊企业名称</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="co_name" disabled placeholder="{$Info.co_name}" style="width: 650px"  class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label" style="float: left">企业类型</label>
+                            <input type="text" name="co_legal" disabled placeholder="{$Info.type_name}" autocomplete="off" class="layui-input">
+                        </div>
+                        <!--<div class="layui-inline">
+                            <label class="layui-form-label">法人代表</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="co_legal" placeholder="请输入法人代表姓名" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>-->
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">联系人</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="co_linker" disabled placeholder="{$Info.co_linker}" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label" style="float: left">联系电话</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="co_phone" disabled placeholder="{$Info.co_phone}" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">联系人职务</label>
+                            <input type="text" name="co_linker_post" disabled placeholder="{$Info.co_linker_post}" autocomplete="off" class="layui-input">
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label" style="float: left">入廊起点</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="co_name" disabled placeholder="{$Info.en_start}" style="width: 650px"  class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label" style="float: left">入廊终点</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="co_name" disabled placeholder="{$Info.en_end}" style="width: 650px"  class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">入廊长度</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="en_long" disabled placeholder="{$Info.en_long}" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label" style="float: left">经办人</label>
+                            <input type="text" name="user" disabled placeholder="{$Info.nickname}" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label" style="float: left">施工企业名称</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="wo_name" disabled placeholder="{$Info.wo_name}" style="width: 650px"  autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">联系人</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="wo_linker" disabled placeholder="{$Info.wo_linker}" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label" style="float: left">联系电话</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="wo_phone" disabled placeholder="{$Info.wo_phone}" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">联系人职务</label>
+                            <input type="text" name="wo_linker_post" disabled placeholder="{$Info.wo_linker_post}" autocomplete="off" class="layui-input">
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">施工人数</label>
+                            <input type="text" name="wo_num" disabled placeholder="{$Info.wo_num}" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label"   style="float: left">计划施工时间</label>
+                            <input type="text" name="wo_plan" disabled placeholder="{$Info.wo_plan}" autocomplete="off" class="layui-input">
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label"   style="float: left">实际施工时间</label>
+                            <input type="text" name="wo_real" disabled placeholder="{$Info.wo_real}" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+
+
+                    <!--底部信息-->
+                    <!--<div class="layui-form-item" style="display: none">
+                        <label class="layui-form-label" style="float: left">设备位置</label>
+
+
+                        <label class="layui-form-label">IP地址</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="eqpt_IP_address" placeholder="请输入设备IP地址" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>-->
+
+
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">备注信息</label>
+                        <div class="layui-input-block" style="width: 650px">
+                            <textarea name="en_remark" disabled placeholder="" class="layui-textarea">{$Info.wo_remark}</textarea>
+                        </div>
+                    </div>
+                </div>
+                <!--<fieldset class="layui-elem-field layui-field-title">
+                </fieldset>
+                <div class="addParets" id='parts'  data-type="openSelect">
+                    <i class="layui-icon">&#xe654;</i>
+                    添加配件
+                </div>
+                <fieldset class="layui-elem-field layui-field-title">
+                </fieldset>-->
+
+            </form>
+        </div>
+    </div>
+</div>
+{/block}
+
+{block name="script"}
+{/block}
+</body>

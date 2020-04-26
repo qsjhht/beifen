@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>运行管理</title>
+    <link rel="icon" type="" href="/static/home/images/video/logo2.png">
+    <link rel="stylesheet" href="/static/home/css/run/run.css">
+    <link rel="stylesheet" href="/static/home/css/navigation.css">
+    <script src="/static/home/js/jquery-1.7.1.min.js"></script>
+    <script src="/static/home/js/run/libs/SuperMap.Include.js"></script>
+    <script>
+        /*setInterval('refresh()',5000);
+        function refresh(){
+            $.ajax({
+                url:'__APP__/home/eqpt/temp',
+                type:'POST',
+                async:true,    //或false,是否异步
+                success:function(result){
+
+                    //eval() 函数可计算某个字符串，并执行其中的的 JavaScript 代码。
+                    //在这里是将String转化为数组形式
+                    //var  datas= eval(result);
+                    temp1 = result.split(',')[0],
+                        temp2 = result.split(',')[1],
+                        temp3 = result.split(',')[2],
+                        //var temp = document.getElementById("temp"); //获取某一个div元素
+                        $("#temp1").html(temp1); //将该Div元素的原有内容清空
+                    $("#temp2").html(temp2); //将该Div元素的原有内容清空
+                    $("#temp3").html(temp3); //将该Div元素的原有内容清空
+                    /!*var accessCount = datas[0]; //获取数组第一个内容
+                     for(i=0; i<accessCount.length; i++){ //遍历该数组
+                     var div = document.createElement("div"); //创建一个div元素
+                     div.className = "lishi0"; //为该div元素指定class
+                     var img = document.createElement("img"); //创建一个img元素
+                     img.className = "lishi3-1";
+                     img.src = "img/lishi1.png"; //为该img元素指定src属性
+                     var p = document.createElement("p"); //创建一个p元素
+                     p.className = "lishi3-2";
+                     var txt = document.createTextNode(accessCount[i]); //创建一个文本内容
+                     p.appendChild(txt); //将该文本内容插入到p元素中
+                     div.appendChild(img); //将img元素插入到div元素中
+                     div.appendChild(p);
+                     temp.appendChild(div); //将这些元素插入到获取的div元素中
+                     }*!/
+                },
+                error: function (XMLHttpRequest, txtStatus, errorThrown)
+                {
+                    //alert(XMLHttpRequest + "<br>" + txtStatus + "<br>" + errorThrown);
+                }
+            });
+        }*/
+    </script>
+    <script type="text/javascript">
+
+        //声明变量 map、layer、urlhttp://localhost:8090/iserver/services/map-map/rest/maps/map
+        var map,layer,utfgrid,control,infowin,name,
+//            url = "http://192.168.1.191:8090/iserver/services/map-first/rest/maps/TrafficMap@BaiduMap";
+            url = 'http://192.168.10.18:8090/iserver/services/map-map/rest/maps/map'
+        //创建地图控件
+        function init() {
+            $("#hide").hover(function(){
+                $("#aaa").show();
+            });
+            function goto() {
+                location.href = "__APP__/home/eqpt/index";
+            }
+            map = new SuperMap.Map ("map",{controls:[
+                    /* new SuperMap.Control.ScaleLine(),
+                     new SuperMap.Control.PanZoomBar({showSlider:true}),
+                     new SuperMap.Control.LayerSwitcher(),*/
+                    new SuperMap.Control.Navigation({
+                        dragPanOptions: {
+                            enableKinetic: true
+                        }
+                    })],
+                projection: "EPSG:3857"
+            });
+            map.numZoomLevels = 5;
+            map.minZoom = 1;
+            map.addControl(new SuperMap.Control.MousePosition());
+            //map.addControl (new  SuperMap.Control.OverviewMap());
+            //创建分块动态 REST 图层，该图层显示 iserver 8C 服务发布的地图,
+            //其中"world"为图层名称，url 图层的服务地址，{transparent: true}设置到 url 的可选参数
+            layer = new SuperMap.Layer.TiledDynamicRESTLayer("map", url, {transparent: true}, {useCanvas: true, maxResolution:"auto"});
+
+            /*marks = new SuperMap.Layer.Vector("Vector Layer");
+             //青色
+             var point1_1 = new SuperMap.Geometry.Point(12757960.74672,4573586.48532);
+             var point1_2 = new SuperMap.Geometry.Point(12759390.77516,4573640.32495);
+             var point1_3 = new SuperMap.Geometry.Point(12759390.77516,4573640.32495);
+             var point1_4 = new SuperMap.Geometry.Point(12762857.58103,4573383.99471);
+             var geometry1 = new SuperMap.Geometry.LineString([point1_1,point1_2,point1_3,point1_4]);
+             //构建矢量要素覆盖物
+             var pointVector1 = new SuperMap.Feature.Vector(geometry1,{id:"1",name:"东门路管廊"},{ strokeColor: "#97FFFF",//"#red",212121
+             strokeWidth: 5,
+             pointerEvents: "visiblePainted",
+             fillColor: "#212121",
+             fillOpacity: 0.5 });
+
+             //灰色
+             var point2_1 = new SuperMap.Geometry.Point(12758878.89657,4575379.39318);
+             var point2_2 = new SuperMap.Geometry.Point(12758858.29040,4572421.59822);
+             var point2_3 = new SuperMap.Geometry.Point(12757354.90209,4570747.78183);
+             var geometry2 = new SuperMap.Geometry.LineString([point2_1,point2_2,point2_3]);
+             //构建矢量要素覆盖物
+             var pointVector2 = new SuperMap.Feature.Vector(geometry2,{id:"2",name:"西上泽大街管廊"},{ strokeColor: "#CCCCCC",//"#red",212121
+             strokeWidth: 5,
+             pointerEvents: "visiblePainted",
+             fillColor: "#212121",
+             fillOpacity: 0.5 });
+
+             //黄色
+             var point3_1 = new SuperMap.Geometry.Point(12757468.85911,4572434.57264);
+             var point3_2 = new SuperMap.Geometry.Point(12762866.93502,4572434.57264);
+             var geometry3 = new SuperMap.Geometry.LineString([point3_1,point3_2]);
+             //构建矢量要素覆盖物
+             var pointVector3 = new SuperMap.Feature.Vector(geometry3,{id:"3",name:"临济路管廊"},{ strokeColor: "#FFFF00",//"#red",212121
+             strokeWidth: 5,
+             pointerEvents: "visiblePainted",
+             fillColor: "#212121",
+             fillOpacity: 0.5 });
+
+             //蓝色
+             var point4_1 = new SuperMap.Geometry.Point(12760420.66313,4575469.35723);
+             var point4_2 = new SuperMap.Geometry.Point(12760420.66313,4572351.74958);
+             var point4_3 = new SuperMap.Geometry.Point(12759660.97415,4571027.88852);
+             var point4_4 = new SuperMap.Geometry.Point(12759574.70059,4570683.77232);
+             var geometry4 = new SuperMap.Geometry.LineString([point4_1,point4_2,point4_3,point4_4]);
+             //构建矢量要素覆盖物
+             var pointVector4 = new SuperMap.Feature.Vector(geometry4,{id:"4",name:"新城大道管廊"},{ strokeColor: "#0000FF",//"#red",212121
+             strokeWidth: 5,
+             pointerEvents: "visiblePainted",
+             fillColor: "#212121",
+             fillOpacity: 0.5 });
+
+             //绿色
+             var point5_1 = new SuperMap.Geometry.Point(12762777.67489,4575236.81519);
+             var point5_2 = new SuperMap.Geometry.Point(12762777.67489,4572131.19583);
+             var point5_3 = new SuperMap.Geometry.Point(12762230.45716,4570594.64397);
+             var point5_4 = new SuperMap.Geometry.Point(12762144.54115,4570221.00920);
+             var geometry5 = new SuperMap.Geometry.LineString([point5_1,point5_2,point5_3,point5_4]);
+             //构建矢量要素覆盖物
+             var pointVector5 = new SuperMap.Feature.Vector(geometry5,{id:"5",name:"太行大街管廊"},{ strokeColor: "#00FF00",//"#red",212121
+             strokeWidth: 5,
+             pointerEvents: "visiblePainted",
+             fillColor: "#212121",
+             fillOpacity: 0.5 });
+             marks.addFeatures([pointVector1,pointVector2,pointVector3,pointVector4,pointVector5]);*/
+//            utfgrid = new SuperMap.Layer.UTFGrid("UTFGridLayer",url,
+//                {
+//                    layerName: "New_Line@first#1",
+//                    utfTileSize: 256,
+//                    pixcell: 8,
+//                    isUseCache: false
+//                },
+//                {
+//                    utfgridResolution: 8
+//                });
+            utfgrid = new SuperMap.Layer.UTFGrid("UTFGridLayer",url,
+                {
+//                    layerName: "New_Line@first#1",
+                    layerName:'New_Line_1@googleLine2#1',
+                    utfTileSize: 256,
+                    pixcell: 8,
+                    isUseCache: false
+                },
+                {
+                    utfgridResolution: 8
+                });
+            controlClick = new SuperMap.Control.UTFGrid({
+                layers: [utfgrid],
+                callback: callbackClick,
+                handlerMode: "click"
+            });
+            controlMove = new SuperMap.Control.UTFGrid({
+                layers: [utfgrid],
+                callback: callbackMove,
+                handlerMode: "move"
+            });
+            map.addControl(controlClick);
+            map.addControl(controlMove);
+            layer.events.on({"layerInitialized": addLayer});
+        }
+        var callbackClick = function (infoLookup, loc, pixel) {
+            closeInfoWin();
+            if (infoLookup) {
+                var info;
+                for (var idx in infoLookup) {
+
+                    info = infoLookup[idx];
+                    if (info && info.data) {
+
+                        //$("#aaa").show();
+                        var id = info.data.SmUserID;
+                        switch (id){
+                            case "1" :
+                                name ="西上泽大街管廊";
+                                break;
+                            case "2":
+                                name = "新城大道管廊";
+                                break;
+                            case "3":
+                                name = "太行大街管廊";
+                                break;
+                            case "4":
+                                name = "东门路管廊";
+                                break;
+                            case "5":
+                                name = "临济路管廊";
+                                break;
+                        }
+                        window.parent.goBim();
+
+                        location.href = "__APP__/home/run/bim";
+                    }
+                }
+            }
+        };
+        var callbackMove = function (infoLookup, loc, pixel) {
+            closeInfoWin();
+            if (infoLookup) {
+                var info;
+                for (var idx in infoLookup) {
+
+                    info = infoLookup[idx];
+                    if (info && info.data) {
+
+                        var name;
+                        var id = info.data.SmUserID;
+
+                        switch (id){
+                            case "1" :
+                                name ="园博园管廊";
+                                break;
+                            case "2":
+                                name = "新城大道管廊";
+                                break;
+                            case "3":
+                                name = "太行大街管廊";
+                                break;
+                            case "4":
+                                name = "迎旭路管廊";
+                                break;
+                            case "5":
+                                name = "隆兴路管廊";
+                                break;
+                        }
+                        /*                        console.log($('#kuangjiaName').html());*/
+                        $('#kuangjiaName').html(name);
+                        $("#aaa").show();
+
+//                        map.div.style.cursor = "pointer";
+
+                        var dom = "<div style='font-size: 15px; color: #FF0000;'>" + name + "</div>";
+                        //设置x与y的像素偏移量，不影响地图浏览；
+                        var xOff = (1 / map.getScale()) * 0.001;
+                        var yOff = +(1 / map.getScale()) * 0.02;
+                        var pos = new SuperMap.LonLat(loc.lon+xOff, loc.lat+yOff);
+                        infowin = new SuperMap.Popup(
+                            "chicken",
+                            pos,
+                            new SuperMap.Size(10, 10),
+                            dom,
+                            false,
+                            null);
+                        infowin.closeOnMove = true;
+                        infowin.autoSize=true;
+                        map.addPopup(infowin);
+                    }
+                }
+            }
+        };
+
+        function closeInfoWin() {
+            if ($("#aaa").is(":visible")) {
+                try {
+                    $("#aaa").hide();
+                }
+                catch (e) {
+                }
+            }
+        }
+
+        function addLayer() {
+            var center = new SuperMap.LonLat(114.63000,38.12074);
+            //将 Layer 图层加载到 Map 对象上
+            map.addLayers([layer,utfgrid]);
+            //出图，map.setCenter 函数显示地图  设置中心点及缩放级别
+            map.setCenter(center, 1);
+            //加载要素选择器控件 绑定事件 hover 是否悬浮
+            /*selectFeature = new SuperMap.Control.SelectFeature(marks,
+             {
+             onSelect: OnFeatureSelect,
+             onUnselect: OnFeatureUnselect,
+             hover:true
+             });
+             //添加 激活
+             map.addControl(selectFeature);
+             selectFeature.activate();*/
+            utfgrid.maxExtent=layer.maxExtent;
+//            utfgrid2.maxExtent=layer.maxExtent;
+        }
+        /* function OnFeatureSelect(feature) {
+         var lat= feature.geometry.getBounds().getCenterLonLat().lat;
+         var lon= feature.geometry.getBounds().getCenterLonLat().lon;
+         var id = feature.attributes.id;
+         //console.log(lat);
+         var name = feature.attributes.name;
+         switch (id)
+         {
+         case "2":
+         lon += 780;
+         //alert(lon);
+         break;
+         case "4":
+         lon += 420;
+         //alert(lon);
+         break;
+         case "5":
+         lon += 350;
+         //alert(lon);
+         break;
+         }
+         //alert(id);
+         var popup = new SuperMap.Popup.FramedCloud(
+         "popwin",
+         new SuperMap.LonLat(lon,lat),
+         null,
+         name,
+         null,
+         false,
+         null);
+         vectorInfoWin = popup;
+         map.addPopup(popup);
+         }
+         function OnFeatureUnselect() {
+         if (vectorInfoWin) {
+         vectorInfoWin.hide();
+         vectorInfoWin.destroy();
+         }
+         }*/
+
+    </script>
+    <style>
+        .selec{
+            background-image: url('/static/home/images/setting/MenuGray.png');
+            background-repeat: no-repeat;
+            text-align:center;
+            line-height:35px;
+            width:150px;
+            font-size:13px;
+            height:35px;
+            float:right;
+            position:absolute;
+            top:20px;
+        }
+        .unselec{
+            background-image: url('/static/home/images/setting/MenuWhite.png');
+            background-repeat: no-repeat;
+            text-align:center;
+            line-height:35px;
+            width:150px;
+            font-size:13px;
+            height:35px;
+            float:right;
+            position:absolute;
+            top:20px;
+        }
+
+    </style>
+</head>
+<body onload="init()">
+<div class="webpage">
+
+    <!--主区-->
+    <div class="content">
+        <div class="content">
+            <div id="map" class="contentView border shadow"></div>
+            <div class="youkuangjia" id="aaa">
+                <div class="youkuangjia_1">
+                    <h3 id="kuangjiaName">园博园大街</h3>
+                    <h4>YBY-03号管廊</h4>
+                </div>
+                <div class="youkuangjia_2"><span>氧气</span><span id="temp1">20.11</span>%VOL</div>
+                <!-- <div class="youkuangjia_2"><span>硫化氢</span><span>33.05%VOL</span></div>
+                 <div class="youkuangjia_2"><span>甲烷</span><span>33.05%VOL</span></div>-->
+                <div class="youkuangjia_2"><span>温度</span><span id="temp2">33.05</span>℃</div>
+                <div class="youkuangjia_2"><span>湿度</span><span id="temp3">33.04</span>%</div>
+                <div class="youkuangjia_2"><span>电舱温度</span><span>33.05℃</span></div>
+                <div class="youkuangjia_2"><span>电舱电缆温度</span><span>33.05%℃</span></div>
+                <div class="youkuangjia_2" style="color: #ed482f;">电舱</div>
+                <div class="youkuangjia_2"><span>集水坑液位</span><span>33%</span></div>
+                <div class="youkuangjia_2" style="color: #ed482f;">水舱</div>
+                <div class="youkuangjia_2"><span>集水坑液位</span><span>33%</span></div>
+            </div>
+
+            <!--</div>-->
+
+        </div>
+    </div>
+</div>
+</body>
+<!--<script>
+    var bool = 0;
+//    var fso = new ActiveXObject('Scripting.FileSystemObject');
+//    var startTime,stopTime;
+    var obj = document.getElementById('obj');
+    var objLink = document.getElementById('objLink');
+    if(obj.object == null){
+        objLink.onclick = function () {
+//            alert('111')
+            location.href="/static/求实1.2.exe";
+        }
+    }
+    else{
+        console.log('控件已存在');
+        objLink.style.display = 'none';
+    }
+    function show_sub(v){
+        // alert(v);
+        switch (v) {
+            case '大华':
+                console.log(v);
+                obj.get_url('rtsp://admin:admin@192.168.1.108:554/cam/realmonitor?channel=1&subtype=0&unicast=true&proto=Onvif');
+                break;
+            case '海康':
+                obj.get_url('rtsp://admin:admin123@192.168.1.64:554/Streaming/Channels/101?transportmode=unicast&profile=Profile_1');
+            default:
+                break;
+        }
+    }
+
+//    document.getElementById('findDevBtn').onclick = function () {
+//        alert('触发了发现设备的按钮...');
+//        console.log(obj.video_dev());
+//    }
+//    document.getElementById('recordBtn').onclick = function () {
+////        alert('luciang ');
+//
+//
+//        var date = new Date;
+//        var year = date.getFullYear();
+//        var month = date.getMonth()+1;
+//        var day = date.getDate()
+//        var dirName = year+'.'+month+'.'+day;
+//        var dirPath = 'F:\\'+dirName;
+//
+//        //如果不存在就创建文件夹
+//        if(!fso.FolderExists(dirPath)){
+//            fso.CreateFolder(dirPath)
+//        }
+//
+//        if(bool == 1){
+//
+//            //点击了第二次
+//            alert('点击了第二次');
+//            bool = 0;
+//            stopTime = getTime();
+//            alert('文件已存在F盘');
+//            var recordName = startTime+'_'+stopTime;
+//            console.log(recordName);
+//            obj.video_record(dirPath+'\\'+recordName);
+//            // obj.video_record('F:\\Img\\1');
+//            // obj.video_record('F:\\1');
+//        }else{
+//
+//            //点击的第一次
+//            alert('点击了第一次');
+//            bool = 1;
+//            startTime = getTime();
+//        }
+////        obj.video_record('E:\\record\\mp.mp4');
+//    }
+    function getTime() {
+        var date = new Date();
+        var month = date.getMonth()+1;
+        var currentTime = date.getHours()+'.'+date.getMinutes()+'.'+date.getSeconds();
+        // console.log(currentTime);
+        return currentTime;
+    }
+</script>-->
+
+</html>

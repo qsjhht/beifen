@@ -1,0 +1,36 @@
+.layerCont{
+    width:590px;
+    margin:15px auto;
+}
+.mask .layer .layerCont .layerRow{
+    margin-bottom:5px;
+}
+.mask .layer .layerCont .layerRow label{
+    display:inline-block;
+    width:70px;
+    text-align:right;
+}
+.width{
+    width:470px;
+}
+.textarea{
+    height:66px;
+    width:470px;
+}
+.lableText{
+    position:relative;
+    top:-28px;
+}
+.layerSub{
+    width:100%;
+    text-align:center;
+}
+.layerSub input{
+    width:75px;
+    margin:20px 30px;
+    background-color:#237a98;
+    border-radius:15px;
+    height:30px;
+    color:#ffffff;
+    border:0;
+}

@@ -1,0 +1,833 @@
+{extend name="demo_layout"/}
+{block name="maincss"}
+    <script src="__STATIC__/new/echarts.js"></script>
+    <link rel="stylesheet" href="__STATIC__/new/demoThree.css">
+
+    <script src="__STATIC__/h5splayer/jquery-3.1.1.js"></script>
+    <script src="__STATIC__/h5splayer/bootstrap.js"></script>
+
+    <script src="__STATIC__/h5splayer/bootstrap.js"></script>
+    <script src="__STATIC__/h5splayer/platform.js"></script>
+    <script src="__STATIC__/h5splayer/h5splayer.js"></script>
+    <script src="__STATIC__/h5splayer/h5splayerhelper.js"></script>
+    <link rel = "stylesheet" type = "text/css" href = "__STATIC__/h5splayer/css/h5splayer.css" />
+
+
+<style>
+
+    .contents {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        width: 102%;
+        height: 95%;
+    }
+    .content2 {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+    }
+
+    .chart2 {
+        display: inline-block;
+        width: 99%;
+        height: auto;
+        margin: 0 0;
+        padding: 0;
+        border: 1px solid #000;
+        position: relative;
+    }
+
+    .vid-wrapper{
+        width: 49.8%;
+        position: relative;
+        padding-bottom: 38.5%;
+    }
+
+    .vid-wrapper video{
+        object-fit: fill;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    .vid-wrapper2{
+        width: 49%;
+        position: relative;
+        /*padding-bottom: 56.25%;*/
+        height: 49%;
+    }
+
+    .vid-wrapper2 video{
+        object-fit: fill;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+
+
+</style>
+{/block}
+{block name="main"}
+    <!--特效-->
+    <div class="special">
+        <div></div>
+    </div>
+    <!--top-->
+    <div class="mainTop">
+        <div class="topLeft">
+            <!--机器人-->
+            <div class="contentRobot mainBor">
+                <p class="robot">机器人</p>
+                <div class="robotTob scrollber">
+                    <table class="robotToble">
+                        <tr>
+                            <th class="robotClass">已完成</th>
+                            <th id="date1"></th>
+                            <th>新城大街</th>
+                            <th>挂轨机器人</th>
+                            <th >
+                            </th>
+                        </tr>
+                        <tr>
+                            <th class="robotClass">进行中</th>
+                            <th id="date2"></th>
+                            <th>新城大街</th>
+                            <th>挂轨机器人</th>
+                            <th onclick="aaa()" class="vidicon">
+                                <img src="__STATIC__/new/image/vidicon-fill.png" width="18" height="20" alt="/">
+                            </th>
+                        </tr>
+                        <tr>
+                            <th class="robotClass">待执行</th>
+                            <th  id="date3"></th>
+                            <th>新城大街</th>
+                            <th>挂轨机器人</th>
+                            <th>
+                                <!--<img src="../image/vidicon-fill.png" width="18" height="20" alt="/">-->
+                            </th>
+                        </tr>
+                    </table>
+                </div>
+                <div class="robotHide" style="display:none;">
+                    <div class="content2">
+
+                            <div class="vid-wrapper">
+                                <video class="h5video" id="h5sVideo1" autoplay webkit-playsinline playsinline>
+                                </video>
+                                <div class="playpause"></div>
+                            </div>
+
+
+                            <div class="vid-wrapper">
+                                <video class="h5video" id="h5sVideo6" autoplay webkit-playsinline playsinline>
+                                </video>
+                                <div class="playpause"></div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+            <!--入廊企业-->
+            <div class="contentFirm mainBor">
+                <div class="borTitle">
+                    环境监测
+                    <select onchange="select(this.value)">
+                        <option value="T">温度</option>
+                        <option value="M">湿度</option>
+                        <option value="O2">氧气</option>
+                        <option value="CH4">甲烷</option>
+                        <option value="H2S">硫化氢</option>
+                    </select>
+                </div>
+                <div class="borCont" id="borCont" style="height: 28.5vh"></div>
+            </div>
+        </div>
+        <!--摄像头-->
+        <input type="hidden" id="videos" name="videos" class="layui-input" value="{$Videos}">
+        <div class="topRight mainBor " id="container">
+            <!--摄像头-->
+            <div class="contents">
+                <!--<div class="chart">-->
+                <div class="vid-wrapper2">
+                    <video class="h5video" style="width: 100%;height: 100%;" id="h5sVideo2"  autoplay webkit-playsinline playsinline>
+
+                    </video>
+                    <div class="playpause"></div>
+                </div>
+                <!--</div>-->
+                <!--<div class="chart">-->
+                <div class="vid-wrapper2">
+                    <video class="h5video" style="width: 100%;height: 100%;" id="h5sVideo3"  autoplay webkit-playsinline playsinline>
+
+                    </video>
+                    <div class="playpause"></div>
+                </div>
+                <!--</div>-->
+                <!--<div class="chart">-->
+                <div class="vid-wrapper2">
+                    <video class="h5video" style="width: 100%;height: 100%;" id="h5sVideo4"  autoplay webkit-playsinline playsinline>
+
+                    </video>
+                    <div class="playpause"></div>
+                </div>
+                <!--</div>-->
+                <!--<div class="chart">-->
+                <div class="vid-wrapper2">
+                    <video class="h5video" style="width: 100%;height: 100%;" id="h5sVideo5"  autoplay webkit-playsinline playsinline>
+
+                    </video>
+                    <div class="playpause"></div>
+                </div>
+                <!--</div>-->
+            </div>
+        </div>
+    </div>
+    <!--bottom-->
+    <div class="mainBot">
+        <!-- 环境监测 -->
+        <div class="borLeft mainBor" >
+
+            <div class="firmContent" style="width: 100%;height:100%;">
+
+                <div id="main" style="width: 100%;height:100%;margin-right: 10vh;"></div>
+            </div>
+        </div>
+        <div class="borRight">
+            <!-- 巡查巡检 -->
+            <!--<div class="contentRobot mainBor">
+                <div class="robot">
+                    巡查巡检
+                    <ul class="borUl">
+                        <li class="borPatrol borUlClass" onclick="stocks()">已完成</li>
+                        <li class="borPatrol" onclick="underway()">进行中</li>
+                        <li class="borPatrol" onclick="contract()">待执行</li>
+                        <li class="borPatrol borUlClass"><a href="#" id="one">已完成</a></li>
+                        <li class="borPatrol"><a href="#" id="two">进行中</a></li>
+                        <li class="borPatrol" onclick="contract()">待执行</li>
+                    </ul>
+                </div>
+                <div class="robotTob scrollber one">
+                    <table class="robotToble">
+                        <tr>
+                            <th>2019-08-13 09:30</th>
+                            <th>管廊一号线巡检</th>
+                            <th>王栋</th>
+                        </tr>
+                        <tr>
+                            <th>2019-08-13 10:48</th>
+                            <th>管廊二号线巡检</th>
+                            <th>武海涛</th>
+                        </tr>
+                        <tr>
+                            <th>2019-08-14 7:30</th>
+                            <th>管廊四号线巡检</th>
+                            <th>张家瑞</th>
+                        </tr>
+                        <tr>
+                            <th>2019-08-15 7:30</th>
+                            <th>管廊三号线巡检</th>
+                            <th>薛世明</th>
+                        </tr>
+                    </table>
+                </div>
+            </div>-->
+            <div class="contentRobot mainBor">
+                <div class="robot">
+                    巡查巡检
+                    <ul class="borUl">
+                        <li class="borPatrol borUlClass" id="one">已完成</li>
+                        <li class="borPatrol" id="two">进行中</li>
+                        <li class="borPatrol" id="three">待执行</li>
+                    </ul>
+                </div>
+                <div class="patrolTob scrollber one isshow">
+                    <table class="robotToble"  id="patrol_logs">
+
+
+                    </table>
+                </div>
+                <div class="patrolTob scrollber two">
+                    <table class="robotToble" id="patroling">
+
+                    </table>
+                </div>
+                <div class="patrolTob scrollber three">
+                    <table class="robotToble" id="patrols">
+
+                    </table>
+                </div>
+            </div>
+
+            <!--入廊企业-->
+            <div class="contentFirm mainBor" id="contentFirm"></div>
+        </div>
+    </div>
+{/block}
+{block name="script"}
+<script src="__STATIC__/new/itemJS/demoThree.js"></script>
+<script src="__STATIC__/new/gis/socket.io.js"></script>
+<script>
+    patrol_reload();
+    var myChart = echarts.init(document.getElementById('main'));
+    var audio = document.getElementById("myAudio");
+    var labelRight = {
+        normal: {
+            position: 'right'
+        }
+    };
+    var labelleft = {
+        normal: {
+            position: 'left'
+        }
+    };
+
+    option = {
+        title: {
+            text: '入廊企业',
+            textStyle:{
+                color:'#00ffff',
+                fontWeight:'normal',
+                fontSize:16
+            },
+            padding:[15,10]
+        },
+        tooltip : {
+            trigger: 'axis',
+            axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+            }
+        },
+        grid: {
+
+            bottom: 30
+        },
+        xAxis: {
+            type : 'value',
+            position: 'top',
+            splitLine: {lineStyle:{type:'dashed'}},
+            show:false
+        },
+        yAxis: {
+            type : 'category',
+            axisLine: {show: false},
+            axisLabel: {show: false},
+            axisTick: {show: false},
+            splitLine: {show: false},
+            data : [ '中国电信正定分公司 8.996km','中国联通集团 8.2km', '正定县供电分公司 34.867km', '中国移动通信集团 10.5km', '广电集团有限公司 10.2km', '新奥燃气有限公司 2.4km', '正定新区水务有限公司 21.705km', '石家庄正定新区惠新供热有限公司 27.718km', '石家庄市供电公司 14.394km']
+        },
+        tooltip:{
+
+        },
+        formatter: function (params) {
+            // console.dir(params);
+            var res  =  params.name;
+            res += '<style>td{padding:5px;}</style><table>';
+            // res += '<tr><td>'+params.seriesName+'</td><td>'+params.value;
+            res += '</table>';
+            // res += '<style>td{padding:5px;}</style><table>';
+            // for(var i=0;i<params.length-1;i++){
+            //     res += '<tr><td>'+params.seriesName+'</td><td>'+params[i].value;
+            //     res += '</td><td>'+params.data.datas[0];
+            // }
+            // res += '<tr><td>'+params[params.length-1].seriesName+'</td><td>'+params[params.length-1].value+'</td></tr>';
+            // res += '</table>';
+            return res;
+
+        },
+        series : [
+            {
+                name:'长度',
+                type:'bar',
+                stack: '总量',
+                barWidth: 20,
+                itemStyle: {
+                    normal: {
+                        color: new echarts.graphic.LinearGradient(1, 0, 0, 0,
+                            [{
+                            offset: 0,
+                            color: "#1268f3" // 0% 处的颜色
+                        }, {
+                            offset: 0.6,
+                            color: "#08a4fa" // 60% 处的颜色
+                        }, {
+                            offset: 1,
+                            color: "#01ccfe" // 100% 处的颜色
+                        }], false),
+                        label: {
+                            show: false, //开启显示
+                            position: 'top', //在上方显示
+                            textStyle: { //数值样式
+                                color: 'white',
+                                fontSize: 16
+                            }
+                        }
+                    }
+
+                },
+                label: {
+                    normal: {
+                        show: true,
+                        formatter: '{b}'
+                    }
+                },
+
+                data:[
+                    {value: -8.996, label: labelRight},
+                    {value: 8.2, label: labelleft},
+                    {value: -34.867, label: labelRight},
+                    {value: 10.5, label: labelleft},
+                    {value: -10.2, label: labelRight},
+                    {value: 2.4, label: labelleft},
+                    {value: -21.705, label: labelRight},
+                    {value: 27.718, label: labelleft},
+                    {value: -14.394, label: labelRight},
+                ]
+            }
+        ]
+    };
+
+    myChart.setOption(option);
+
+
+    $('.borPatrol').click(function(){
+        var id= $(this).attr('id');
+        $('.borPatrol').removeClass('borUlClass');
+        $(this).addClass('borUlClass');
+        if ( id == 'one')
+        {
+            $('.patrolTob').removeClass('isshow');
+            $(".one").addClass('isshow');
+        }
+        if ( id == 'two')
+        {
+            $('.patrolTob').removeClass('isshow');
+            $(".two").addClass('isshow');
+        }
+        if ( id == 'three')
+        {
+            $('.patrolTob').removeClass('isshow');
+            $(".three").addClass('isshow');
+        }
+    })
+
+    // 连接服务端，workerman.net:2120换成实际部署web-msg-sender服务的域名或者ip
+    var socket = io('http://192.168.10.18:2120');
+    // uid可以是自己网站的用户id，以便针对uid推送以及统计在线人数
+    var uid = '2333';
+    // console.dir(uid);
+    // socket连接后以uid登录
+    socket.on('connect', function(){
+        socket.emit('login', uid);
+    });
+    // 后端推送来消息时
+    socket.on('new_msg', function(msg){
+        let objs =  eval('('+msg+')');
+        if(objs.reload){
+            patrol_reload();
+        }else{
+        }
+    });
+
+    new Vue({
+        el: '#app',
+        data: function() {
+            return {
+                visible: false ,
+                dialogVisible:false,
+                alarm_tips:'',
+                audio:''
+            }
+        },
+        created(){
+            let ccc = this.$options.methods.alarm_tips.bind(this);
+            socket.on('new_msg',(data) => {
+                ccc(data);
+                console.dir('cccccccccccccccc');
+                console.dir(data);
+            })
+        },
+        methods:{
+            alarm_tips:function(a){
+                let _this = this;
+                let evala = eval('('+ a +')').real_alarm;
+                _this.alarm_tips = evala;
+                if(evala.lvlcontent == '普通'){
+                    // return;
+                }else if(evala.lvlcontent == '设备'){
+                    return ;
+                }else if(evala.lvlcontent == '紧急'){
+                    audio.play();
+                    audio.loop = true;
+                    _this.$notify({
+                        title:`${evala.lvlcontent}报警`,
+                        message:`${new Date(evala.alarm_time*1000).toLocaleString()}\r ${evala.zone}\r ${evala.cate_name}
+                              <a style="float: right" href="javascript:void(0)" onclick="alarmtips(${evala.id},${evala.is_manage})">[详情]</a>`,
+                        duration:0,
+                        dangerouslyUseHTMLString:true,
+                        iconClass:'el-icon-bell',
+                        customClass:'bulletion_yellow',
+                        onClick:function(){
+                            audio.pause();
+                            // dialogVisible = true;
+                        },
+                        onClose(){
+                            audio.pause();
+                        }
+                    })
+                }else if(evala.lvlcontent == '严重'){
+                    audio.play();
+                    audio.loop = true;
+                    _this.$notify({
+                        title:`${evala.lvlcontent}报警`,
+                        message:`${new Date(evala.alarm_time*1000).toLocaleString()}\r ${evala.zone}\r ${evala.cate_name}
+                              <a style="float: right" href="javascript:void(0)" onclick="alarmtips(${evala.id},${evala.is_manage})">[详情]</a>`,
+                        duration:0,
+                        dangerouslyUseHTMLString:true,
+                        iconClass:'el-icon-bell',
+                        customClass:'bulletin_red',
+                        onClick:function(){
+                            audio.pause();
+                            // _this.dialogVisible = true;
+                        },
+                        onClose(){
+                            audio.pause();
+                        }
+                    })
+                }
+                _this.alarm_tips.alarm_time = new Date(_this.alarm_tips.alarm_time*1000).toLocaleString();
+                if(_this.alarm_tips.is_manage == 0){
+                    _this.alarm_tips.is_manage = '否'
+                }else if(_this.alarm_tips.is_manage == 1){
+                    _this.alarm_tips.is_manage = '是'
+                }
+
+            }
+        }
+    })
+    // 后端推送来在线数据时
+    socket.on('update_online_count', function(online_stat){
+        console.log(online_stat);
+    });
+    //ajax 获取 巡检数据 局部更新数据
+    function patrol_reload() {
+        console.dir('reload');
+        $.post('http://192.168.10.18/patrol/patrol_reload',/* { 'patrols_limit': 1,'patrol_logs_limit':1},*/ function(data) {
+            //layer.msg(data.msg);
+            data = JSON.parse(data);
+            if (data.code == 200) {
+                // console.dir(data.data.patrols);
+
+
+                let patrol_logs = data.data.patrol_logs;
+                let patroling = data.data.patroling;
+                let patrols = data.data.patrols;
+
+                let patrols_arr = "<table class='robotToble' id='patrols'>";
+                let patroling_arr = "<table class='robotToble' id='patroling'>";
+                let patrol_logs_arr = "<table class='robotToble' id='patrol_logs'>";
+                if(patrols.length !== 0){
+                    // console.dir(objs);
+                    for (var i in patrols) {
+                        patrols_arr +=  "<tr><th>" +patrols[i].create_date.substr(5,11)+ "</th><th>" +patrols[i].name+ "</th><th>" +patrols[i].check_user+  "</th></tr>";
+                        // console.dir(alarms[i]);
+                    }
+                }else{
+                    patrols_arr += "<tr><th>暂无数据</th></tr>";
+                }
+                if(patroling.length !== 0){
+                    // console.dir(objs);
+                    for (var i in patroling) {
+                        patroling_arr +=  "<tr><th>" +patrol_logs[i].check_start_time.substr(5,11)+ "</th><th>" +patroling[i].name+  "</th><th>" +patroling[i].check_user+  "</th></tr>";
+                        // console.dir(alarms[i]);
+                    }
+                }else{
+                    patroling_arr += "<tr><th>暂无数据</th></tr>";
+                }
+                if(patrol_logs.length !== 0){
+                    // console.dir(objs);
+                    for (var i in patrol_logs) {
+                        patrol_logs_arr +=  "<tr><th>" +patrol_logs[i].check_start_time.substr(5,11)+ "</th><th>" +patrol_logs[i].name+  "</th><th>" +patrol_logs[i].check_user+  "</th></tr>";
+                    }
+                }else{
+                    patrol_logs_arr += "<tr><th>暂无数据</th></tr>";
+                }
+
+                patrols_arr += "</table>";
+                patroling_arr += "</table>";
+                patrol_logs_arr += "</table>";
+                $("#patrols").replaceWith(patrols_arr);//重写如页面
+                $("#patroling").replaceWith(patroling_arr);//重写如页面
+                $("#patrol_logs").replaceWith(patrol_logs_arr);//重写如页面
+
+                // console.dir(patrols_arr);
+                // console.dir(patroling_arr);
+                // console.dir(patrol_logs_arr);
+                // console.dir(objs);
+
+
+
+
+
+
+                // if (data.url) {
+                //     layer.msg(data.msg + ' 页面即将自动跳转~');
+                // } else {
+                //     layer.msg(data.msg);
+                // }
+                // setTimeout(function() {
+                //     if (data.url) {
+                //         location.href = data.url;
+                //     } else {
+                //         location.reload();
+                //     }
+                // }, 1500);
+            } else {
+                console.dir(data.msg);
+                // layer.msg(data.msg + ' 页面即将自动刷新~');
+                // setTimeout(function() {
+                //     location.reload();
+                // }, 1000);
+            }
+
+        });
+    }
+
+
+    if (H5siOS() === true
+        || H5sSafariBrowser() === true)
+    {
+        $('#h5sVideo1').prop("controls", true);
+        $('#h5sVideo2').prop("controls", true);
+        $('#h5sVideo3').prop("controls", true);
+        $('#h5sVideo4').prop("controls", true);
+        $('#h5sVideo5').prop("controls", true);
+    }
+    var videos = JSON.parse($('#videos').val());
+    var conf1 = {
+        videoid:'h5sVideo1',
+        protocol: window.location.protocol, //'http:' or 'https:'
+        host: '192.168.5.100:8080', //'localhost:8080'
+        rootpath:'/', // '/' or window.location.pathname
+        token:videos.h5sVideo1,
+        //streamprofile: 'sub',
+        hlsver:'v1', //v1 is for ts, v2 is for fmp4
+        session:'c1782caf-b670-42d8-ba90-2244d0b0ee83' //session got from login
+
+    };
+    var conf2 = {
+        videoid:'h5sVideo2',
+        protocol: window.location.protocol, //'http:' or 'https:'
+        host: '192.168.5.100:8080', //'localhost:8080'
+        rootpath:'/', // '/' or window.location.pathname
+        token:videos.h5sVideo2,
+        streamprofile: 'sub',
+        hlsver:'v1', //v1 is for ts, v2 is for fmp4
+        session:'c1782caf-b670-42d8-ba90-2244d0b0ee83' //session got from login
+    };
+    var conf3 = {
+        videoid:'h5sVideo3',
+        protocol: window.location.protocol, //'http:' or 'https:'
+        host: '192.168.5.100:8080', //'localhost:8080'
+        rootpath:'/', // '/' or window.location.pathname
+        token:videos.h5sVideo3,
+        streamprofile: 'sub',
+        hlsver:'v1', //v1 is for ts, v2 is for fmp4
+        session:'c1782caf-b670-42d8-ba90-2244d0b0ee83' //session got from login
+    };
+    var conf4 = {
+        videoid:'h5sVideo4',
+        protocol: window.location.protocol, //'http:' or 'https:'
+        host: '192.168.5.100:8080', //'localhost:8080'
+        rootpath:'/', // '/' or window.location.pathname
+        token:videos.h5sVideo4,
+        streamprofile: 'sub',
+        hlsver:'v1', //v1 is for ts, v2 is for fmp4
+        session:'c1782caf-b670-42d8-ba90-2244d0b0ee83' //session got from login
+    };
+    var conf5 = {
+        videoid:'h5sVideo5',
+        protocol: window.location.protocol, //'http:' or 'https:'
+        host: '192.168.5.100:8080', //'localhost:8080'
+        rootpath:'/', // '/' or window.location.pathname
+        token:videos.h5sVideo5,
+        streamprofile: 'sub',
+        hlsver:'v1', //v1 is for ts, v2 is for fmp4
+        session:'c1782caf-b670-42d8-ba90-2244d0b0ee83' //session got from login
+    };
+    var conf6 = {
+        videoid:'h5sVideo6',
+        protocol: window.location.protocol, //'http:' or 'https:'
+        host: '192.168.5.100:8080', //'localhost:8080'
+        rootpath:'/', // '/' or window.location.pathname
+        token:videos.h5sVideo6,
+        //streamprofile: 'sub',
+        hlsver:'v1', //v1 is for ts, v2 is for fmp4
+        session:'c1782caf-b670-42d8-ba90-2244d0b0ee83' //session got from login
+    };
+
+    var v1 = H5sPlayerCreate(conf1);
+    var v2 = H5sPlayerCreate(conf2);
+    var v3 = H5sPlayerCreate(conf3);
+    var v4 = H5sPlayerCreate(conf4);
+    var v5 = H5sPlayerCreate(conf5);
+    var v6 = H5sPlayerCreate(conf6);
+
+    $('#h5sVideo1').parent().click(function () {
+        if($(this).children(".h5video").get(0).paused){
+            if(v1 != null)
+            {
+                v1.disconnect();
+                delete v1;
+                v1 = null;
+            }
+
+            v1 = H5sPlayerCreate(conf1);
+
+            console.log(v1);
+            v1.connect();
+
+            $(this).children(".playpause").fadeOut();
+        }else{
+            v1.disconnect();
+            delete v1;
+            v1 = null;
+            $(this).children(".h5video").get(0).pause();
+            $(this).children(".playpause").fadeIn();
+        }
+    });
+
+    $('#h5sVideo2').parent().click(function () {
+        if($(this).children(".h5video").get(0).paused){
+            if(v2 != null)
+            {
+                v2.disconnect();
+                delete v2;
+                v2 = null;
+            }
+
+            v2 = H5sPlayerCreate(conf2);
+
+            console.log(v2);
+            v2.connect();
+            $(this).children(".playpause").fadeOut();
+        }else{
+            v2.disconnect();
+            delete v2;
+            v2 = null;
+            $(this).children(".h5video").get(0).pause();
+            $(this).children(".playpause").fadeIn();
+        }
+    });
+
+    $('#h5sVideo3').parent().click(function () {
+        if($(this).children(".h5video").get(0).paused){
+            if(v3 != null)
+            {
+                v3.disconnect();
+                delete v3;
+                v3 = null;
+            }
+
+            v3 = H5sPlayerCreate(conf3);
+
+            console.log(v3);
+            v3.connect();
+
+            $(this).children(".playpause").fadeOut();
+        }else{
+            v3.disconnect();
+            delete v3;
+            v3 = null;
+            $(this).children(".h5video").get(0).pause();
+            $(this).children(".playpause").fadeIn();
+        }
+    });
+
+    $('#h5sVideo4').parent().click(function () {
+        if($(this).children(".h5video").get(0).paused){
+            if(v4 != null)
+            {
+                v4.disconnect();
+                delete v4;
+                v4 = null;
+            }
+
+            v4 = H5sPlayerCreate(conf4);
+
+            console.log(v4);
+            v4.connect();
+            $(this).children(".playpause").fadeOut();
+        }else{
+            v4.disconnect();
+            delete v4;
+            v4 = null;
+            $(this).children(".h5video").get(0).pause();
+            $(this).children(".playpause").fadeIn();
+        }
+    });
+
+    $('#h5sVideo5').parent().click(function () {
+        if($(this).children(".h5video").get(0).paused){
+            if(v5 != null)
+            {
+                v5.disconnect();
+                delete v5;
+                v5 = null;
+            }
+
+            v5 = H5sPlayerCreate(conf5);
+
+            console.log(v5);
+            v5.connect();
+            $(this).children(".playpause").fadeOut();
+        }else{
+            v4.disconnect();
+            delete v5;
+            v5 = null;
+            $(this).children(".h5video").get(0).pause();
+            $(this).children(".playpause").fadeIn();
+        }
+    });
+    $('#h5sVideo6').parent().click(function () {
+        if($(this).children(".h5video").get(0).paused){
+            if(v6 != null)
+            {
+                v6.disconnect();
+                delete v6;
+                v6 = null;
+            }
+
+            v6 = H5sPlayerCreate(conf6);
+
+            console.log(v6);
+            v6.connect();
+            $(this).children(".playpause").fadeOut();
+        }else{
+            v4.disconnect();
+            delete v6;
+            v6 = null;
+            $(this).children(".h5video").get(0).pause();
+            $(this).children(".playpause").fadeIn();
+        }
+    });
+    // 机器人显示视频页面
+    let bb = true;
+    function aaa(){
+        let robotHide = document.getElementsByClassName('robotHide')[0];
+        if(bb == true){
+            robotHide.style.display = '';
+            bb = false;
+        }else if(bb == false){
+            robotHide.style.display = 'none';
+            bb = true
+        }
+    }
+</script>
+{/block}

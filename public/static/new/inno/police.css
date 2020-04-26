@@ -1,0 +1,33 @@
+.middleScr{
+    width:95%;
+    margin:3px auto;
+}
+.layerUl{
+    width:96%;
+    margin:20px auto;
+    list-style:none;
+}
+.layerUl li{
+    padding:10px;
+}
+.policeBorder{
+    border:1px solid #00FFFF;
+    margin:10px 0;
+}
+.policeTop{
+    border-top:1px solid #FFFFFF;
+}
+.policeRela{
+    position:relative;
+    top:7px;
+}
+.layui-row span{
+    color:white;
+}
+.policeForm{
+    float:right;
+    width:250px;
+    color:black;
+}
+
+

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>信息展示弹框</title>
+    <script src="/static/home/js/jquery-1.7.1.min.js"></script>
+    <script>
+//        function objSelect(select3d) {
+//            alert(select3d[0].get_item(0)+','+select3d[0].get_layer3D().get_name());
+//        }
+//        $('#youx').click(function () {
+//            alert('dd')
+//        })
+        function closeCurrent() {
+            window.parent.closeRitMes();
+        }
+    </script>
+    <style>
+        *{
+            margin: 0px;
+            padding: 0px;
+        }
+        body{
+            overflow: hidden;
+            background-color: #FFFFFF;
+        }
+        .container{
+            width: 260px;
+            height: 500px;
+            font-family: 'Arial Negreta', 'Arial Normal', 'Arial';
+            font-size: 14px;
+            /*background-color: #f3f3f3;*/
+            position: relative;
+        }
+        .header{
+            background-color: #1cd6ff;
+            height: 45px;
+        }
+        .header p{
+            padding-left: 10px;
+            font-weight: 700;
+            font-size: 15px;
+            font-style: normal;
+            color: #FFFFFF;
+            line-height: 45px;
+        }
+        .header img{
+            position: absolute;
+            top: 10px;
+            right: 5px;
+            cursor: pointer;
+        }
+        .content{
+            margin: 0 10px;
+            height: 555px;
+            font-size: 14px;
+            /*background-color: #EEEEEE;*/
+        }
+        .content div{
+            width: 240px;
+            height: 39px;
+            line-height: 39px;
+        }
+        .content .conTitle{
+            font-weight: 700;
+            color: #5E5E5E;
+            background-color: #FFFFFF;
+            text-align: center;
+        }
+        .content .conMes{
+            background-color: #f3f3f3;
+            font-family: "Microsoft YaHei",'Arial','Sans-Serif';
+            color: #1a1a1a;
+            border-bottom: thin solid #d9d9d9;
+        }
+        .content .conMes span{
+            display: inline-block;
+            /*height: 39px;*/
+        }
+        .conMes span:first-child{
+            width: 25%;
+            padding-left: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <p>设备信息</p>
+        <img src="/static/home/images/run/取消.jpg" alt="" id="youx" onclick="closeCurrent()"/>
+    </div>
+    <foreach name='info' item='v'>
+    <div class="content">
+        <div class="conTitle"><strong>基本信息</strong></div>
+        <div class="conMes"><span>设备名称</span><span>{$v.eqpt_name}</span></div>
+        <div class="conMes"><span>设备id</span><span>{$v.id}</span></div>
+        <div class="conMes"><span>型号</span><span>{$v.model}</span></div>
+        <div class="conMes"><span>品牌</span><span>{$v.brand}</span></div>
+        <div class="conMes"><span>编号</span><span>{$v.number}</span></div>
+        <div class="conMes"><span>规格</span><span>{$v.size}</span></div>
+        <div class="conTitle"><strong>维修信息</strong></div>
+        <div class="conMes"><span>{$v.service_message}</span></div>
+    </div>
+    </foreach>
+</div>
+
+</body>
+</html>

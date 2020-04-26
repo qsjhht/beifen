@@ -1,0 +1,53 @@
+{extend name="sub_layout"/}
+{block name="main"}
+<div class="layui-card">
+    <div class="layui-card-header">部门详情</div>
+    <div class="layui-card-body">
+        <form class="layui-form form-horizontal" action="" method="post">
+            <div class="layui-form-item">
+                <label class="layui-form-label">部门名称</label>
+                <div class="layui-input-inline w400" >
+                    <input type="text" name="dept_name" autocomplete="off" value="{$details['dept_name']}"  placeholder="部门名称" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">上级部门</label>
+                <div class="layui-input-inline w400" >
+                    <input type="text" value="{$details['dept_p']}" autocomplete="off" value=""  placeholder="部门名称" class="layui-input">
+                </div>
+            </div>
+
+            <!--<div class="layui-form-item" style="width: 450px;">
+                <label class="layui-form-label">所在机构</label>
+                <div class="layui-input-block">
+                    <div class="layui-input-block">
+		               <input type="text" id="tree" lay-filter="tree" class="layui-input">
+		           </div>
+                </div>
+
+            </div>-->
+            <div class="layui-form-item">
+                <label class="layui-form-label">位置信息</label>
+                <div class="layui-input-inline w400" >
+                    <input type="text" name="location" autocomplete="off" value="{$details['location']}" lay-verify="required" placeholder="部门名称" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">部门详情</label>
+                <div class="layui-input-inline w400" >
+                    <textarea name="detail" required="" lay-verify="required"  placeholder="部门详情" class="layui-textarea">{$details['detail']}</textarea>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">备注</label>
+                <div class="layui-input-block w400">
+                    <textarea name="remarks" required="" lay-verify="required"  placeholder="部门的相关备注" class="layui-textarea">{$details['remarks']}</textarea>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{/block}
+{block name="script"}
+
+{/block}

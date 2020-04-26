@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>bimBtn</title>
+    <meta http-equiv="X-UA-Compatible" content="chrome=50"/>
+    <meta name="robots" content="index,follow"/>
+    <meta name="author" content="Qiushi">
+    <script src="/static/resources/scripts/jquery-1.7.1.min.js"></script>
+
+</head>
+<style>
+    *{
+        margin: 0px;
+        padding-left: 0px;
+    }
+    body{
+        background-color: #016B71;
+        overflow: hidden;
+    }
+    .bg{
+        /*background-image: url("images/运行管理/u691.png");*/
+        /*background-repeat: no-repeat;*/
+        /*background-size: 400px;*/
+        /*display: inline-block;*/
+        position:absolute;
+        top:19px;
+        left: 80px;
+        width: 450px;
+        height: 45px;
+        overflow: hidden;
+    }
+    .btn{
+        width: 50px;
+        height: 42px;
+    }
+    .btn:hover{
+        cursor: pointer;
+    }
+    .toBtn{
+        display: inline-block;
+        position: relative;
+        /*top: 11px;*/
+        /*left: 22px;*/
+    }
+    .toImg{
+        width: 80px;
+        height: 80px;
+    }
+    #bg{
+        position: absolute;
+        z-index: -1;
+        overflow: hidden;
+    }
+    #bg img{
+        width: 80px;
+        height: 80px;
+    }
+</style>
+<body bgColor="transparent">
+<div id="bg">
+    <img id="bgImg" src="/static/images/运行管理/frame.png" alt="">
+</div>
+<div class="toBtn">
+    <img class="toImg" src="/static/images/运行管理/toBtn1.png" alt="">
+</div>
+<div class="bg" style="display: none">
+
+
+    <img id="toggle" class="btn" src="/static/images/运行管理/u702.png" alt="" title="GIS/BIM" onmouseover="this.src='/static/images/运行管理/0_5_u716.png'" onmouseout="this.src='/static/images/运行管理/u702.png'">
+
+    <img id="firSel" class="btn" src="/static/images/运行管理/u696.png" alt="" title="防火分区" onmouseover="this.src='/static/images/运行管理/0_2_u710.png'" onmouseout="this.src='/static/images/运行管理/u696.png'">
+    <img id="eqpMan" class="btn" src="/static/images/运行管理/u698.png" alt="" title="设备管理" onmouseover="this.src='/static/images/运行管理/0_3_u720.png'" onmouseout="this.src='/static/images/运行管理/u698.png'">
+    <img id="botMes" class="btn" src="/static/images/运行管理/u700.png" alt="" title="设备信息" onmouseover="this.src='/static/images/运行管理/0_4_u712.png'" onmouseout="this.src='/static/images/运行管理/u700.png'">
+
+    <img id="gal" class="btn" src="/static/images/运行管理/gallery1.png" alt="" title="整体管廊" onmouseover="this.src='/static/images/运行管理/gallery.png'" onmouseout="this.src='/static/images/运行管理/gallery1.png'">
+
+    <img id="water" class="btn" src="/static/images/运行管理/u704.png" alt="" title="水仓" onmouseover="this.src='/static/images/运行管理/0_6_u718.png'" onmouseout="this.src='/static/images/运行管理/u704.png'">
+    <img id="elec" class="btn" src="/static/images/运行管理/u706.png" alt="" title="电仓" onmouseover="this.src='/static/images/运行管理/0_7_u714.png'" onmouseout="this.src='/static/images/运行管理/u706.png'">
+    <img id="layer" class="btn" src="/static/images/运行管理/u708.png" alt="" title="夹层" onmouseover="this.src='/static/images/运行管理/0_8_u722.png'" onmouseout="this.src='/static/images/运行管理/u708.png'">
+</div>
+<script>
+    var a = 0;
+    $('.toImg').click(function () {
+        if (a==0){
+            $('#bgImg').animate({width:'540px'});
+            a=1;
+        }
+        else {
+
+            $('#bgImg').animate({width:'80px'});
+            a=0;
+        }
+//        $('#btn').animate({width:'toggle'});
+        $('.bg').fadeToggle();
+        window.parent.changBtnFun(a);
+    })
+    $('.btn').click(function () {
+        window.parent.subPageFun(this.id);
+    })
+</script>
+</body>
+</html>

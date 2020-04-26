@@ -1,0 +1,63 @@
+{__NOLAYOUT__}<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="__STATIC__/new/dispatch-img/common.css">
+    <link rel="stylesheet" href="__STATIC__/layui/css/layui.css">
+    <link rel="stylesheet" href="__STATIC__/new/css/dispatch.css">
+</head>
+<style>
+    ::-webkit-scrollbar {
+        display: block;
+        width:15px;
+    }
+    ::-webkit-scrollbar-thumb{
+        border-radius: 5px;
+        background-color:#001e29;
+    }
+    .scrollber{
+        scrollbar-base-color:#001e29;
+    }
+</style>
+<body style="overflow-y: hidden">
+<div class="mainMiddle mainBor" style="height: 100%;">
+    <div class="middleNav">
+        <i class="layui-icon">&#xe653;</i> &nbsp;
+        指挥调度
+    </div>
+    <div class="dispatch" style="height: 100%;">
+        <div class="dispatchTop">
+            <div style="width:77%;text-align:center" class="display">
+                <div class="display dispatchTop_header">
+                    <div class="display qiu" id="display1"></div><span>调度台一</span>
+                </div>
+                <div class="display dispatchTop_header">
+                    <div class="display qiu" id="display2"></div><span>调度台二</span>
+                </div>
+            </div>
+            <div class="display">
+                <img src="__STATIC__/new/dispatch-img/conduct1.png" class="dispatchImg1" alt="/">
+            </div>
+
+        </div>
+        <div class="dispatchBottom" style="height: 90%">
+            <!-- 话机展示框 -->
+            <div class="dispatchBottom_left display" style="height: 98%;overflow: auto" id="dispatchBottom_left"></div>
+            <!-- 右侧导航栏 -->
+            <div class="dispatchBottom_right display scrollber" id="dispatchBottom_right">
+                <div class="rightTriangle" id="jiao">
+                    <img src="__STATIC__/new/dispatch-img/jiao2.png" class="dispatchImg2" alt="/">
+                    <img src="__STATIC__/new/dispatch-img/jiao1.png" style="float:right" class="dispatchImg2" alt="/">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="__STATIC__/layui/layui.js"></script>
+<script src="__STATIC__/new/gis/socket.io.js"></script>
+<script src="__STATIC__/new/jquery-3.2.1.min.js"></script>
+<script src="__STATIC__/new/js/dispatch.js"></script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+*{
+        margin:0;
+        padding:0;
+    }
+    body{
+        background:url("../../../static/new/image/back.png");
+        background-size:100%;
+        overflow:hidden;
+        color:#ffffff;
+    }
+    .mainBor{
+	border:1px solid #113c58;
+	background:rgba(00,03,11,0.4)
+    }
+    /*ͷ��*/
+    .mainFont{
+        height:7vh;
+        line-height:7vh;
+        font-size:0;
+        font-weight:600;
+        color:#00ffff;
+        width: 100%;
+        background:url("../../../static/image/bim-back.png") no-repeat center ;
+    }
+    /*ͷ������*/
+    .img{
+	width:50px;
+	height:30px;
+	position:relative;
+	top:6px;
+	margin:0 0.2vw;
+    }
+
+
+    .wireContent{
+        width:34%;
+	    display:inline-block;
+	    vertical-align:top;
+	    font-size:1.6rem;
+	    color:#00ffff;
+	    text-align:center;
+	    position:relative;
+	    letter-spacing:6px;
+
+    }
+
+    .fontWire2{
+	width:90.5%;
+	height:2px;
+	background-color:#00ffff;
+	position:absolute;
+	right:0;
+	top:1.5vh;
+    }
+    /*����*/
+    .content{
+	margin-top:1.3vh;
+        height:90vh;
+        width:100vw;
+    }

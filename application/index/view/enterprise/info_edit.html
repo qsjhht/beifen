@@ -1,0 +1,340 @@
+{extend name="eqpt_layout"/}
+<body class="backg">
+{block name="main"}
+<link rel="stylesheet" href="/static/css/equipment.css">
+<link rel="stylesheet" href="/static/css/eqpt.css">
+<!--<style>
+    #layui-laydate1 .layui-laydate-main{width:350px;}
+    #layui-laydate1 .l  ayui-laydate-content td,#test-n1 .layui-laydate-content th{width:87px;height: 50px;}
+</style>-->
+<div class="mainMiddle mainBor"  style="display:inline-block;width: 100%;border: 0px;background-image: url('/static/image/bgSmall.png')">
+    <!--设备台账-->
+    <div class="layerMiddle divCenter">
+        <div class="layerNav">
+            <div class="floatLeft">
+                <i class="layui-icon">&#xe653;</i> &nbsp;
+                编辑企业信息
+            </div>
+        </div>
+        <div class="scrollber" >
+            <form class="layui-form" action="" method="post">
+                <!--&lt;!&ndash;左上角图片&ndash;&gt;
+                <div class="layerImage"  id="test1">
+                    <div class="image3D" id="image3D" >
+                        <p>点击上传设备图片</p>
+                        <img src="/static/image/camera.png" alt="" width="120" height="120" id="demo2">
+                    </div>
+                    &lt;!&ndash; <button type="button" class="layui-btn" id="test1">
+                         <i class="layui-icon">&#xe67c;</i>上传图片
+                     </button>&ndash;&gt;
+
+                    <div class="canvas">
+                        <img src="/static/image/camera_1.png" alt="" width="17" height="15" id="img1">
+                        <canvas id="3D"></canvas>
+                    </div>
+                </div>-->
+                <!--<div class="layui-upload-drag" id="test10">
+                    <i class="layui-icon"></i>
+                    <p>点击上传，或将文件拖拽到此处</p>
+                </div>-->
+                <!--右上角信息-->
+                <div class="layui-show-md-inline-block">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label" style="float: left">企业名称</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="co_name" lay-verify="eqpt_name" placeholder="企业名称" value="{$Info.co_name}" style="width: 650px"  autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <div class="layui-form-item test2"  lay-filter="test2"></div>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <div class="layui-form-item test3"  lay-filter="test3"></div>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <div class="layui-form-item" id="area-picker">
+                                <div class="layui-form-label">详细地址</div>
+                                <div class="layui-input-inline" style="width: 200px;">
+                                    <select name="province" class="province-selector" data-value="" lay-filter="province-1">
+                                        <option value="">请选择省</option>
+                                    </select>
+                                </div>
+                                <div class="layui-input-inline" style="width: 200px;">
+                                    <select name="city" class="city-selector" data-value="" lay-filter="city-1">
+                                        <option value="">请选择市</option>
+                                    </select>
+                                </div>
+                                <div class="layui-input-inline" style="width: 200px;">
+                                    <select name="county" class="county-selector" data-value="" lay-filter="county-1">
+                                        <option value="">请选择区</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <input type="text" name="add" placeholder="详细地址" value="{$Add}" style="width: 490px"  autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label" style="float: left">企业类型</label>
+                            <select name="co_type" lay-verify="required">
+                                <option value="">请选择</option>
+                                {volist name="Co_type" id="vo"}
+                                {if $vo.co_type_id == $Info.co_type}
+                                <option value="{$vo.co_type_id}" selected>{$vo.type_name}</option>
+                                {else/}
+                                <option value="{$vo.co_type_id}">{$vo.type_name}</option>
+                                {/if}
+                                {/volist}
+                            </select>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">法人代表</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="co_legal" placeholder="法人代表" value="{$Info.co_legal}" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">联系人</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="co_linker" placeholder="联系人" value="{$Info.co_linker}" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label" style="float: left">联系电话</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="co_phone" placeholder="联系电话" value="{$Info.co_phone}" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">联系人职务</label>
+                            <input type="text" name="co_linker_post" placeholder="联系人职务" value="{$Info.co_linker_post}" autocomplete="off" class="layui-input">
+                        </div>
+                        <label class="layui-form-label"   style="float: left">入廊时间</label>
+                        <input type="text" lay-verify="required" name="en_time" class="layui-input" id="test5" placeholder="" class="layui-input">
+
+                    </div>
+                    <input type="hidden" name="co_id" class="layui-input" value="{$Info.co_id}">
+                    <input type="hidden" id="sitesdata" class="layui-input" value="{$Sitesdata}">
+                    <input type="hidden" id="local_data" class="layui-input" value="{$local_data}">
+                    <input type="hidden" id="endstr" class="layui-input" value="{$Endstr}">
+                    <input type="hidden" id="startstr" class="layui-input" value="{$Startstr}">
+                    <input type="hidden" id="local" class="layui-input" value="{$Local}">
+                    <input type="hidden" id="en_time" class="layui-input" value="{$Time}">
+                    <!--底部信息-->
+                    <!--<div class="layui-form-item" style="display: none">
+                        <label class="layui-form-label" style="float: left">设备位置</label>
+
+
+                        <label class="layui-form-label">IP地址</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="eqpt_IP_address" placeholder="请输入设备IP地址" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>-->
+
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">入廊长度</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="en_long" placeholder="入廊长度" value="{$Info.en_long}" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label" style="float: left">经办人</label>
+                            <select name="user_id" lay-verify="required">
+                                <option value="">请选择</option>
+                                {volist name="User" id="vo"}
+
+                                {if $vo.userid == $Info.userid}
+                                <option value="{$vo.userid}" selected>{$vo.nickname}</option>
+                                {else/}
+                                <option value="{$vo.userid}">{$vo.nickname}</option>
+                                {/if}
+                                {/volist}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">备注信息</label>
+                        <div class="layui-input-block" style="width: 650px">
+                            <textarea name="en_remark"  placeholder="请输入" class="layui-textarea">{$Info.en_remark}</textarea>
+                        </div>
+                    </div>
+                </div>
+                <!--<fieldset class="layui-elem-field layui-field-title">
+                </fieldset>
+                <div class="addParets" id='parts'  data-type="openSelect">
+                    <i class="layui-icon">&#xe654;</i>
+                    添加配件
+                </div>
+                <fieldset class="layui-elem-field layui-field-title">
+                </fieldset>-->
+
+                <div class="layui-form-item">
+                    <div class="layui-input-block margin-top-seven">
+                        <!--<button type="button" class="layui-btn">
+                            <i class="layui-icon">&#xe857;</i>提交并绑定设备模型
+                        </button>-->
+                        <button class="layui-btn" id="sub" lay-submit lay-filter="sub">立即提交</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{/block}
+
+{block name="script"}
+
+<script>
+    layui.config({
+        base: '__STATIC__/'
+    }).extend({
+        interact: 'interact/js/interact',
+        layarea: 'layarea/mods/layarea',
+    });
+    layui.use(['form', 'laydate','upload','interact','layarea'], function(){
+        var form = layui.form,
+            laydate = layui.laydate,
+            interact = layui.interact,
+            layarea = layui.layarea;
+        var $ = layui.$;
+
+        var site_data = JSON.parse($('#sitesdata').val());
+        var startstr = JSON.parse($('#startstr').val());
+        var endstr = JSON.parse($('#endstr').val());
+        var local = JSON.parse($('#local').val());
+        var en_time = $('#en_time').val();
+//        console.dir(en_time);
+
+        layarea.render({
+            elem: '#area-picker',
+            data: {
+                province: local['0'],
+                city: local['1'],
+                county: local['2'],
+            },
+            change: function (res) {
+                //选择结果
+                // console.log(res);
+            }
+        });
+
+
+        interact.render({
+            elem : '.test2',
+            // url : '{:url("index/patrol/sitesdata")}',
+            title : '入廊起点：',
+            data : site_data,
+            selected : startstr,
+            // name : ['street','cang','site'],
+            name : 'start',
+            hint : ['请选择街道','请选择舱室','请选择防火分区']
+        });
+
+        interact.render({
+            elem : '.test3',
+            // url : '{:url("index/patrol/sitesdata")}',
+            title : '入廊终点：',
+            data : site_data,
+            selected : endstr,
+            // name : ['street','cang','site'],
+            name : 'end',
+            hint : ['请选择街道','请选择舱室','请选择防火分区']
+        });
+
+        //监听提交
+        /* form.on('submit(demo1)', function(data){
+             layer.alert(JSON.stringify(data.field), {
+                 title: '最终的提交信息'
+             });
+             return false;
+         });*/
+        //日期时间选择器
+        laydate.render({
+            elem: '#test5'
+            ,type: 'datetime'
+//            ,showBottom:false
+            ,value:en_time
+            ,done: function(value){
+                console.log(value); //得到日期生成的值，如：2017-08-18
+            }
+        });
+
+
+        /* $(document).on('click','#parts',function(){
+             var parts = $("form").find("fieldset").eq(-2);
+             var num = $("form").find("fieldset").length/2;
+
+             var my_input = $('<fieldset class="layui-elem-field layui-field-title">\n' +
+                 '                    <legend>配件信息</legend>\n' +
+                 '                </fieldset>\n' +
+                 '                <div class="layui-show-md-inline-block">\n' +
+                 '                    <div class="layui-form-item">\n' +
+                 '                        <!--<div class="layui-inline">\n' +
+                 '                            <div class="layui-upload">\n' +
+                 '                                <button type="button" class="layui-btn" id="">上传图片</button>\n' +
+                 '                                <div class="layui-upload-list">\n' +
+                 '                                    <img class="layui-upload-img" id="demo1">\n' +
+                 '                                    <p id="demoText"></p>\n' +
+                 '                                </div>\n' +
+                 '                            </div>\n' +
+                 '                        </div>-->\n' +
+                 '\n' +
+                 '                        <div class="layui-inline">\n' +
+                 '                            <div class="layui-form-item">\n' +
+                 '                                <div class="layui-inline">\n' +
+                 '                                    <label class="layui-form-label">配件名称</label>\n' +
+                 '                                    <div class="layui-input-inline">\n' +
+                 '                                        <input type="text" class="layui-input" placeholder="00-01号线缆">\n' +
+                 '                                    </div>\n' +
+                 '                                </div>\n' +
+                 '                                <div class="layui-inline">\n' +
+                 '                                    <label class="layui-form-label">型号规格</label>\n' +
+                 '                                    <div class="layui-input-inline">\n' +
+                 '                                        <input type="text" class="layui-input" placeholder="20*20*20">\n' +
+                 '                                    </div>\n' +
+                 '                                </div>\n' +
+                 '                            </div>\n' +
+                 '                            <div class="layui-form-item">\n' +
+                 '                                <div class="layui-inline">\n' +
+                 '                                    <label class="layui-form-label">需要数量/个</label>\n' +
+                 '                                    <div class="layui-input-inline">\n' +
+                 '                                        <input type="text" class="layui-input" placeholder="备注信息">\n' +
+                 '                                    </div>\n' +
+                 '                                </div>\n' +
+                 '                            </div>\n' +
+                 '                            <div class="layui-form-item">\n' +
+                 '                                <label class="layui-form-label">备注信息</label>\n' +
+                 '                                <div class="layui-input-block" style="width: 650px">\n' +
+                 '                                    <textarea name="remarks"  placeholder="请输入" class="layui-textarea"></textarea>\n' +
+                 '                                </div>\n' +
+                 '                            </div>\n' +
+                 '                        </div>\n' +
+                 '                    </div>\n' +
+                 '                </div>\n' +
+                 '                <fieldset class="layui-elem-field layui-field-title">\n' +
+                 '                </fieldset>\n');
+             parts.append(my_input);
+         });*/
+    });
+</script>
+
+{/block}
+</body>

@@ -1,0 +1,233 @@
+{extend name="eqpt_layout"/}
+
+{block name="main"}
+<link rel="stylesheet" href="/static/css/eqpt.css">
+<style type="text/css">
+     .layui-table-cell{
+        height:auto;
+        overflow:visible;
+        text-overflow:inherit;
+        white-space:normal;
+    }
+
+</style>
+
+<div class="mainMiddle mainBor"  style="display:inline-block;width: 100%;border: 0px">
+    <!--标题-->
+    <div class="middleNav">
+        <i class="layui-icon">&#xe653;</i> &nbsp;
+        部门列表
+    </div>
+    <div class="middleScreen layui-inline" style="right: 20px">
+        <button class="middleAdd" id="add_dept"><i class="layui-icon">&#xe654</i>&nbsp;添加</button>
+    </div>
+
+
+    <div class="mainTable scrollber">
+
+        <table class="mytable layui-table" id="ledger" lay-filter="eqpt_show"></table>
+        <script type="text/html" id="barDemo">
+            <a class="layui-btn layui-btn-xs operBtn" lay-event="details">详情</a>
+            <a class="layui-btn layui-btn-xs operBtn" lay-event="edit">编辑</a>
+            <a class="layui-btn layui-btn-danger layui-btn-xs operBtn" lay-event="del">删除</a>
+        </script>
+    </div>
+</div>
+{/block}
+
+{block name="script"}
+
+<script>
+    layui.use(['table','form','layer'], function(){
+        var table = layui.table,
+            form = layui.form,
+            layer = layui.layer;
+        //创建arr对象  ps：关联数组无法转换成json
+        table.render({
+            elem: '#ledger' //指定原始表格元素选择器（推荐id选择器）
+            ,height:  'full-123' //容器高度
+            ,url: '{:url("index/dept/index")}'
+            ,page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
+                //layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] //自定义分页布局
+                //,curr: 5 //设定初始在第 5 页
+                groups: 5 //只显示 1 个连续页码
+                //,first: false //不显示首页
+                ,limit: 10 //每页显示数量
+                ,limits: [5, 10, 20, 30, 40]  //每页条数的选择项
+                //,last: false //不显示尾页
+//                ,theme:'#00ffff'
+            }
+            ,cols: [[
+                //,{field:'floor_id',title:'分层ID', width:110, sort: true}
+                {field:'dept_id',title:'部门编号'}
+                ,{field:'dept_name',align:'center',title:'部门名称'}
+                ,{field:'location',align:'center',title:'部门位置'}
+                ,{field:'detail',align:'center',title:'部门介绍'}
+                ,{field:'user_num',width:150,align:'center',title:'部门人数'}
+
+                /*,{field:'eqpt_site',title:'设备位置'}*/
+
+
+                ,{align:'center',title:'操作', toolbar: '#barDemo'}
+            ]
+            ] //设置表头
+            //,…… //更多参数参考右侧目录：基本参数选项
+            ,done:function(res,curr,count){
+                var img_show = null; // tips提示
+                $("td span p").hover(function(){
+                    img_show = layer.tips('点击修改设备状态！', this,{
+                        tips:[1, 'rgba(41,41,41,.8)']
+                    });
+                },function(){
+                    layer.close(img_show);
+                });
+            }
+        });
+        table.on('tool(eqpt_show)', function(obj) {
+            var data = obj.data;
+
+            //console.log(obj);
+            /*if (obj.event === 'del') {
+             layer.confirm('确定删除当前设备组？', { icon: 3, title: '提示' }, function(index) {
+             $.post('{:url("eqpt_management/del_group")}', { 'id': data.id }, function(data) {
+             //layer.msg(data.msg);
+             if (data.code == 1) {
+             if (data.url) {
+             layer.msg(data.msg + ' 页面即将自动跳转~');
+             } else {
+             layer.msg(data.msg);
+             }
+             setTimeout(function() {
+             if (data.url) {
+             location.href = data.url;
+             } else {
+             location.reload();
+             }
+             }, 1000);
+             } else {
+             layer.msg(data.msg + ' 页面即将自动刷新~');
+             setTimeout(function() {
+             location.reload();
+             }, 1000);
+             }
+             });
+             //layer.close(index);
+             /!*$.post('{:url("eqpt_management/del_group")}', { 'id': data.id }, function(data) {
+             if (data.code == 1) {
+             if (data.url) {
+             layer.msg(data.msg + ' 页面即将自动跳转~');
+             } else {
+             layer.msg(data.msg);
+             }
+             setTimeout(function() {
+             if (data.url) {
+             location.href = data.url;
+             } else {
+             location.reload();
+             }
+             }, 1500);
+             } else {
+             layer.msg(data.msg);
+             setTimeout(function() {
+             if (data.url) {
+             location.href = data.url;
+             }
+             }, 1500);
+             }
+             });*!/
+             });
+             } /!*else if (obj.event === 'add') {
+             window.open('{:url("eqpt_management/add")}' + "?id=" + data.id, '_self')
+             } *!/*/
+            if (obj.event === 'edit') {
+                console.dir(data);
+                //window.open('{:url("eqpt/eqpt_details")}' + "?id=" + data.eqpt_id, '_self');
+                layer.open({
+                    title:"设备详情",
+                    title:false,
+                    type: 2,
+                    offset: ['100px', '130px'],
+                    area: ['1070px', '655px'],
+                    fixed: true, //不固定
+                    maxmin: false,
+                    content: ['{:url("dept/dept_edit")}' + "?dept_id=" + data.dept_id, 'no'],
+                    shade: [0.8, '#393D49'],
+                    /*cancel: function(){
+                        //右上角关闭回调  刷新父页面
+                        window.parent.location.reload();
+                        //return false 开启该代码可禁止点击该按钮关闭
+                    }*/
+                });
+            }else if (obj.event === 'details') {
+                console.dir(data.dept_id);
+                /*window.open('{:url("eqpt_management/details")}' + "?id=" + data.id, '_self');*/
+                //iframe层-父子操作
+                //alert(data.id);
+                layer.open({
+                    title:"设备详情",
+                    title:false,
+                    type: 2,
+                    offset: ['100px', '130px'],
+                    area: ['1070px', '655px'],
+                    fixed: true, //不固定
+                    maxmin: false,
+                    content: ['{:url("dept/dept_details")}' + "?dept_id=" + data.dept_id, 'no'],
+                    shade: [0.8, '#393D49'],
+                    /* cancel: function(){
+                     //右上角关闭回调  刷新父页面
+                     window.parent.location.reload();
+                     //return false 开启该代码可禁止点击该按钮关闭
+                     }*/
+                });
+
+            }else if(obj.event === 'del'){
+                layer.confirm('确定删除该部门？', { icon: 3, title: '提示' }, function(index) {
+                console.dir(data.dept_id);
+                    $.post('{:url("dept/dept_del")}', { 'dept_id': data.dept_id }, function(data) {
+                        //layer.msg(data.msg);
+                        if (data.code == 1) {
+                            if (data.url) {
+                                layer.msg(data.msg + ' 页面即将自动跳转~');
+                            } else {
+                                layer.msg(data.msg);
+                            }
+                            setTimeout(function() {
+                                if (data.url) {
+                                    location.href = data.url;
+                                } else {
+                                    location.reload();
+                                }
+                            }, 1500);
+                        } else {
+                            layer.msg(data.msg + ' 页面即将自动刷新~');
+                            setTimeout(function() {
+                                location.reload();
+                            }, 1000);
+                        }
+
+                    });
+                });
+
+            }
+        });
+        $('#add_dept').on('click', function() {
+            layer.open({
+                title:"添加设备",
+                title:false,
+                type: 2,
+                offset: ['100px', '130px'],
+                area: ['1070px', '655px'],
+                fixed: true, //不固定
+                maxmin: false,
+                content: ['{:url("dept/dept_add")}', 'no'],
+                shade: [0.8, '#393D49'],
+                /*cancel: function(){
+                    //右上角关闭回调  刷新父页面
+                    window.parent.location.reload();
+                    //return false 开启该代码可禁止点击该按钮关闭
+                }*/
+            })
+        });
+    });
+</script>
+{/block}

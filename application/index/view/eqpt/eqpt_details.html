@@ -1,0 +1,276 @@
+{extend name="eqpt_layout"/}
+<body class="backg">
+{block name="main"}
+<link rel="stylesheet" href="/static/css/equipment.css">
+<link rel="stylesheet" href="/static/css/eqpt.css">
+<div class="mainMiddle mainBor"  style="display:inline-block;width: 100%;border: 0px;background-image: url('/static/image/bgSmall.png')">
+    <!--设备台账-->
+    <div class="layers">
+        <div class="layerNav">
+            <i class="layui-icon">&#xe653;</i> &nbsp;
+            设备详情
+        </div>
+        <div class="layerMiddle scrollber" >
+            <form class="layui-form" action="" method="post">
+
+                <fieldset class="layui-elem-field layui-field-title">
+                    <legend>设备信息</legend>
+                </fieldset>
+
+                <!--左上角图片-->
+                <div class="layerImage">
+                    <div class="image3D" id="image3D" >
+                        <p>设备3D图像旋转</p>
+                        <img src="/static/image/3D.png" alt="" width="120" height="120" id="demo2">
+                    </div>
+                    <!--<button type="button" class="layui-btn" id="test1">
+                        <i class="layui-icon">&#xe67c;</i>上传图片
+                    </button>-->
+
+                    <div class="canvas">
+                        <img src="/static/image/camera_1.png" alt="" width="17" height="15" id="img1">
+                        <canvas id="3D"></canvas>
+                    </div>
+                </div>
+
+                <!--右上角信息-->
+                <div class="layui-show-md-inline-block">
+                    <div class="layui-form-item">
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label" style="float: left">设备类型</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="eqpt_cate" disabled value="{$eqpts.cate_name}" autocomplete="off" class="layui-input layui-input-details">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">设备名称</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="eqpt_type" disabled value="{$eqpts.eqpt_type}" autocomplete="off" class="layui-input layui-input-details">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">设备品牌</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="eqpt_type" disabled value="{$eqpts.eqpt_brand}" autocomplete="off" class="layui-input layui-input-details">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">设备型号</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="eqpt_type" disabled value="{$eqpts.eqpt_model}"  autocomplete="off" class="layui-input layui-input-details">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">设备状态</label>
+                            <input type="text" name="eqpt_type" disabled value="{$eqpts.eqpt_status}" class="layui-input layui-input-details">
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">安装时间</label>
+                            <input type="text" name="eqpt_type" disabled value="{$eqpts.eqpt_ins_time}" class="layui-input layui-input-details">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">额定功率</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="eqpt_brand" disabled value="{$eqpts.eqpt_rated}" autocomplete="off" class="layui-input layui-input-details">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">使用年限</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="eqpt_brand" disabled value="{$eqpts.eqpt_durable}" autocomplete="off" class="layui-input layui-input-details">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">供应商</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="eqpt_brand" disabled value="{$eqpts.eqpt_supplier}" autocomplete="off" class="layui-input layui-input-details">
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <label class="layui-form-label">采购员</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="eqpt_brand" disabled value="{$eqpts.eqpt_buyer}" autocomplete="off" class="layui-input layui-input-details">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">维修电话</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="eqpt_brand" disabled value="{$eqpts.eqpt_service_MP}" autocomplete="off" class="layui-input layui-input-details">
+                            </div>
+                        </div>
+                        <!--<div class="layui-inline">-->
+                        <!--<label class="layui-form-label">设备数量</label>-->
+                        <!--<div class="layui-input-block">-->
+                        <!--<input type="text" name="eqpt_name" required autocomplete="off" class="input">-->
+                        <!--</div>-->
+                        <!--</div>-->
+                    </div>
+                </div>
+
+
+                <div class="layui-form-item self-left">
+                    <label class="layui-form-label">质保信息</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="eqpt_quality" disabled value="{$eqpts.eqpt_quality}" class="layui-input layui-input-textarea" style="width: 842px">
+                    </div>
+                </div>
+
+                <div class="layui-form-item self-left">
+                    <label class="layui-form-label">保养提示</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="eqpt_upkeep_info" disabled value="{$eqpts.eqpt_upkeep_info}"  class="layui-input layui-input-textarea" style="width: 842px">
+                    </div>
+                </div>
+
+                <div class="layui-form-item self-left">
+                    <label class="layui-form-label">备注信息</label>
+                    <div class="layui-input-block" style="width: 842px">
+                        <textarea name="eqpt_remarks" disabled  class="layui-textarea layui-input-textarea">{$eqpts.eqpt_remarks}</textarea>
+                    </div>
+                </div>
+
+                <!--<fieldset class="layui-elem-field layui-field-title">
+                    <legend>配件信息</legend>
+                </fieldset>
+                <div class="accInfo">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">配件信息一</label>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <div class="layui-upload">
+                                <button type="button" class="layui-btn" id="">上传图片</button>
+                                <div class="layui-upload-list">
+                                    <img class="layui-upload-img" id="demo1">
+                                    <p id="demoText"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-inline">
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">配件名称</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" class="layui-input" placeholder="00-01号线缆">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">型号规格</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" class="layui-input" placeholder="20*20*20">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">需要数量/个</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" class="layui-input" placeholder="备注信息">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline">
+                                    <label class="layui-form-label">备注信息</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" class="layui-input" placeholder="备注信息">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="layui-form-item">
+                    <div>添加配件</div>
+                </div>-->
+
+               <!-- <div class="layui-form-item Center">
+                    <div class="layui-input-block">
+                        &lt;!&ndash;<button type="button" class="layui-btn">
+                            <i class="layui-icon">&#xe857;</i>提交并绑定设备模型
+                        </button>&ndash;&gt;
+                        <button class="layui-btn" id="sub" lay-submit lay-filter="sub">立即提交</button>
+                        <button type="reset" class="layui-btn layui-btn-danger">关闭</button>
+                    </div>
+                </div>-->
+            </form>
+        </div>
+    </div>
+
+
+</div>
+{/block}
+
+{block name="script"}
+<script>
+    layui.use(['form', 'laydate','upload'], function(){
+        var form = layui.form,
+            laydate = layui.laydate,
+            upload = layui.upload;
+
+
+        //监听提交
+        /* form.on('submit(demo1)', function(data){
+             layer.alert(JSON.stringify(data.field), {
+                 title: '最终的提交信息'
+             });
+             return false;
+         });*/
+        //日期时间选择器
+        laydate.render({
+            elem: '#test5'
+            ,type: 'datetime'
+//            ,showBottom:false
+            ,value: new Date()
+        });
+        //普通图片上传
+        var uploadInst = upload.render({
+            elem: '#test1'
+            ,url: '/upload/'
+            ,before: function(obj){
+                //预读本地文件示例，不支持ie8
+                obj.preview(function(index, file, result){
+                    $('#demo2').attr('src', result); //图片链接（base64）
+                });
+            }
+            ,done: function(res){
+                //如果上传失败
+                if(res.code > 0){
+                    return layer.msg('上传失败');
+                }
+                //上传成功
+            }
+            ,error: function(){
+                //演示失败状态，并实现重传
+                var demoText = $('#demoText');
+                demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+                demoText.find('.demo-reload').on('click', function(){
+                    uploadInst.upload();
+                });
+            }
+        });
+    });
+</script>
+{/block}
+</body>

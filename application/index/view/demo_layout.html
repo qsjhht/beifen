@@ -1,0 +1,222 @@
+</head>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="__STATIC__/h5splayer/jquery-3.1.1.js"></script>
+    <link rel="stylesheet" href="__STATIC__/new/element-ui/lib/theme-chalk/index.css">
+    <script src="__STATIC__/new/js/vue.js"></script>
+    <script src="__STATIC__/new/element-ui/lib/index.js"></script>
+    <script src="__STATIC__/new/gis/socket.io.js"></script>
+    <script src="__STATIC__/layui/layui.js"></script>
+    {block name="maincss"}css js 类{/block}
+
+</head>
+<style>
+    .bulletin_red{
+        background-color:#470313;
+        border:1px solid #df3d38;
+        color:#df3d38
+    }
+    .bulletion_yellow{
+        background-color:#3b2b18;
+        border:1px solid #ca8622;
+        color:#ca8622
+    }
+    .el-notification__title{
+        color:#FFF;
+    }
+    .el-notification__content{
+        color:#FFF;
+    }
+    .el-icon-close{
+        color:#FFF
+    }
+    .el-dialog__body{
+        background-color:black;
+    }
+</style>
+<body>
+<div id="app" style="display: none;">
+    <el-dialog :visible.sync="dialogVisible" width="30%" title="报警信息">
+        <table width="400" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <th>报警时间</th>
+                <th>{{alarm_tips.alarm_time}}</th>
+            </tr>
+            <tr>
+                <th>设备</th>
+                <th>{{alarm_tips.cate_name}}</th>
+            </tr>
+            <tr>
+                <th>防火分区</th>
+                <th>{{alarm_tips.zone}}</th>
+            </tr>
+            <tr>
+                <th>报警位置</th>
+                <th>{{alarm_tips.eqpt_site}}</th>
+            </tr>
+            <tr>
+                <th>报警级别</th>
+                <th>{{alarm_tips.type_content}}</th>
+            </tr>
+            <tr>
+                <th>内容描述</th>
+                <th>{{alarm_tips.lvlcontent}}</th>
+            </tr>
+            <tr>
+                <th>详情</th>
+                <th>{{alarm_tips.rec_details}}</th>
+            </tr>
+            <tr>
+                <th>备注</th>
+                <th>{{alarm_tips.remark}}</th>
+            </tr>
+            <tr>
+                <th>是否处置</th>
+                <th>{{alarm_tips.is_manage}}</th>
+            </tr>
+        </table>
+    </el-dialog>
+    <!--  -->
+</div>
+<audio id="myAudio" style="display: none;">
+    <source src="__STATIC__/new/alarm.wav" type="audio/wav">
+    您的浏览器不支持 audio 与元素。
+</audio>
+{block name="main"}主内容{/block}
+{block name="script"}
+<script>
+    var socket = io('http://192.168.10.18:2120');
+    socket.emit('login',2333);
+    var audio = document.getElementById("myAudio");
+    // 收取后端数据
+    new Vue({
+        el: '#app',
+        data: function() {
+            return {
+                visible: false ,
+                dialogVisible:false,
+                alarm_tips:'',
+                audio:''
+            }
+        },
+        created(){
+            let ccc = this.$options.methods.alarm_tips.bind(this);
+            socket.on('new_msg',(data) => {
+                ccc(data);
+                console.dir('cccccccccccccccc');
+                console.dir(data);
+            })
+        },
+        methods:{
+            alarm_tips:function(a){
+                let _this = this;
+                let evala = eval('('+ a +')').real_alarm;
+                _this.alarm_tips = evala;
+                if(evala.lvlcontent == '普通'){
+                    // return;
+                }else if(evala.lvlcontent == '设备'){
+                    return ;
+                }else if(evala.lvlcontent == '紧急'){
+                    audio.play();
+                    audio.loop = true;
+                    _this.$notify({
+                        title:`${evala.lvlcontent}报警`,
+                        message:`${new Date(evala.alarm_time*1000).toLocaleString()}\r ${evala.zone}\r ${evala.cate_name}
+                              <a style="float: right" href="javascript:void(0)" onclick="alarmtips(${evala.id},${evala.is_manage})">[详情]</a>`,
+                        duration:0,
+                        dangerouslyUseHTMLString:true,
+                        iconClass:'el-icon-bell',
+                        customClass:'bulletion_yellow',
+                        onClick:function(){
+                            audio.pause();
+                            // dialogVisible = true;
+                        },
+                        onClose(){
+                            audio.pause();
+                        }
+                    })
+                }else if(evala.lvlcontent == '严重'){
+                    audio.play();
+                    audio.loop = true;
+                    _this.$notify({
+                        title:`${evala.lvlcontent}报警`,
+                        message:`${new Date(evala.alarm_time*1000).toLocaleString()}\r ${evala.zone}\r ${evala.cate_name}
+                              <a style="float: right" href="javascript:void(0)" onclick="alarmtips(${evala.id},${evala.is_manage})">[详情]</a>`,
+                        duration:0,
+                        dangerouslyUseHTMLString:true,
+                        iconClass:'el-icon-bell',
+                        customClass:'bulletin_red',
+                        onClick:function(){
+                            audio.pause();
+                            // _this.dialogVisible = true;
+                        },
+                        onClose(){
+                            audio.pause();
+                        }
+                    })
+                }
+                _this.alarm_tips.alarm_time = new Date(_this.alarm_tips.alarm_time*1000).toLocaleString();
+                if(_this.alarm_tips.is_manage == 0){
+                    _this.alarm_tips.is_manage = '否'
+                }else if(_this.alarm_tips.is_manage == 1){
+                    _this.alarm_tips.is_manage = '是'
+                }
+
+            }
+        }
+    })
+
+
+</script>
+{/block}
+<script>
+
+    function alarmtips(alarm_id,is_manage) {
+        // alert(alarm_id);
+        // alert(is_manage);
+        layui.use('layer', function(){
+            var layer = layui.layer;
+            //console.dir(data);
+            //window.open('{:url("eqpt/eqpt_details")}' + "?id=" + data.eqpt_id, '_self');
+            if(is_manage){
+                layer.open({
+                    title:"设备详情",
+                    title:false,
+                    type: 2,
+                    offset: ['200px', '400px'],
+                    area: ['1070px', '655px'],
+                    fixed: true, //不固定
+                    maxmin: false,
+                    content: ['{:url("alarm/details")}' + "?rec_id=" + alarm_id, 'no'],
+                    shade: [0.8, '#393D49'],
+                    cancel: function(){
+                        //右上角关闭回调  刷新父页面
+                        // window.parent.location.reload();
+                        //return false 开启该代码可禁止点击该按钮关闭
+                    }
+                });
+            }else{
+                layer.open({
+                    title:"设备详情",
+                    title:false,
+                    type: 2,
+                    offset: ['200px', '400px'],
+                    area: ['1070px', '655px'],
+                    fixed: true, //不固定
+                    maxmin: false,
+                    content: ['{:url("alarm/manage")}' + "?rec_id=" + alarm_id, 'no'],
+                    shade: [0.8, '#393D49'],
+                    cancel: function(){
+                        //右上角关闭回调  刷新父页面
+                        // window.parent.location.reload();
+                        //return false 开启该代码可禁止点击该按钮关闭
+                    }
+                });
+            }
+        });
+    }
+</script>
+</body>
+</html>

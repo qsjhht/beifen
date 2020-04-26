@@ -1,0 +1,229 @@
+*{
+    margin: 0px;
+    padding: 0px;
+}
+body{
+    overflow: hidden;
+}
+/*二级导航栏设置开始*/
+.switchViewBtn{
+    text-align: center;
+    width:100%;
+    height: 55px;
+    font-size: 13px;
+    line-height: 55px;
+}
+.switchViewBtn a{
+ /*   width:120px;
+    height:46px;*/
+    /*display: block;     !*把a变成块级元素*!*/
+    margin-top: 10px;
+    text-decoration:none;
+    color: #1E1E1E;
+    float: right;
+}
+/*二级导航栏结束*/
+
+
+.content{
+    clear: both;
+    width: 100%;
+    height: 100%;
+    position:absolute;
+    /*left:355px;*/
+}
+.content .contentView{
+    width: 99.8%;
+    height:100%;
+    background-color: #f2f2f2;
+}
+.viewLeft{
+    background-color: #169BD5;
+    float: left;
+    width: 780px;
+    height: 693px;
+    background-color: #cccccc;
+}
+.viewRight{
+    width: 405px;
+    height: 693px;
+    margin: 0 0 0 8px;
+    float: right
+}
+.viewLeftVideo{
+    width: 770px;
+    height: 578px;
+    background-color: #1E1E1E;
+    margin: 5px 5px 0 5px;
+    position: relative;
+}
+.objLink{
+    color: #FFFFFF;
+    position: absolute;
+    left: 0px;
+    display: inline-block;
+    text-decoration: underline;
+    margin: 35% 35%;
+}
+.objLink:hover{
+    cursor: pointer;
+    color: #33CCFF;
+    text-decoration: none;
+}
+.viewLeftCtl{
+    padding-top: 30px;
+    padding-left: 10px;
+    width:775px;
+    height: 78px;
+    text-align: center;
+}
+.viewLeftCtl form{
+    width: 207px;
+    margin-top: 10px;
+}
+.viewLeftCtl form .street{
+    margin-bottom: 8px;
+}
+
+.viewRightCtl{
+    width:280px;
+    position: relative;
+    top:-50px;
+    left:280px;
+}
+.viewRightCtl #recordBtn{
+    /*display: inline-block;*/
+    position: relative;
+    top: -11px;
+    left: 100px;
+}
+.viewRightCtl #findDevBtn{
+    /*display: inline-block;*/
+    position: relative;
+    top: -11px;
+    left: 100px;
+}
+.viewRightCtl button{
+    display: none;
+}
+
+/*GIS区域*/
+.viewRitGis{
+    width: 400px;
+    height: 341px;
+    margin-bottom: 10px;
+    background-color: #cccccc;
+}
+
+/*防火分区*/
+.viewRitFirePro{
+    width: 400px;
+    height: 341px;
+    background-color: #cccccc;
+}
+.viewRitFirePro img{
+    display:block;
+    width:100%;
+    height:100%;
+    margin:0 auto;
+}
+
+
+
+.youkuangjia{
+    display: none;
+    Z-index:3000;
+    height:700px;
+    width:250px;
+    background-color: #000000;
+    position:absolute;
+    right:-1px;
+    top:0px;
+    background-color:rgba(00,00,00,0.5);
+}
+.youkuangjia_1{
+    background-color:rgba(00,00,00,0.2);
+    width:250px;
+    height:80px;
+    top:0px;
+}
+.youkuangjia_1 h3{
+    height: 40px;
+    line-height: 40px;
+    color:#ed482f;
+    color: #f1ffd6;
+    /*margin-left:-80px;*/
+    padding-top: 8px;
+    text-align: center;
+}
+.youkuangjia_1 h4{
+    color:#ed482f;
+    color: #f1ffd6;
+    /*color: #1E1E1E;*/
+    /*margin-left:30px;*/
+    /*padding-top:8px;*/
+    text-align: center;
+}
+.youkuangjia_2{
+    width:230px;
+    height:45px;
+    font-size:16px;
+    line-height:45px;
+    /*text-align:center;*/
+    color:#ffffff;
+    display:inline-block;
+    padding-left: 20px;
+}
+.youkuangjia_2 span:first-child{
+    margin-right: 10px;
+}
+.youkuangjia_2 p{
+    /*color: #00ff66;*/
+    display:inline-block;
+}
+/*标签*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

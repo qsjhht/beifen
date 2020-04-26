@@ -1,0 +1,180 @@
+{extend name="sub_layout"/}
+{block name="main"}
+<style type="text/css">
+    div img {
+        width: 100px;
+    }
+</style>
+<div class="layui-card">
+    <div class="layui-card-body">
+        <form class="layui-form form-horizontal" action="" method="post">
+            <input type="hidden" name="userid" class="layui-input" value="{$details['userid']}">
+            <div class="layui-form-item">
+                <label class="layui-form-label">用户名</label>
+                <div class="layui-input-inline w400" >
+                    <input type="text" name="username" autocomplete="off" value="{$details['username']}"  placeholder="登录名" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">用户昵称</label>
+                <div class="layui-input-inline w400" >
+                    <input type="text" name="nickname" autocomplete="off" value="{$details['nickname']}"  placeholder="用户昵称" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">用户手机</label>
+                <div class="layui-input-inline w400" >
+                    <input type="text" name="phone" autocomplete="off" value="{$details['phone']}"  placeholder="用户手机" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">性别</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="sex" value="1" title="男" {if $details.sex=="1"}checked{/if}>
+                    <input type="radio" name="sex" value="0" title="女" {if $details.sex=="0"}checked{/if}>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">所属部门</label>
+                <div class="layui-input-block">
+                    <input type="text" name="label" required="" value="{$details.dept_name}" lay-verify="required" placeholder="请选择上级部门" readonly="" autocomplete="off" class="layui-input eletxea w400">
+                    <input type="text" name="user_dept_id" value="{$details.deptid}" class="layui-input" style="display: none">
+                    <div class="eleTree ele5 w400" lay-filter="data5"></div>
+                </div>
+            </div>
+
+            <div class="layui-form-item" style="width: 450px;">
+                <label class="layui-form-label">所属角色</label>
+                <div class="layui-input-block">
+                    <select name="roleid" lay-verify="required">
+                        {volist name="Role" id="vo"}
+                        <option value="{$vo.role_id}" {if $details.roleid==$vo.role_id}selected{/if}>{$vo.role_name}</option>
+                        {/volist}
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{/block}
+{block name="script"}
+<script>
+    layui.config({
+        base : '__STATIC__/layui/'
+    }).use(['layer','form','jquery','selectN','selectM','eleTree'],function(){
+        $ = layui.jquery;
+        var el5;
+        var form = layui.form;
+        var eleTree= layui.eleTree;
+        $ .ajax({
+            type: 'GET',
+            url: '/index/user/get_tree_data',//发送请求
+            //data: {'lamp_num':lamp_num},
+            dataType:'json',
+            async:false,
+            success: function(result) {
+
+                //document.getElementById("Lamp").value = result;
+                //由于 JSON 语法是 JavaScript 语法的子集，JavaScript 函数 eval() 可用于将 JSON 文本转换为 JavaScript 对象。
+
+                //var tagData =JSON.stringify(eval(result));
+
+                //var tagData = eval(document.getElementById("Lamp").value);
+                console.log(result);
+
+                $("[name='label']").on("click",function (e) {
+                    e.stopPropagation();
+                    if(!el5){
+                        el5=eleTree.render({
+                            elem: '.ele5',
+                            data: result,
+                            defaultExpandAll: false,
+                            expandOnClickNode: false,
+                            highlightCurrent: true
+                        });
+                    }
+                    $(".ele5").toggle();
+                })
+                eleTree.on("nodeClick(data5)",function(d) {
+                    $("[name='label']").val(d.data.currentData.label);
+                    $("[name='user_dept_id']").val(d.data.currentData.id);
+                    $(".ele5").hide();
+                })
+                $(document).on("click",function() {
+                    $(".ele5").hide();
+                })
+
+            }
+        });
+
+        //监听提交
+        form.on('submit(demo1)', function(data){
+            //alert('adsfdfs');
+            //console.dir(data.field);
+            //alert('adsfdfs');
+            $.ajax({
+                url: '{:url("index/user/user_edit_ajax")}',
+                method:'post',
+                data:data.field,
+                dataType:'JSON',
+                success:function(res){
+                    console.dir(res);
+                    if(res.code == '1'){
+                        layer.alert(res.msg);
+                        //parent.closeIframe(res.msg);
+                        var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                        window.parent.location.reload();//刷新父页面
+                        parent.layer.close(index);//关闭弹出层
+
+                    }else{
+                        return false;
+                    }
+                },
+                error:function (res) {
+                    layer.alert(res.msg);
+                    return false;
+                }
+            }) ;
+        });
+        //监听返回按钮
+        /*$('#go_back').on('click', function()
+        {
+          window.open('{:url("user/index",array("menuid"=>"24"))}',  '_self');
+        });*/
+
+        //监听提交
+        /*form.on('submit(demo1)', function(data){
+
+
+
+        $.ajax({   
+            url:'./add_dept',       
+            method:'post',       
+            data:data.field,        
+            dataType:'JSON',         
+            success:function(res){     
+                if(res.code='0'){    
+                layer.alert('success');  
+                    //parent.closeIframe(res.msg);
+                    return false;
+                }                
+                else{
+                    layer.alert('sss')  
+                    return false;
+                }
+            },              
+            error:function (data) {
+                 layer.alert('error')
+                    return false;
+            }           
+               }) ;         
+        });*/
+    });
+</script>
+{/block}

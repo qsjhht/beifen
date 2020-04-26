@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>document</title>
+    <link rel="stylesheet" href="__STATIC__/new/evironment/evironment.css">
+    <link rel="stylesheet" href="__STATIC__/new/itemJS/evironment.js">
+    <link rel="stylesheet" href="__STATIC__/new/evironment/common.css">
+    <link rel="stylesheet" href="__STATIC__/layui/css/layui.css">
+    <script src="__STATIC__/js/echarts.min.js"></script>
+    <!--<script src="__STATIC__/new/js/index.js"></script>-->
+    <!-- 图标 -->
+    <link rel="stylesheet" href="__STATIC__/new/style.css">
+    <link rel="stylesheet" href="__STATIC__/new/demo.css">
+    <script src="__STATIC__/h5splayer/jquery-3.1.1.js"></script>
+</head>
+<style>
+    input.layui-input.layui-unselect{
+        height: 30px;
+        width: 200px;
+        border-radius: 10px;
+        border: 1px solid #00FFFF;
+        color: #000000;
+        margin-top: 5px;
+        padding: 0 14px;
+        appearance: none;
+        -moz-appearance: none;
+        -webkit-appearance: none;
+        /*background: url(../image/sanjiao.png) no-repeat right center;*/
+        background-color: #cccfd1;
+    }
+    div.layui-input-inline{
+        margin-right: 15px!important;
+    }
+    .settling{
+        /*padding:10px;*/
+        /*border:1px solid red;*/
+        /*background-color:black;*/
+        height:40vh;
+        width: 100%;
+        margin-top:20px;
+    }
+    ::-webkit-scrollbar{
+         display: none;
+    }
+    .parent {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(3, 1fr);
+        grid-column-gap: 2px;
+        grid-row-gap: 2px;
+        width: 48.2%;
+        height: 100%;
+    }
+
+    .div1 { grid-area: 1 / 1 / 2 / 2; }
+    .div2 { grid-area: 1 / 2 / 2 / 3; }
+    .div3 { grid-area: 2 / 1 / 3 / 2; }
+    .div4 { grid-area: 2 / 2 / 3 / 3; }
+    .div5 { grid-area: 3 / 1 / 4 / 2; }
+    .div6 { grid-area: 3 / 2 / 4 / 3; }
+    .flexs{
+        display: flex;
+        justify-content: center;
+        align-items:center;
+    }
+</style>
+<body class="backg" style="overflow: auto">
+
+    <div class="middleNav">
+        <i class="layui-icon">&#xe653;</i> &nbsp;
+        大数据管理
+    </div>
+
+
+    <input type="hidden" id="sitesdata" class="layui-input" value="{$Sitesdata}">
+    <input type="hidden" id="sitehk" class="layui-input" value="{$Sitehk}">
+    <input type="hidden" id="realtime_IP" class="layui-input" value="{$Config.realtime_IP}">
+    <form class="layui-form" action="">
+        <div class="layui-inline" style="height: 42.6px">
+            <div class="layui-form-item test"  lay-filter="test"></div>
+        </div>
+    </form>
+    <div class="evirMain">
+        <div class="evirMain2 flex" style="justify-content:space-between;align-content:space-between">
+            <div class="evirMainDiv mainBor ">
+                <div class="contentHead">
+                    温度 <img src="__STATIC__/new/image/c13.png" alt="/" width="15" height="20">
+                </div>
+                <div class="contentDiv" data-name="T" id="T">
+                    ----
+                    <!-- 30℃ -->
+                </div>
+                <div class="contentBelow">℃</div>
+            </div>
+            <div class="evirMainDiv mainBor">
+                <div class="contentHead">
+
+                    湿度
+                    <img src="__STATIC__/new/image/c4.png" alt="/" width="20" height="20">
+                </div>
+                <div class="contentDiv" data-name="M" id="M">
+                    ----
+                    <!-- 72% -->
+                </div>
+                <div class="contentBelow">%</div>
+            </div>
+            <div class="evirMainDiv mainBor">
+                <div class="contentHead">
+                    水位 <img src="__STATIC__/new/image/c14.png" alt="/" width="30  ">
+                </div>
+                <div class="contentDiv" data-name="LT" id="LT">
+                    <!-- 20cm -->
+                    ----
+                </div>
+                <div class="contentBelow">CM</div>
+            </div>
+            <div class="evirMainDiv mainBor">
+                <div class="contentHead">
+                    甲烷
+                    <span>&nbsp;CH<sub style="font-size: 1px">4</sub></span>
+                </div>
+                <div class="contentDiv" data-name="CH4" id="CH4">
+                    ----
+                    <!-- 3 -->
+                </div>
+                <div class="contentBelow">%LEL</div>
+            </div>
+            <div class="evirMainDiv mainBor">
+                <div class="contentHead">
+                    硫化氢
+                    <span>&nbsp;H<sub style="font-size: 1px">2</sub>S</span>
+                </div>
+                <div class="contentDiv" data-name="H2S" id="H2S">
+                    ----
+                    <!-- 0 -->
+                </div>
+                <div class="contentBelow">PPM</div>
+            </div>
+            <div class="evirMainDiv mainBor">
+                <div class="contentHead">
+                    氧气
+                    <span>&nbsp;O<sub style="font-size: 1px">2</sub></span>
+                </div>
+                <div class="contentDiv" data-name="O2" id="O2">
+                    ----
+                    <!-- 20 -->
+                </div>
+                <div class="contentBelow">%VOL</div>
+            </div>
+        </div>
+        <div class="evirMain2 layui-form flex" >
+            <div class="main2Con">
+                <div class="divWidth flex">
+                    <img src="__STATIC__/new/image/c1.png" alt="当前没有图片" class="evirImg "/>
+                    <div class="divWidthInput">
+                        水舱排风</br>
+                        <input type="checkbox"  lay-skin="switch"  lay-filter="fan_switch1" lay-text="ON|OFF"/>
+                    </div>
+                </div>
+                <div class="divWidth flex" style="border-top:1px dashed #ffffff">
+                    <img src="__STATIC__/new/image/c1.png" alt="当前没有图片" class="evirImg"/>
+                    <div class="divWidthInput">
+                        电舱排风</br>
+                        <input type="checkbox" lay-skin="switch"  lay-filter="fan_switch2" lay-text="ON|OFF">
+                    </div>
+                </div>
+            </div>
+            <div class="main2Con flex" style="border-left:1px solid #ffffff;border-right:1px solid #ffffff; margin:0 4px">
+                <img src="__STATIC__/new/image/c3.png" alt="当前没有图片" class="evirImg"/>
+                <div class="divWidthInput">
+                    水泵</br>
+                    <input type="checkbox" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF">
+                </div>
+            </div>
+            <div class="parent">
+                <div class="div1 flexs">
+
+                        <img src="__STATIC__/new/image/lamp-off.png" id="lamp_01" alt="当前没有图片" class="evirImg2"/>
+                        <div class="divWidthInput">
+                            普通照明</br>
+                            <input type="checkbox" lay-skin="switch" lay-text="ON|OFF" id="01" class="switch_lamp" lay-filter="switch_lamp">
+                        </div>
+
+                </div>
+                <div class="div2 flexs">
+
+                        <img src="__STATIC__/new/image/lamp-off.png" id="lamp_02" alt="当前没有图片" class="evirImg2"/>
+                        <div class="divWidthInput">
+                            应急照明</br>
+                            <input type="checkbox" lay-skin="switch" lay-text="ON|OFF" id="02" class="switch_lamp" lay-filter="switch_lamp">
+
+                        </div>
+                </div>
+                <div class="div3 flexs">
+
+                        <img src="__STATIC__/new/image/lamp-off.png" id="lamp_03" alt="当前没有图片" class="evirImg2"/>
+                        <div class="divWidthInput">
+                            安全照明</br>
+                            <input type="checkbox" lay-skin="switch" lay-text="ON|OFF" id="03" class="switch_lamp" lay-filter="switch_lamp">
+                        </div>
+
+                </div>
+                <div class="div4 flexs">
+
+                        <img src="__STATIC__/new/image/lamp-off.png" id="lamp_04" alt="当前没有图片" class="evirImg2"/>
+                        <div class="divWidthInput">
+                            全部照明</br>
+                            <input type="checkbox" lay-skin="switch" lay-text="ON|OFF" id="04" class="switch_lamp" lay-filter="switch_lamp">
+                        </div>
+
+                </div>
+                <div class="div5 flexs">
+
+                        <img src="__STATIC__/new/image/lamp-off.png" id="lamp_05" alt="当前没有图片" class="evirImg2"/>
+                        <div class="divWidthInput">
+                            过渡普通照明</br>
+                            <input type="checkbox" lay-skin="switch" lay-text="ON|OFF" id="05" class="switch_lamp" lay-filter="switch_lamp">
+                        </div>
+
+                </div>
+                <div class="div6 flexs">
+
+                        <img src="__STATIC__/new/image/lamp-off.png" id="lamp_06" alt="当前没有图片" class="evirImg2"/>
+                        <div class="divWidthInput">
+                            过渡应急照明</br>
+                            <input type="checkbox" lay-skin="switch" lay-text="ON|OFF" id="06" class="switch_lamp" lay-filter="switch_lamp">
+                        </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="evirMain evirMain1" style="flex-wrap:wrap">
+        <div class="evirMainSele">
+            <select class="evirSelect" id="seleTwo">
+                <option value="T">温度</option>
+                <option value="M">湿度</option>
+                <option value="O2">氧气</option>
+                <option value="CH4">甲烷</option>
+                <option value="H2S">硫化氢</option>
+                <option value="LT">水位</option>
+            </select>
+            <!--<div class="display evirSelect">
+                <div class="evirSele"><i class="icon-chart-01"></i></div>
+                <ul class="evirUl">
+                    <li><i class="icon-chart-01"></i></li>
+                    <li><i class="icon-chart-02"></i></li>
+                    <li><i class="icon-chart-03"></i></li>
+                    <li><i class="icon-chart-04"></i></li>
+                </ul>
+            </div>-->
+        </div>
+        <div id="container" class="evirEchart"></div>
+        <!--<div id="container" style="width:100%;height:100%;"></div>-->
+        <div class="settling" id="settling1"></div>
+        <div class="settling" id="settling2"></div>
+        <div class="settling" id="settling3"></div>
+        <div class="settling" id="settling4"></div>
+
+    </div>
+</body>
+
+<script src="__STATIC__/layui/layui.js"></script>
+
+<script>
+    var zone1 = '';
+    var form,zoneone,lampname;
+    let evirImg = document.getElementsByClassName('evirImg');
+    layui.config({
+        base: '__STATIC__/interact/js/',
+    })
+    layui.use(['table','laydate','form','interact','layer'], function(){
+        var table = layui.table,
+            interact = layui.interact,
+            $ = layui.jquery,
+
+            layer = layui.layer;
+        form = layui.form;
+
+        var site_data = JSON.parse($('#sitesdata').val());
+        var site_hk = JSON.parse($('#sitehk').val());
+        // console.dir(site_data);
+        form.on('switch(fan_switch1)',function(){
+            if(this.checked ? true : false == true){
+                setTimeout(function() {
+                    layer.msg('成功！');
+                    evirImg[0].classList.add('evirImgKey')
+                }, 1000);
+            }else if(this.checked ? trun : false == false){
+                setTimeout(function() {
+                    layer.msg('成功！');
+                    evirImg[0].classList.remove('evirImgKey')
+                }, 1000);
+            }
+        })
+        form.on('switch(fan_switch2)',function(){
+            if(this.checked ? true : false == true){
+                setTimeout(function() {
+                    layer.msg('成功！');
+                    evirImg[1].classList.add('evirImgKey');
+                }, 1000);
+            }else if(this.checked ? trun : false == false){
+                setTimeout(function() {
+                    layer.msg('成功！');
+                    evirImg[1].classList.remove('evirImgKey');
+                }, 1000);
+            }
+        })
+        form.on('switch(switchTest)',function(){
+            if(this.checked ? true : false == true){
+                setTimeout(function() {
+                    layer.msg('成功！');
+                    // evirImg[1].classList.add('evirImgKey');
+                }, 1000);
+            }else if(this.checked ? trun : false == false){
+                setTimeout(function() {
+                    layer.msg('成功！');
+                    // evirImg[1].classList.remove('evirImgKey');
+                }, 1000);
+            }
+        })
+        form.on('switch(switch_lamp)', function(obj){
+            //layer.tips(this.name + '：'+ obj.elem.checked, obj.othis);
+            // console.dir(this.name);
+            // console.dir(this.id);
+            var id = this.id;
+            var status;
+            var status = obj.elem.checked ? status="1" : status="0";
+            // var status = eval(obj.elem.checked);
+
+            if(zone1){
+
+                //获取分区信息 转换小写 去掉/
+                // let zoneone = zone1.replace('/','')/*.toLowerCase()*/;
+                // console.dir(zoneone);
+                // console.log(id);
+                lampname = zoneone+'_'+ id+'_C';
+
+                console.dir(lampname);
+                console.log(status);
+                let lamp = '{"'+lampname+'":"'+status+'"}';
+                $.get('http://192.168.5.100:1234/write',{ 'tags': lamp}, function(res) {
+                    res = JSON.parse(res);
+                    if(res.code == '200'){
+                        layer.msg('成功！');
+                        if(id == '04'){
+                            var btns = $('.switch_lamp');
+                            var lampimgs = $('.evirImg2');
+                            // btns.each(function(i, btn) {
+                            btns.attr('checked',obj.elem.checked);
+                            console.dir(obj.elem.checked);
+                            if(obj.elem.checked){
+                                lampimgs.attr("src", '__STATIC__/new/image/lamp-on.png');
+                                form.render('checkbox');
+                            }else{
+                                lampimgs.attr("src", '__STATIC__/new/image/lamp-off.png');
+                                form.render('checkbox');
+                            }
+
+                            // });
+                        }else{
+                            if(obj.elem.checked){
+                                $("#lamp_" + id + "").attr("src", '__STATIC__/new/image/lamp-on.png');
+                                form.render('checkbox');
+                            }else{
+                                $("#lamp_" + id + "").attr("src", '__STATIC__/new/image/lamp-off.png');
+                                form.render('checkbox');
+                            }
+                        }
+
+                    }else{
+                        obj.elem.checked = obj.elem.checked ? false : true;
+
+                        layer.msg('失败！');
+                        form.render('checkbox');
+                    }
+
+                });
+
+            }else{
+                layer.msg('请先选择防火分区后再进行操作！');
+
+            }
+
+
+
+
+            // var loding = layer.load(0);
+            // $.post('{:url("eqpt_management/changestatus")}', { 'id': id,'status':status}, function(data) {
+            //     console.log(data);
+            //     if (data.code == 1) {
+            //         if (data.url) {
+            //             layer.close(loding);
+            //             layer.msg(data.msg + ' 页面即将自动刷新~');
+            //         } else {
+            //             layer.close(loding);
+            //             layer.msg(data.msg);
+            //         }
+            //         setTimeout(function() {
+            //             if (data.url) {
+            //                 location.href = data.url;
+            //             } else {
+            //                 location.reload();
+            //             }
+            //         }, 1500);
+            //     } else {
+            //         layer.close(loding);
+            //         layer.msg(data.msg);
+            //         setTimeout(function() {
+            //             location.reload();
+            //         }, 1500);
+            //     }
+            // });
+        });
+        interact.render({
+            elem : '.test',
+            // url : '{:url("index/patrol/sitesdata")}',
+            title : '防火分区：',
+            data : site_data,
+            selected: [4,12,0], //[5,14,0],
+            // name : ['street','cang','site'],
+             hint : ['请选择街道','请选择舱室','请选择防火分区']
+        });
+
+            $(".settling").hide();
+            $(".evirEchart").hide();
+            $(".evirSelect").hide();
+        //监听选择select选择事件 使用lay-filter
+        var switch_lamp = $('.switch_lamp');
+        switch_lamp.attr("disabled","disabled");
+        interact.on('interact(test)',function(data){
+            // checkbox.attr("disabled",false);
+            //判断text是否含有中文
+            var reg = new RegExp("[\\u4E00-\\u9FFF]+","g");
+            if(!reg.test(data.text)){
+                //根据防火分区 获取实时数据
+                //console.dir(data.text);
+                //第一次 选择 创建定时器 获取实时数据
+                if(typeof(zone) == 'undefined'){
+
+
+
+                    // console.dir('undefined');
+                    arrDate = [];
+                    arrData = [];
+                    zone = data.text;
+                    if(typeof(site_hk[zone]) !== "undefined"){
+
+                        numData = new Array(); //数据
+                        stayguyData = new Array(); // 拉线
+                        angle_X = new Array(); //角度-X
+                        angle_Y = new Array(); //角度-Y
+
+                        did = site_hk[zone]; //采集箱
+                        zonenum = zone.substr(zone.length-4,2);   // 防火分区？
+                        $(".settling").show();
+                        // console.dir(site_hk[zone]);
+                        // console.dir(zone.substr(zone.length-4,2));
+                        zone_evir(did,zonenum);
+                        zone_socket(did);
+                    }
+
+                    zone1 = zone;
+
+                    //获取分区信息 转换小写 去掉/
+                    zoneone = zone1.replace('/','')/*.toLowerCase()*/;
+                    // console.dir(zoneone);
+                    get_lamp();
+                    real_time(zone);
+                    realtimes(zone);
+                    lastdata(zone);
+                    $("#seleTwo").val('T');
+                    myContainer.setOption({
+                        tooltip: {
+                            trigger: 'axis'
+                        },
+                        toolbox: {
+                            show: true,
+                            right:'10%',
+                            top:'5%',
+                            feature: {
+                                dataZoom: {
+                                    yAxisIndex: 'none'
+                                },
+                                // dataView: {readOnly: false},
+                                magicType: {type: ['line', 'bar']},
+                                restore: {},
+                                saveAsImage: {}
+                            },
+                            iconStyle: {
+                                color:
+                                    '#fff'
+                                ,
+                                borderColor:'#00FFFF'
+
+                            }
+                        },
+
+                        xAxis:{
+                            axisLabel:{
+                               interval:9,//间隔多少个坐标显示
+                                formatter: function (value, index) {
+                                    // 格式化成月/日，只在第一个刻度显示年份
+                                    return value.substr(11,5);
+                                }
+                            },
+                            data:arrDate
+                        },
+
+                        series:[{
+                            // name:'成交',
+                            data:arrData
+                        }]
+                    });
+                    // realtimes();
+                    Interval = window.setInterval("real_time(zone)",60000);
+                    Reallog = setInterval(function(){
+                        lastdata(zone);
+                        zone1 = zone;
+                        myContainer.setOption({
+                            xAxis:{
+                                axisLabel:{
+                                   interval:9,//间隔多少个坐标显示
+                                    formatter: function (value, index) {
+                                        // 格式化成月/日，只在第一个刻度显示年份
+                                        return value.substr(11,5);
+                                    }
+                                },
+                                data:arrDate
+                            },
+                            series:[{
+                                // name:'成交',
+                                data:arrData
+                            }]
+                        });
+                    },60000)
+
+                }else{
+                    // console.dir(zone);
+                    arrDate = [];
+                    arrData = [];
+                    // 删除旧定时器
+                    window.clearInterval(Interval);
+                    window.clearInterval(Reallog);
+
+
+
+                    $("#seleTwo").val('T');
+                    zone = data.text;
+
+                    $(".settling").hide();
+
+                    if(site_hk[zone] !== undefined){
+
+                        did = site_hk[zone]; //采集箱
+                        zonenum = zone.substr(zone.length-4,2);   // 防火分区？
+                        $(".settling").show();
+                        // console.dir(site_hk[zone]);
+                        // console.dir(zone.substr(zone.length-4,2));
+                        zone_evir(did,zonenum);
+                        zone_socket(did);
+                    }
+
+                    //获取分区信息 转换小写 去掉/
+                    zoneone = zone.replace('/','')/*.toLowerCase()*/;
+                    // console.dir(zoneone);
+                    get_lamp();
+                    real_time(zone);
+                    realtimes(zone);
+                    lastdata(zone);
+                    zone1 = zone;
+                    myContainer.setOption({
+                        xAxis:{
+                            axisLabel:{
+                               interval:9,//间隔多少个坐标显示
+                                formatter: function (value, index) {
+                                    // 格式化成月/日，只在第一个刻度显示年份
+                                    return value.substr(11,5);
+                                }
+                            },
+                            data:arrDate
+                        },
+                        series:[{
+                            // name:'成交',
+                            data:arrData
+                        }]
+                    });
+                    Interval = window.setInterval("real_time(zone)",60000);
+                    Reallog = setInterval(function(){
+                        lastdata(zone);
+                        myContainer.setOption({
+                            xAxis:{
+                                axisLabel:{
+                                   interval:9,//间隔多少个坐标显示
+                                    formatter: function (value, index) {
+                                        // 格式化成月/日，只在第一个刻度显示年份
+                                        return value.substr(11,5);
+                                    }
+                                },
+                                data:arrDate
+                            },
+                            series:[{
+                                // name:'成交',
+                                data:arrData
+                            }]
+                        });
+                    },60000)
+                }
+            }
+        })
+
+    // 监控种类
+        let seleTwo = document.getElementById('seleTwo');
+        seleTwo.onchange = function(){
+            arrDate = [];
+            arrData = [];
+            names = 'T';
+            // console.log(this.name);
+            // console.log(zone1);
+            if(zone1 !== ''){
+                window.clearInterval(Reallog);
+                names = this.value;
+                // console.dir(names);
+                realtimes(zone1,this.value);
+                lastdata(zone1,this.value);
+                myContainer.setOption({
+                    title:{
+                        text:$(this).find("option:selected").text()+'监测'
+                    },
+                    xAxis:{
+                        axisLabel:{
+                           interval:9,//间隔多少个坐标显示
+                            formatter: function (value, index) {
+                                // 格式化成月/日，只在第一个刻度显示年份
+                                return value.substr(11,5);
+                            }
+                        },
+                        data:arrDate
+                    },
+                    series:[{
+                        // name:'成交',
+                        data:arrData
+                    }]
+                });
+                Reallog = setInterval(function(){
+                    // console.dir(names);
+                    lastdata(zone1,names);
+                    myContainer.setOption({
+                        title:{
+                            text:$(this).find("option:selected").text()+'监测'
+                        },
+                        xAxis:{
+                            axisLabel:{
+                               interval:9,//间隔多少个坐标显示
+                                formatter: function (value, index) {
+                                    // 格式化成月/日，只在第一个刻度显示年份
+                                    return value.substr(11,5);
+                                }
+                            },
+                            data:arrDate
+                        },
+                        series:[{
+                            // name:'成交',
+                            data:arrData
+                        }]
+                    });
+                },60000)
+            }
+
+        }
+
+    });
+    function get_lamp() {
+        var btns = $('.switch_lamp');
+        let items='';
+        btns.each(function(i, btn) {
+            // console.dir(btn.id);
+            if(!isNaN(btn.id)){
+                items += zoneone+'_'+btn.id+'_S,';
+            }
+        });
+        let reg=/,$/gi;
+        items=items.replace(reg,"");
+        // console.dir(items);
+        $.get('http://192.168.5.100:1234/get',{ 'tags': items}, function(data) {
+            data = JSON.parse(data);
+            // console.dir(data);
+            if(data.code == '200'){
+                let datas = data.data;
+                // console.dir('数组数组');
+                // console.dir(datas.length);
+                if(datas.length !== 0){
+                    let hidenum = 0;
+                    jQuery.each(datas, function(i, val) {
+                        // console.dir(val);
+                        for(var key in val){
+                            // console.dir(key);
+                            matchResult = key.match(/_(\d+)_/)[1];
+
+                            // console.dir(val[key]);
+
+                            if(val[key] !== "null"){
+                                vals = val[key] == 1 ? true : false;
+                                $("#" + matchResult + "").attr('checked',vals);
+                                console.dir('matchResult:'+matchResult);
+                                if(vals){
+                                    $("#lamp_" + matchResult + "").attr("src", '__STATIC__/new/image/lamp-on.png');
+                                }
+                                $("#" + matchResult + "").attr("disabled",false);
+                                $("#" + matchResult + "").parent().parent().show();
+                                console.dir(val[key]);
+                            }else{
+                                ++hidenum;
+
+                                $("#" + matchResult + "").parent().parent().hide();
+                                $("#" + matchResult + "").attr("disabled",'disabled');
+                            }
+                            form.render('checkbox');
+
+                        }
+                    });
+                    // console.dir('asdfadsf');
+                    // console.dir(hidenum);
+                    if(hidenum == 5){
+                        $("#all_lamp").parent().parent().hide();
+                        $("#all_lamp").attr("disabled",'disabled');
+                    }else{
+                        $("#all_lamp").parent().parent().show();
+                        $("#all_lamp").attr("disabled",false);
+                    }
+                    form.render('checkbox');
+                    // console.dir('render');
+                }else{
+                    // console.dir('shuzu 0000000');
+                    $('.flexs').hide();
+                }
+
+                // hidenum = 0;
+            }
+
+            // console.dir(data);
+            // if(data.code == '200'){
+            //     datas = data.data;
+            //     // console.dir(datas);
+            //     $('#units').html(datas.date_num.substr(0,1));
+            //     $('#tens').html(datas.date_num.substr(1,1));
+            //     $('#hundreds').html(datas.date_num.substr(2,1));
+            //     $('#thousands').html(datas.date_num.substr(3,1));
+            //     if(datas.nickname !== ''){
+            //         $('#nickname').html(datas.nickname);
+            //     }
+            //     if(datas.person_num !== ''){
+            //         $('#person_num').html(datas.person_num);
+            //
+            //     }
+            //     $('#stime').html(datas.stime);
+            //     $('#etime').html(datas.etime);
+            //     element.progress('demo', datas.per);
+            // }else{
+            //     $('#stime').html('--');
+            //     $('#etime').html('--');
+            // }
+
+        });
+        // $("#01").attr('checked',true);
+        // $("#03").attr('checked',true);
+
+        // $("#01").prop("checked", "checked");
+        // $("#02").prop("checked", "checked");
+        // $("#03").prop("checked", "checked");
+        // $("#04").prop("checked","checked");
+        // console.dir($('#01'));
+        // console.dir($('#01').is(":checked"));
+
+        //     // url:realtime_IP+"/real/real_time?zone="+zones,
+        //     // url:"http://192.168.10.18/real/real_time?zone="+zones,
+        //     async:false,
+        //     success:function(result){
+        //         result = JSON.parse(result);
+        //         // console.dir(result);
+        //         var res={};
+        //         $.each(result,function(key,value){    //objTmp对象数据
+        //             value = parseFloat(value);
+        //             res[key] = value.toFixed(2);
+        //         });
+        //         // console.dir(res);
+        //         let list = document.querySelectorAll('.contentDiv');
+        //         var m = 0;
+        //         for(var i = 0; i < list.length; i++){
+        //             var key = list[i].dataset.name+'_'+zones;
+        //             var ids = list[i].dataset.name;
+        //
+        //
+        //             //console.dir(key);
+        //             if(typeof(res[key]) !== 'undefined'){
+        //                 document.getElementById(ids).innerText = res[key];
+        //             }else{
+        //                 m++;
+        //                 document.getElementById(ids).innerText = '----';
+        //             }
+        //         }
+        //         // console.dir(m);
+        //         //console.dir(result.PV_CH4_SL1SX01);
+        //     }
+        // });
+    }
+    function real_time(zone){
+        var zones = zone.replace('/','');
+        var realtime_IP = $('#realtime_IP').val();
+        $.ajax({
+            // url:realtime_IP+"/real/real_time?zone="+zones,
+            url:"http://192.168.10.18/real/real_time?zone="+zones,
+            async:false,
+            success:function(result){
+                result = JSON.parse(result);
+                // console.dir(result);
+                var res={};
+                $.each(result,function(key,value){    //objTmp对象数据
+                    value = parseFloat(value);
+                    res[key] = value.toFixed(2);
+                });
+                // console.dir(res);
+                let list = document.querySelectorAll('.contentDiv');
+                var m = 0;
+                for(var i = 0; i < list.length; i++){
+                    var key = list[i].dataset.name+'_'+zones;
+                    var ids = list[i].dataset.name;
+
+
+                    //console.dir(key);
+                    if(typeof(res[key]) !== 'undefined'){
+                        document.getElementById(ids).innerText = res[key];
+                    }else{
+                        m++;
+                        document.getElementById(ids).innerText = '----';
+                    }
+                }
+                if(m == 6){
+                    $(".evirEchart").hide();
+                    $(".evirSelect").hide();
+                }else{
+                    $(".evirEchart").show();
+                    $(".evirSelect").show();
+                    }
+                // console.dir(m);
+                //console.dir(result.PV_CH4_SL1SX01);
+            }
+        });
+        //console.dir(arr);
+    }
+
+    var container = document.getElementById('container');
+    var myContainer = echarts.init(container);
+
+    /*var base = + new Date(2018,9,30);
+    var oneDay = 24*3600*1000;
+    var date = [];
+    var data = [Math.random()*150];
+    var now = new Date(base);
+    function addData(shift){
+        now = [now.getFullYear(),now.getMonth()+1,now.getDate()].join('/');
+        date.push(now);
+        data.push((Math.random()-0.5)*10+data[data.length-1]);
+        if (shift) {
+            //console.log(data);
+            date.shift();
+            data.shift();
+        }
+        now = new Date(+new Date(now)+oneDay);
+    }
+
+
+
+    for (var i = 0; i < 100; i++) {
+        addData();
+    }*/
+    var datas,lastdata;
+    arrDate = [];
+    arrData = [];
+    function realtimes(zone,name) {
+        zone=zone||'XC13/S';
+        name=name||'T';
+        var zone = zone.replace('/','');
+        var realtime_IP = $('#realtime_IP').val();
+        // console.dir(realtime_IP);
+        // console.dir(zone);
+        // console.dir(name);
+        $.ajax({
+            // url:realtime_IP+"/real/real_times?name=QS_O2_XC13S",
+            url:"http://192.168.10.18/real/real_times?zone="+zone+"&name="+name,
+            async:false,
+            success:function(result){
+                let jsonObj = $.parseJSON(result);
+                objToArray(jsonObj,true);
+                // console.dir(arrDate);
+            }
+        });
+    }
+    function lastdata(zone,name) {
+        zone=zone||'XC13/S';
+        name=name||'T';
+        // console.dir('lastdata sssssssssss');
+        // console.dir(zone);
+        // console.dir(name);
+        var zone = zone.replace('/','');
+        var realtime_IP = $('#realtime_IP').val();
+        // console.dir(zone);
+        // console.dir(name);
+        // console.dir(realtime_IP);
+        $.ajax({
+            // url:realtime_IP+"/real/get_last_real?name=QS_O2_XC13S",
+            // url:"http://192.168.10.18/real/get_last_real?name=QS_O2_XC13S",
+            url:"http://192.168.10.18/real/get_last_real?zone="+zone+"&name="+name,
+            async:false,
+            success:function(result){
+
+                // console.dir(result);
+                // console.dir(name);
+                let jsonObj = $.parseJSON(result);
+                // console.dir(jsonObj);
+                // console.dir('lastdata eeeeeeeeeeeeeee');
+                objToArray(jsonObj,true);
+                // console.dir(arrDate);
+            }
+        });
+    }
+    // realtimes();
+
+
+   /* var arr = [];
+    for (let i in obj) {
+        //arr.push(obj[i]); //属性
+        //arr.push(obj[i]); //值
+        var o={};
+        o[i]=obj[i];
+        arr.push(o);
+    }*/
+
+    function objToArray(array,shift) {
+        for (var i in array) {
+            /*var o={};
+            o[i]=array[i];
+            arrDate.push(o);*/
+            arrDate.push(i);
+            arrData.push(array[i]);
+        }
+        if (shift) {
+            //console.log(data);
+            arrDate.shift();
+            arrData.shift();
+        }
+    }
+    // console.log(arr)
+
+
+    //console.dir(typeof(arrdata));
+    //console.dir(arrdata);
+    //设置图标配置项
+    myContainer.setOption({
+        title:{
+            text:'温度监测',
+            textStyle:{
+                color:'#00ffff',
+                fontWeight:'normal',
+                fontSize:16
+            },
+            padding:[15,10]
+        },
+        xAxis:{
+            type:"category",
+            boundaryGap:false,
+            axisLabel:{
+               interval:9,//间隔多少个坐标显示
+                formatter: function (value, index) {
+                    // 格式化成月/日，只在第一个刻度显示年份
+                    return value.substr(11,5);
+                }
+            },
+            data:arrDate,
+            axisLine:{
+                lineStyle:{
+                    color:'#e4e4e4'
+                }
+            }
+        },
+        yAxis:{
+            boundaryGap:[0,'50%'],
+            type:'value',
+            axisLine:{
+                lineStyle:{
+                    color:'#e4e4e4'
+                }
+            }
+        },
+        series:[{
+            // name:'成交',
+            type:'line',
+            smooth:true, //数据光滑过度
+            // symbol:'none', //下一个数据点
+            stack:'a',
+            // areaStyle: {normal : {
+            //         color:'#8cd5c2', //改变折线点的颜色
+            //         lineStyle:{
+            //             color:'#8cd5c2' //改变折线颜色
+            //         }
+            //     }},
+            // itemStyle : {
+            //     normal : {
+            //         lineStyle:{
+            //             color:'#ffffff'
+            //         }
+            //     }
+            // },
+            data:arrData
+        }]
+    });
+
+
+
+
+    //设置参数
+    let username = 'lshengh626'; //账户名
+    let userpass = '312650221'; // 密码
+
+
+
+    let a = 2;
+
+    // let
+    let date = new Date()  //日期
+    let getDate = date.getFullYear()+'-'+(date.getMonth()+1)+'-'+ date.getDate(); //当前日期
+
+    let evirData; // 数据
+    var Datanum;
+    var stayguynum;
+    var Xnum;
+    var Ynum;
+    let oo;  //时间
+    let socketData; //socket 数据
+    // let numData = new Array(); //数据
+    // let stayguyData = new Array(); // 拉线
+    // let angle_X = new Array(); //角度-X
+    // let angle_Y = new Array(); //角度-Y
+
+    function getArrayIndex(arr, obj) {
+        var i = arr.length;
+        while (i--) {
+            if (arr[i].code === obj) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    function zone_evir(did,zonenum) {
+        numData = new Array(); //数据
+        stayguyData = new Array(); // 拉线
+        angle_X = new Array(); //角度-X
+        angle_Y = new Array(); //角度-Y
+        // zonenum = zonenum.replace(/\b(0+)/gi,"");
+        // ajxa 使用
+        const XML = new XMLHttpRequest();
+        let url = `https://www.civildata.cn/api/OpenPlatform/openApi?u=${username}&p=${userpass}&did=${did}&date=${getDate}`;
+        XML.open('POST',url,false);
+
+        XML.onreadystatechange = function(){
+            if (XML.readyState == 4 && XML.status == 200) { //回传成功
+                // console.dir(url);
+                let evirData = JSON.parse(XML.responseText).result.data;
+                let device = JSON.parse(XML.responseText).result.device;
+                // console.dir(evirData);
+                // console.dir(device);
+                // console.dir(zonenum);
+
+
+                for(let i in device){
+                    if(device[i].name.search(zonenum+'防火分区沉降') != -1){
+                        code = device[i].code;
+                        Datanum = getArrayIndex(evirData[0].data,code );
+                        // console.dir(code);
+                        // console.dir(Datanum);
+                    }
+                    if(device[i].name.search(zonenum+'防火分区拉线') != -1){
+                        code = device[i].code;
+                        stayguynum = getArrayIndex(evirData[0].data,code );
+                    }
+                    if(device[i].name.search(zonenum+'防火分区倾角X') != -1){
+                        code = device[i].code;
+                        Xnum = getArrayIndex(evirData[0].data,code );
+                    }
+                    if(device[i].name.search(zonenum+'防火分区倾角Y') != -1){
+                        code = device[i].code;
+                        Ynum = getArrayIndex(evirData[0].data,code );
+                    }
+                }
+                evirData = evirData.slice(evirData.length-720,evirData.length);
+                // console.dir(evirData);
+                // console.dir(device);
+                for(let i in evirData){
+
+                    oo = evirData[i].date.substring(11,20);
+                    if(Datanum >= 0){
+                        numData.push([oo,evirData[i].data[Datanum].data]);
+                    }
+                    if(stayguynum >= 0){
+                        stayguyData.push([oo,evirData[i].data[stayguynum].data]);
+                    }
+                    if(Xnum >= 0){
+                        angle_X.push([oo,evirData[i].data[Xnum].data]);
+                    }
+                    if(Ynum >= 0){
+                        angle_Y.push([oo,evirData[i].data[Ynum].data]);
+                    }
+                }
+                // console.dir(Datanum)
+                // console.dir(stayguynum)
+                // console.dir(Xnum)
+                // console.dir(Ynum)
+
+                /*var reg = new RegExp("[\\u4E00-\\u9FFF]+","g");
+
+10#沉降19
+                if(!reg.test(device)){
+
+                }*/
+                // for(let i in evirData){
+                //     oo = data[i].date.substring(11,20);
+                //     numData.push([oo,data[i].data[num].data]);
+                //     stayguyData.push([oo,data[i].data[num+(1*a)].data]);
+                //     angle_X.push([oo,data[i].data[num+(2*a)].data])
+                //     angle_Y.push([oo,data[i].data[num+(3*a)].data])
+                // }
+                /*data = evirData.slice(evirData.length-800,evirData.length);
+                if(data[1].data.length == 10){
+                    num += 2
+                    console.log('10')
+                }else if(data[1].data.length == 4){
+                    console.log('4')
+                    a = 1;
+                    num = 0;
+                }*/
+            }else{
+                console.log('数据获取失败')
+            }
+        }
+        XML.send();
+
+
+        // console.dir(data);
+        // 获取历史数据
+        // for(let i in data){
+        //     oo = data[i].date.substring(11,20);
+        //     numData.push([oo,data[i].data[num].data]);
+        //     stayguyData.push([oo,data[i].data[num+(1*a)].data]);
+        //     angle_X.push([oo,data[i].data[num+(2*a)].data])
+        //     angle_Y.push([oo,data[i].data[num+(3*a)].data])
+        // }
+
+
+        evirEchart('settling1','沉降数据（mm）', numData);
+        evirEchart('settling2','拉线数据（mm）',stayguyData);
+        evirEchart('settling3','倾角-X（度）',angle_X);
+        evirEchart('settling4','倾角-Y（度）',angle_Y);
+    }
+    // webSocket  使用
+    wsUrl = 'ws://192.168.5.100:88/OpenPlatform/webSocket?projectId=211';
+    ws = new WebSocket(wsUrl);
+    ws.onopen = function(){
+        console.log("client:打开链接");
+        ws.send('{"u":"admin", "p":"admin", "code": 201 }')
+    };
+    function zone_socket(did) {
+        ws.onmessage = function(e){
+            socketData = JSON.parse(e.data);  //报错
+
+            if(socketData.deviceId == did){
+                // console.dir('tuisong ');
+                console.dir(did);
+                oo = socketData.date.substring(11,20);
+                // console.dir(oo);
+                // console.dir(socketData);
+                // console.dir(Datanum);
+                // console.dir(stayguynum);
+                // console.dir(Xnum);
+                // console.dir(Ynum);
+                // console.dir(num);
+                // console.dir(socketData.data[num].data);
+                if(Datanum >= 0){
+                    numData.push([oo,socketData.data[Datanum].data]);
+                    numData.shift();
+                    evirEchart('settling1','沉降数据（mm）', numData);
+                    // console.dir(socketData.data[Datanum].data);
+                }
+
+
+
+                if(stayguynum >= 0){
+                    stayguyData.push([oo,socketData.data[stayguynum].data]);
+                    stayguyData.shift();
+                    evirEchart('settling2','拉线数据（mm）',stayguyData);
+                    // console.dir(socketData.data[stayguynum].data);
+                }
+
+                if(Xnum >= 0){
+                    angle_X.push([oo,socketData.data[Xnum].data])
+                    angle_X.shift();
+                    evirEchart('settling3','倾角-X（度）',angle_X);
+                    // console.dir(socketData.data[Xnum].data);
+                }
+                if(Ynum >= 0) {
+                    angle_Y.push([oo, socketData.data[Ynum].data])
+                    angle_Y.shift();
+                    evirEchart('settling4', '倾角-Y（度）', angle_Y)
+                    // console.dir(socketData.data[Ynum].data);
+                }
+
+            }
+
+            evirEchart('settling1','沉降数据（mm）', numData);
+            evirEchart('settling2','拉线数据（mm）',stayguyData);
+            evirEchart('settling3','倾角-X（度）',angle_X);
+            evirEchart('settling4','倾角-Y（度）',angle_Y);
+        };
+        // 断开按钮
+        // function err(){
+        //     ws.close();
+        // };
+        ws.onclose=function(e){
+            console.log(e);
+            ws.close(); //关闭TCP连接
+        };
+        ws.onerror = (err)=>{
+            console.log("错误"+err)
+        }
+
+
+
+    }
+
+    // evirEchart
+    function evirEchart(echaId,name,dataEvir){
+        settling = echarts.init(document.getElementById(echaId));
+        // console.dir(settling);
+        settling.setOption({
+            tooltip: {
+                trigger: 'axis'
+            },
+            toolbox: {
+                show: true,
+                right:'10%',
+                top:'5%',
+                feature: {
+                    dataZoom: {
+                        yAxisIndex: 'none'
+                    },
+                    // dataView: {readOnly: false},
+                    magicType: {type: ['line', 'bar']},
+                    restore: {},
+                    saveAsImage: {}
+                },
+                iconStyle: {
+                    color:
+                        '#fff'
+                    ,
+                    borderColor:'#00FFFF'
+
+                }
+            },
+            title:{
+                text:name,
+                textStyle:{
+                    color:'#00ffff',
+                    fontWeight:'normal',
+                    fontSize:16
+                },
+                padding:[15,10]
+            },
+            xAxis:{
+                type:'category',
+                axisLine:{
+                    lineStyle:{
+                        color:'#e4e4e4'
+                    }
+                }
+            },
+            yAxis:{
+                name:name,
+                type:'value',
+                axisLine:{
+                    lineStyle:{
+                        color:'#e4e4e4'
+                    }
+                }
+            },
+            series:[{
+                data:dataEvir,
+                type:'line'
+            }]
+        })
+    }
+
+
+
+
+
+
+
+
+
+</script>
+</body>
+</html>

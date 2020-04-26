@@ -1,0 +1,282 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>可视化数据</title>
+    <link rel="stylesheet" href="/static/css/common.css">
+    <link rel="stylesheet" href="/static/layui/css/layui.css">
+    <link rel="stylesheet" href="/static/css/Visualization.css">
+    <script type="text/javascript" src="/static/js/echarts.min.js"></script>
+</head>
+`
+<body class="backg">
+<div class="wrapss">
+    <!--一级标签-->
+   <!-- <div class="header">
+        &lt;!&ndash;报警设置&ndash;&gt;
+        <ul class="headerUl">
+            <li>
+                <a href="branch.html">
+                    <img src="../image/a1.png" alt="">
+                    设置
+                </a>
+            </li>
+            <span style="display:inline;">|</span>
+            <li>
+                <a>
+                    <img src="../image/a2.png" alt="">
+                    报警
+                </a>
+            </li>
+        </ul>
+        &lt;!&ndash;一级菜单&ndash;&gt;
+
+        <ul class="headerNav">
+            <li>
+                <img src="../image/a3.png" alt="" class="img">
+                智慧管廊综合管理平台
+            </li>
+            <span style="visibility:hidden">|</span>
+            <li>
+                <a href="Visualization.html">可视化数据</a>
+            </li>
+            <span >|</span>
+            <li >
+                <a href="BIM.html">运行管理</a>
+            </li>
+            <span>|</span>
+            <li >
+                <a href="video.html">视频监控</a>
+            </li>
+            <span>|</span>
+            <li>
+                <a href="equipment.html">设备管理</a>
+            </li>
+            <span>|</span>
+            <li>
+                <a href="patrol.html">巡查巡检</a>
+            </li>
+            <span>|</span>
+            <li>
+                <a href="company.html">入廊企业</a>
+            </li>
+            <span>|</span>
+            <li>
+                <a href="staff.html">人员管理</a>
+            </li>
+            <span>|</span>
+            <li>
+                <a href="contingency.html">应急指挥</a>
+            </li>
+            <span>|</span>
+            <li>
+                <a href="3D.html">3D漫游</a>
+            </li>
+            <span>|</span>
+            &lt;!&ndash;<span>|</span>&ndash;&gt;
+            <li>
+                <img src="../image/aLeft.png" alt="" class="img1">&nbsp;
+                <img src="../image/aRight.png" alt="" class="img1">
+            </li>
+        </ul>
+
+        &lt;!&ndash;动画&ndash;&gt;
+
+        <div class="anim">
+            <div class="wire" id="wire1"></div>
+            <div class="wire" id="wire2"></div>
+            <div class="wire" id="wire3"></div>
+        </div>
+
+    </div>-->
+
+    <!--文本内容-->
+    <div class='main'>
+        <div class="mainLeft">
+            <div class="mainLeft1 mainBor">
+                <div class="mainHeader">
+                    》&nbsp;入廊企业数据
+                </div>
+                <div class="mainCont" id="dv1"></div>
+            </div>
+            <div class="mainLeft1 mainBor">
+                <div class="mainHeader">
+                    》&nbsp;报警类型
+                </div>
+                <div id="dv2" class="mainCont"></div>
+            </div>
+            <div class="mainLeft3 mainBor">
+                <div class="mainHeader">
+                    》&nbsp;本周报警统计
+                </div>
+                <div class="mainCont" id="dv3"></div>
+            </div>
+        </div>
+        <div class="mainMiddl">
+
+            <div class="mainMiddle1 mainBor">
+
+                <div class="mainHeader">
+                    》&nbsp;正定新区管廊分布
+                </div>
+
+                <div class="mainCont" id="dv4">
+                    <iframe name="mapFrame" width="100%" height="100%" src="/index.php/index/visual/map"  frameborder="0"></iframe>
+                </div>
+
+            </div>
+
+            <div class="mainMiddle2">
+                <div class="middleLeft mainBor">
+
+                    <div class="mainHeader">
+                        》&nbsp;巡查进度
+                    </div>
+
+                    <div class="mainCont" style="padding:5% 0">
+
+                        <div class="progress">
+                            <span>一号线:</span>
+                            <div class="layui-progress layui-progress-big" lay-showpercent="true">
+                                <div class="layui-progress-bar" lay-percent="20%" style="background-color:#d48265"></div>
+
+                            </div>
+                        </div>
+
+                        <div class="progress">
+                            <span>二号线:</span>
+                            <div class="layui-progress layui-progress-big" lay-showpercent="true">
+                                <div class="layui-progress-bar" lay-percent="75%" style="background-color:#c23531"></div>
+                            </div>
+                        </div>
+
+                        <div class="progress">
+                            <span>三号线:</span>
+                            <div class="layui-progress layui-progress-big" lay-showpercent="true">
+                                <div class="layui-progress-bar" lay-percent="56%" style="background-color:#2f4554"></div>
+                            </div>
+                        </div>
+
+                        <div class="progress">
+                            <span>四号线:</span>
+                            <div class="layui-progress layui-progress-big" lay-showpercent="true">
+                                <div class="layui-progress-bar" lay-percent="66%" style="background-color:#61a0a8"></div>
+                            </div>
+                        </div>
+
+                        <div class="progress">
+                            <span>五号线:</span>
+                            <div class="layui-progress layui-progress-big" lay-showpercent="true">
+                                <div class="layui-progress-bar" lay-percent="70%"style="background-color:#91c7ae"></div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="middleMid mainBor">
+                    <div class="mainHeader">
+                        》&nbsp;巡检线路数据
+                    </div>
+                    <div class="mainCont" id="dv6"></div>
+                </div>
+                <div class="middleLeft mainBor">
+                    <div class="mainHeader">
+                        》&nbsp;维修设备类别
+                    </div>
+                    <div class="mainCont" id="dv7"></div>
+                </div>
+            </div>
+            <div class="mainMiddle3 mainBor">
+                <div class="mainHeader">
+                    》&nbsp;本周报警统计
+                </div>
+                <div class="mainCont">
+                    <table class="table">
+                        <tbody>
+                        <tr>
+                            <th>设备名称</th>
+                            <th>报警区域</th>
+                            <th>报警类型</th>
+                            <th>报警时间</th>
+                            <th>处理措施</th>
+                        </tr>
+                        </tbody>
+                        <tbody>
+                        <tr>
+                            <th>门禁</th>
+                            <th>YBY-001防火分区</th>
+                            <th>门禁失效</th>
+                            <th>2018-10-16 15:20:10</th>
+                            <th>定时预案</th>
+                        </tr>
+                        <tr>
+                            <th>门禁</th>
+                            <th>YBY-001防火分区</th>
+                            <th>门禁失效</th>
+                            <th>2018-10-16 15:20:10</th>
+                            <th>定时预案</th>
+                        </tr>
+                        <tr>
+                            <th>门禁</th>
+                            <th>YBY-001防火分区</th>
+                            <th>门禁失效</th>
+                            <th>2018-10-16 15:20:10</th>
+                            <th>定时预案</th>
+                        </tr>
+                        <tr>
+                            <th>门禁</th>
+                            <th>YBY-001防火分区</th>
+                            <th>门禁失效</th>
+                            <th>2018-10-16 15:20:10</th>
+                            <th>定时预案</th>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="mainRight">
+            <div class="mainRight1 mainBor">
+                <div class="mainHeader">
+                    》&nbsp;管廊环境数据
+                </div>
+                <div class="mainCont" id="dv9"></div>
+            </div>
+            <div class="mainRight1 mainBor">
+                <div class="mainHeader">
+                    》&nbsp;电仓数据监测
+                </div>
+                <div class="mainCont" id="dv10">
+                    <div id="dv10_1"></div>
+                    <div id="dv10_2"></div>
+                    <span class="plant">当前电压</span>
+                    <span class="plant1"></span>
+                    <span class="plant">当前电流</span>
+                    <div id="dv10_3"></div>
+                    <div id="dv10_4"></div>
+                    <span class="plant">当前电量</span>
+                    <span class="plant1"></span>
+                    <span class="plant">当前温度</span>
+                </div>
+            </div>
+            <div class="mainRight3 mainBor">
+                <div class="mainHeader">
+                    》&nbsp;近六月水仓流量监测
+                </div>
+                <div class="mainCont" id="dv11"></div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+<script src="/static/layui/layui.js"></script>
+<script src="/static/js/Visualization.js" type="text/javascript"></script>
+<script src="/static/js/common.js"></script>
+<!--<script>
+    window.onload = function(){
+        menu1();//一级菜单
+    };
+</script>-->
+
+</html>

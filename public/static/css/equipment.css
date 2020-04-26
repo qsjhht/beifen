@@ -1,0 +1,227 @@
+/*!*一级菜单边框颜色*!
+.headerNav li:nth-child(1){
+    outline:1px solid #247998;
+    box-shadow: 0 0 6px #247998 inset;
+}*/
+/*------------------------------------------------------台账-------------------------------------*/
+/*弹出层图片*/
+body{
+    background-image: url("/static/image/bgSmall.png");
+}
+.layerMiddle form .layerImage{
+    position:relative;
+    width:250px;
+    height:250px;
+    display:inline-block;
+    vertical-align: top;
+    border:2px solid #00ffff;
+    overflow:hidden;
+    background-color:#cccfd1;
+    margin:0 0 20px 90px;
+}
+
+.layerMiddle form .layerImage .image3D{
+    text-align:center;
+}
+.layerMiddle form .layerImage .image3D p{
+    padding:10px;
+    margin-top:40px;
+    color:#3d3d3d;
+}
+
+.layerMiddle form .layerImage .camera{
+    text-align:center;
+    display:none;
+}
+.layerMiddle form .layerImage .camera img{
+    padding:20px;
+    margin-top:30px;
+}
+
+.layerMiddle form .layerImage .camera p{
+    color:#3d3d3d;
+    cursor:pointer;
+}
+.layui-layer1{
+    border: 1px solid #048ab6;
+}
+.layui-field-title{
+    width: 95%;
+    border-color: #048ab6;
+    margin-left: auto;
+    margin-right: auto;
+}
+/*.layerMiddle form .layerImage .camera input{*/
+/*border:1px solid red;*/
+
+/*}*/
+
+
+/*小图标*/
+.canvas{
+    right:0;
+    bottom:-20px;
+    position:absolute;
+    width:50px;
+    height:50px;
+}
+.canvas img{
+    position:absolute;
+    right:5px;
+    bottom:5px;
+    cursor:pointer;
+}
+
+.layerFrame{
+    display:inline-block;
+    vertical-align: top;
+    padding-left:20px;
+}
+.layerFrame .layerSelect{
+    margin-bottom:5px;
+}
+.label{
+    width:130px;
+    display:inline-block;
+    text-align:right;
+}
+.layerFrame1{
+    margin:3px 80px;
+}
+.layerFrame1.layerTran table{
+    width:98%;
+    margin:0 auto;
+    padding-top:5px;
+    border:1px solid red;
+}
+.width{
+    width:122px;
+}
+.width1{
+    width: 788px;
+}
+.width2{
+    width:200px;
+}
+
+/*配件信息*/
+.layerPar{
+    width:100%;
+}
+.layerParets{
+    width:90%;
+    margin:0 auto;
+}
+.layerImage1{
+    margin:20px;
+    display:inline-block;
+    vertical-align: top;
+    width: 120px;
+    height: 120px;
+    border:2px solid #00ffff;
+    overflow:hidden;
+    background-color:#cccfd1;
+    text-align:center;
+}
+.layerImage1 img{
+    margin:20px 0;
+}
+
+
+/*添加配件按钮*/
+.addParets{
+    border:2px dashed #227a98;
+    padding:3px;
+    color: #ffffff;
+    text-align:center;
+    cursor:pointer;
+    width:150px;
+    margin:0 auto;
+}
+
+/*弹窗页面div布局 居中*/
+.divCenter{
+    text-align:center;
+    float: right;
+}
+.floatLeft{
+    float: left;
+}
+.inline-left{
+    display: inline;
+}
+.inline-right{
+    display: inline-block;
+}
+
+/*弹窗确定按钮*/
+
+.layerSub{
+    padding:30px 38%;
+}
+.layerSub input{
+    margin:20px;
+    width:80px;
+    height:30px;
+    color:#ffffff;
+    background-color: #237a98;
+    border:0;
+    border-radius:20px;
+    text-align:center;
+    cursor:pointer;
+}
+/*------------------------------------------------维修----------------------------------------------*/
+.layerBut{
+    width:65px;
+    height:30px;
+    color:#ffffff;
+    background-color:#247b99;
+    border-radius: 10px;
+    border:0;
+    cursor:pointer;
+}
+.layerTran{
+    display:inline-block;
+    vertical-align: top;
+    width:373px;
+    height:290px;
+    border-radius: 10px;
+    border:1px solid #00FFFF;
+    background-color:#cccfd1;
+    color:#000000;
+}
+.layerTran table{
+    width:100%;
+}
+.layerTran table tr{
+    height:30px;
+}
+.layerTran table tr:hover{
+    background-color:#b7babc;
+}
+.layerTran table tr th{
+    color:#000000;
+}
+.tranBut{
+    display:inline-block;
+    vertical-align: top;
+    width:60px;
+    text-align:center;
+    padding: 60px 0;
+}
+
+.tranBut button{
+    width:45px;
+    height:45px;
+    border-radius: 4px;
+    background-color:#247b99;
+    border:0;
+    margin:20px 0;
+    cursor:pointer;
+}
+.tranBut button i{
+    color:#ffffff;
+}
+
+
+

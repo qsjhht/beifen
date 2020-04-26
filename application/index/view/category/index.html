@@ -1,0 +1,220 @@
+{extend name="eqpt_layout"/}
+{block name="main"}
+<link rel="stylesheet" href="/static/css/eqpt.css">
+<style type="text/css">
+    .layui-table-cell{
+        height:auto;
+        overflow:visible;
+        text-overflow:inherit;
+        white-space:normal;
+    }
+
+</style>
+<div class="mainMiddle mainBor"  style="display:inline-block;width: 100%;border: 0px">
+    <!--标题-->
+    <div class="middleNav">
+        <i class="layui-icon">&#xe653;</i> &nbsp;
+        角色列表
+    </div>
+    <div class="middleScreen layui-inline" style="right: 20px">
+        <button class="middleAdd" id="add_role"><i class="layui-icon">&#xe654</i>&nbsp;添加</button>
+    </div>
+
+
+    <div class="mainTable scrollber">
+
+        <table class="mytable layui-table" id="ledger" lay-filter="eqpt_show"></table>
+        <script type="text/html" id="barDemo">
+            <a class="layui-btn layui-btn-xs operBtn" lay-event="details">详情</a>
+            <a class="layui-btn layui-btn-xs operBtn" lay-event="edit">编辑</a>
+            <a class="layui-btn layui-btn-danger layui-btn-xs operBtn" lay-event="del">删除</a>
+        </script>
+    </div>
+</div>
+{/block}
+
+{block name="script"}
+
+<script>
+    layui.use(['table','form','layer'], function(){
+        var table = layui.table,
+            form = layui.form,
+            layer = layui.layer;
+        //创建arr对象  ps：关联数组无法转换成json
+        table.render({
+            elem: '#ledger' //指定原始表格元素选择器（推荐id选择器）
+            ,height:  'full-170' //容器高度
+            ,url: '{:url("index/role/index")}'
+            ,page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
+                //layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] //自定义分页布局
+                //,curr: 5 //设定初始在第 5 页
+                groups: 5 //只显示 1 个连续页码
+                //,first: false //不显示首页
+                ,limit: 10 //每页显示数量
+                ,limits: [5, 10, 20, 30, 40]  //每页条数的选择项
+                //,last: false //不显示尾页
+//                ,theme:'#00ffff'
+            }
+            ,cols: [[
+                //,{field:'floor_id',title:'分层ID', width:110, sort: true}
+                {field:'role_id',title:'角色编号'}
+                ,{field:'role_name',align:'center',title:'角色名称'}
+                ,{field:'role_auth_names',align:'center',title:'角色权限'}
+                ,{field:'role_detail',align:'center',title:'角色描述'}
+                ,{field:'role_detail',width:150,align:'center',title:'角色人数'}
+
+                /*,{field:'eqpt_site',title:'设备位置'}*/
+
+
+                ,{align:'center',title:'操作', toolbar: '#barDemo'}
+            ]
+            ] //设置表头
+            //,…… //更多参数参考右侧目录：基本参数选项
+        });
+        table.on('tool(eqpt_show)', function(obj) {
+            var data = obj.data;
+
+            //console.log(obj);
+            /*if (obj.event === 'del') {
+             layer.confirm('确定删除当前设备组？', { icon: 3, title: '提示' }, function(index) {
+             $.post('{:url("eqpt_management/del_group")}', { 'id': data.id }, function(data) {
+             //layer.msg(data.msg);
+             if (data.code == 1) {
+             if (data.url) {
+             layer.msg(data.msg + ' 页面即将自动跳转~');
+             } else {
+             layer.msg(data.msg);
+             }
+             setTimeout(function() {
+             if (data.url) {
+             location.href = data.url;
+             } else {
+             location.reload();
+             }
+             }, 1000);
+             } else {
+             layer.msg(data.msg + ' 页面即将自动刷新~');
+             setTimeout(function() {
+             location.reload();
+             }, 1000);
+             }
+             });
+             //layer.close(index);
+             /!*$.post('{:url("eqpt_management/del_group")}', { 'id': data.id }, function(data) {
+             if (data.code == 1) {
+             if (data.url) {
+             layer.msg(data.msg + ' 页面即将自动跳转~');
+             } else {
+             layer.msg(data.msg);
+             }
+             setTimeout(function() {
+             if (data.url) {
+             location.href = data.url;
+             } else {
+             location.reload();
+             }
+             }, 1500);
+             } else {
+             layer.msg(data.msg);
+             setTimeout(function() {
+             if (data.url) {
+             location.href = data.url;
+             }
+             }, 1500);
+             }
+             });*!/
+             });
+             } /!*else if (obj.event === 'add') {
+             window.open('{:url("eqpt_management/add")}' + "?id=" + data.id, '_self')
+             } *!/*/
+            if (obj.event === 'edit') {
+                console.dir(data.role_id);
+                //window.open('{:url("eqpt/eqpt_details")}' + "?id=" + data.eqpt_id, '_self');
+                layer.open({
+                    title:"编辑角色",
+                    type: 2,
+                    offset: ['100px', '130px'],
+                    area: ['1070px', '655px'],
+                    fixed: true, //不固定
+                    maxmin: true,
+                    content: ['{:url("role/role_edit")}' + "?role_id=" + data.role_id],
+                    shade: [0.8, '#393D49'],
+                    /*cancel: function(){
+                        //右上角关闭回调  刷新父页面
+                        window.parent.location.reload();
+                        //return false 开启该代码可禁止点击该按钮关闭
+                    }*/
+                });
+            }else if (obj.event === 'details') {
+                console.dir(data.role_id);
+                /*window.open('{:url("eqpt_management/details")}' + "?id=" + data.id, '_self');*/
+                //iframe层-父子操作
+                //alert(data.id);
+                layer.open({
+                    title:"角色详情",
+                    type: 2,
+                    offset: ['100px', '130px'],
+                    area: ['1070px', '655px'],
+                    fixed: true, //不固定
+                    maxmin: true,
+                    content: ['{:url("role/role_details")}' + "?role_id=" + data.role_id],
+                    shade: [0.8, '#393D49'],
+                    /* cancel: function(){
+                     //右上角关闭回调  刷新父页面
+                     window.parent.location.reload();
+                     //return false 开启该代码可禁止点击该按钮关闭
+                     }*/
+                });
+
+            }else if(obj.event === 'del'){
+                layer.confirm('确定删除该角色？', { icon: 3, title: '提示' }, function(index) {
+                console.dir(data.role_id);
+                    $.post('{:url("role/role_del")}', { 'role_id': data.role_id }, function(data) {
+                        //layer.msg(data.msg);
+                        if (data.code == 1) {
+                            if (data.url) {
+                                layer.msg(data.msg + ' 页面即将自动跳转~');
+                            } else {
+                                layer.msg(data.msg);
+                            }
+                            setTimeout(function() {
+                                if (data.url) {
+                                    location.href = data.url;
+                                } else {
+                                    location.reload();
+                                }
+                            }, 1500);
+                        } else {
+                            layer.msg(data.msg + ' 页面即将自动刷新~');
+                            setTimeout(function() {
+                                location.reload();
+                            }, 1000);
+                        }
+
+                    });
+                });
+
+            }
+        });
+        $('#add_role').on('click', function() {
+            layer.open({
+                title:"添加设备",
+                title :'角色添加',
+                type: 2,
+                offset: ['100px', '130px'],
+                area: ['1070px', '655px'],
+                fixed: true, //不固定
+                maxmin: true,
+                closeBtn:1,
+                content: ['{:url("role/role_add")}'],
+                shade: [0.8, '#393D49']
+                /*cancel: function(){
+                    //右上角关闭回调  刷新父页面
+                    window.parent.location.reload();
+                    //return false 开启该代码可禁止点击该按钮关闭
+                }*/
+            })
+        });
+    });
+</script>
+{/block}

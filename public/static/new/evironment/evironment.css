@@ -1,0 +1,165 @@
+.evirMain{
+    width:98%;
+    margin:0 auto;
+    height:43.8vh;
+    display:flex;
+    justify-content:space-between;
+}
+.evirMain1{
+    margin-top:1vh;
+    border-top:1px solid #00ffff;
+    position:relative;
+}
+.layui-form-select dl dd {
+    color: black;
+}
+.evirMain2{
+    width:47.6vw;
+    height:42.6vh;
+    flex-wrap:wrap;
+}
+.evirMainDiv{
+    width:15.3vw;
+    height:20.6vh;
+    background-color:yellow
+}
+
+.divWidth{
+    width:100%;
+    height:18.8vh;
+}
+.divWidthInput{
+    min-width:58px;
+}
+.flex{
+    display:flex;
+    justify-content: center ;
+    align-items: center;
+}
+.main2Con{
+    width:24.1%;
+    height:100%;
+}
+.evirMainSele{
+    position: absolute;
+    right:0;
+    z-index:10;
+}
+
+.evirEchart{
+    width:100%;
+    height:100%;
+    /* display:none; */
+}
+.evirSelect{
+    height:30px;
+    width:120px;
+    border-radius:3px;
+    border:1px solid #00ffff;
+    appearance:none;
+    -moz-appearance:none;
+    -webkit-appearance:none;
+    background-color:#000000;
+    color:#FFFFFF;
+    text-align:center;
+    text-align-last:center;
+    margin:10px 10px;
+}
+.middleScr{
+    padding-bottom:1vh;
+    width:96%;
+    margin:0 auto;
+}
+
+/* ------------------------------------内容--------------------- */
+.contentHead{
+    font-size:18px;
+    padding:10px 20px;
+    color:#ffffff;
+}
+.contentDiv{
+    font-weight:700;
+    font-size:1.5rem;
+    text-align:center;
+    line-height:9vh;
+    color:#ffffff;
+    
+}
+.contentBelow{
+    text-align:center;
+    padding:1vh 0;
+    font-size:1.2rem;
+    color:#ffffff;
+}
+.evirImg{
+    width:50px;
+    height:50px;
+    margin:0 10px;
+}
+
+/* 动画 */
+.evirImgKey{
+    animation:evirImgKeyframes 4s ease 0s infinite ;
+}
+@keyframes evirImgKeyframes{
+    0%{transform:rotate(0deg) }
+    50%{transform:rotate(180deg)}
+    100%{transform:rotate(360deg)}
+}
+.evirImg1{
+    width:20px;
+    height:20px;
+}
+.evirImg2{
+    /*width:30px;*/
+    height:50px;
+    margin:0 10px;
+}
+
+/* --------------------------ul------------------------- */
+.evirSele i{
+    font-size:20px;
+    font-weight:400;
+    line-height:28px;
+}
+.evirUl{
+    border:1px solid blue;
+    background-color:black;
+    width:120px;
+    position:relative;
+    top:8spx;
+    display:none;
+    text-align:center;
+    text-align-last:center;
+}
+.evirUl li {
+    text-align:center;
+    padding:3px;
+}
+.evirUl li i{
+    font-size:20px;
+}
+.evirUl li:hover{
+    background-color:blue;  
+    color:#ffffff;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

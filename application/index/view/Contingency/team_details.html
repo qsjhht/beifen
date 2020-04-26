@@ -1,0 +1,268 @@
+{extend name="eqpt_layout"/}
+<body class="backg">
+{block name="main"}
+<link rel="stylesheet" href="/static/css/equipment.css">
+<link rel="stylesheet" href="/static/css/eqpt.css">
+<style>
+    .members {
+        min-height: 50px;
+    }
+    .wrap {
+        margin: 0 auto;
+        padding: 10px;
+        width: 100%;
+        text-align: left;
+    }
+    .member {
+        outline: none;
+        border: none;
+        /*width: 160px;*/
+        /*height: 30px;*/
+        /*background-color: cornflowerblue;*/
+        margin-right: 10px;
+    }
+    .leaderbtn{
+        background: none;
+    }
+    .memberbtn{
+        background: none;
+    }
+</style>
+<div class="mainMiddle mainBor"  style="display:inline-block;width: 100%;border: 0px;background-image: url('/static/image/bgSmall.png')">
+    <!--设备台账-->
+    <div style="text-align: center;">
+        <div class="layerNav">
+            <!--<div class="floatLeft">
+                <i class="layui-icon">&#xe653;</i> &nbsp;
+                新增访客信息
+            </div>-->
+        </div>
+        <input type="text" name="" id="cate_id" value="{$Teams.t_c_id}" hidden>
+        <div class="scrollber" >
+            <form class="layui-form" action="" method="post">
+                <!--&lt;!&ndash;左上角图片&ndash;&gt;
+                <div class="layerImage"  id="test1">
+                    <div class="image3D" id="image3D" >
+                        <p>点击上传设备图片</p>
+                        <img src="/static/image/camera.png" alt="" width="120" height="120" id="demo2">
+                    </div>
+                    &lt;!&ndash; <button type="button" class="layui-btn" id="test1">
+                         <i class="layui-icon">&#xe67c;</i>上传图片
+                     </button>&ndash;&gt;
+
+                    <div class="canvas">
+                        <img src="/static/image/camera_1.png" alt="" width="17" height="15" id="img1">
+                        <canvas id="3D"></canvas>
+                    </div>
+                </div>-->
+                <!--<div class="layui-upload-drag" id="test10">
+                    <i class="layui-icon"></i>
+                    <p>点击上传，或将文件拖拽到此处</p>
+                </div>-->
+                <!--右上角信息-->
+                <div class="layui-show-md-inline-block">
+
+
+                    <div class="layui-form-item">
+                        <!--<div class="layui-form-inline">-->
+                            <!--<label class="layui-form-label">编号</label>-->
+                            <!--<div class="layui-input-inline">-->
+                                <!--<input type="text" name="serial" id="serial" placeholder="请输入" autocomplete="off" class="layui-input">-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <div class="layui-form-inline">
+                            <label class="layui-form-label">队伍名称</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="team_name" id="team_name" placeholder="请输入" disabled value="{$Teams.team_name}" autocomplete="off" class="layui-input w400">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+
+                        <div class="layui-form-inline">
+                            <label class="layui-form-label">队伍类别</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="t_c_name" id="t_c_name" placeholder="请输入" disabled value="{$Teams.t_c_name}" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-inline">
+                            <label class="layui-form-label">队伍编号</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="t_number" id="t_number" placeholder="请输入" disabled value="{$Teams.t_number}" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-form-inline ex_p" hidden>
+                            <label class="layui-form-label">外联人员</label>
+                            <div class="layui-input-inline">
+                                    <textarea name="members" disabled class="layui-textarea layui-input members w400">{$Teams.members}</textarea
+                            </div>
+                        </div>
+                        <div class="layui-form-inline leader" hidden>
+                            <label class="layui-form-label"> 组长</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="leaders" id="leaders" placeholder="请输入" disabled value="{$Teams.leaders}" autocomplete="off" class="layui-input w400" >
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-form-inline inner" hidden  style="padding:8px 0px">
+                                <label class="layui-form-label">组员</label>
+                                <div class="layui-input-inline">
+                                    <textarea name="members" disabled class="layui-textarea layui-input members w400">{$Teams.members}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <!--<div class="layui-form-inline">-->
+                            <!--<label class="layui-form-label"> 联系方式 </label>-->
+                            <!--<div class="layui-input-inline">-->
+                                <!--<input type="text" id="iphone" name="iphone" placeholder="请输入" autocomplete="off" class="layui-input">-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label"> 备注 </label>
+                        <div class="layui-input-block">
+                            <textarea name="t_c_remark" id="t_c_remark" disabled class="layui-textarea layui-input w600">{$Teams.t_remark}</textarea>
+                        </div>
+                    </div>
+
+
+                   <!-- <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label"   style="float: left">计划日期</label>
+                            <input type="text" lay-verify="required" name="date_range" class="layui-input" id="test5" placeholder="" class="layui-input">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label"   style="float: left">值班时间</label>
+                        </div>
+                    </div>-->
+
+                    <!--底部信息-->
+                    <!--<div class="layui-form-item" style="display: none">
+                        <label class="layui-form-label" style="float: left">设备位置</label>
+
+
+                        <label class="layui-form-label">IP地址</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="eqpt_IP_address" placeholder="请输入设备IP地址" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>-->
+                </div>
+                <!--<fieldset class="layui-elem-field layui-field-title">
+                </fieldset>
+                <div class="addParets" id='parts'  data-type="openSelect">
+                    <i class="layui-icon">&#xe654;</i>
+                    添加配件
+                </div>
+                <fieldset class="layui-elem-field layui-field-title">
+                </fieldset>-->
+
+                <!--<div class="layui-form-item">-->
+                    <!--<div class="layui-input-block margin-top-seven">-->
+                        <!--&lt;!&ndash;<button type="button" class="layui-btn">-->
+                            <!--<i class="layui-icon">&#xe857;</i>提交并绑定设备模型-->
+                        <!--</button>&ndash;&gt;-->
+                        <!--<button class="layui-btn" type="submit"  id="sub" lay-submit lay-filter="sub">立即提交</button>-->
+
+                    <!--</div>-->
+                <!--</div>-->
+
+                <!--<div class="layui-form-item">-->
+                    <!--<div class="layui-input-block">-->
+                        <!--<button class="layui-btn" type="submit" lay-submit lay-filter="formDemo1">立即提交</button>-->
+                        <!--<button type="reset" class="layui-btn layui-btn-primary">重置</button>-->
+                    <!--</div>-->
+                <!--</div>-->
+            </form>
+        </div>
+    </div>
+</div>
+{/block}
+
+{block name="script"}
+
+<script>
+    let cate_id = $('#cate_id').val();
+    // console.dir(cate_id);
+    if(cate_id == '1'){
+        $('.leader').show();
+        $('.inner').show();
+        $('.ex_p').hide();
+    }else{
+        $('.leader').hide();
+        $('.inner').hide();
+        $('.ex_p').show();
+    }
+
+
+        // var site_data = JSON.parse($('#sitesdata').val());
+
+
+
+
+
+
+        /* $(document).on('click','#parts',function(){
+             var parts = $("form").find("fieldset").eq(-2);
+             var num = $("form").find("fieldset").length/2;
+
+             var my_input = $('<fieldset class="layui-elem-field layui-field-title">\n' +
+                 '                    <legend>配件信息</legend>\n' +
+                 '                </fieldset>\n' +
+                 '                <div class="layui-show-md-inline-block">\n' +
+                 '                    <div class="layui-form-item">\n' +
+                 '                        <!--<div class="layui-inline">\n' +
+                 '                            <div class="layui-upload">\n' +
+                 '                                <button type="button" class="layui-btn" id="">上传图片</button>\n' +
+                 '                                <div class="layui-upload-list">\n' +
+                 '                                    <img class="layui-upload-img" id="demo1">\n' +
+                 '                                    <p id="demoText"></p>\n' +
+                 '                                </div>\n' +
+                 '                            </div>\n' +
+                 '                        </div>-->\n' +
+                 '\n' +
+                 '                        <div class="layui-inline">\n' +
+                 '                            <div class="layui-form-item">\n' +
+                 '                                <div class="layui-inline">\n' +
+                 '                                    <label class="layui-form-label">配件名称</label>\n' +
+                 '                                    <div class="layui-input-inline">\n' +
+                 '                                        <input type="text" class="layui-input" placeholder="00-01号线缆">\n' +
+                 '                                    </div>\n' +
+                 '                                </div>\n' +
+                 '                                <div class="layui-inline">\n' +
+                 '                                    <label class="layui-form-label">型号规格</label>\n' +
+                 '                                    <div class="layui-input-inline">\n' +
+                 '                                        <input type="text" class="layui-input" placeholder="20*20*20">\n' +
+                 '                                    </div>\n' +
+                 '                                </div>\n' +
+                 '                            </div>\n' +
+                 '                            <div class="layui-form-item">\n' +
+                 '                                <div class="layui-inline">\n' +
+                 '                                    <label class="layui-form-label">需要数量/个</label>\n' +
+                 '                                    <div class="layui-input-inline">\n' +
+                 '                                        <input type="text" class="layui-input" placeholder="备注信息">\n' +
+                 '                                    </div>\n' +
+                 '                                </div>\n' +
+                 '                            </div>\n' +
+                 '                            <div class="layui-form-item">\n' +
+                 '                                <label class="layui-form-label">备注信息</label>\n' +
+                 '                                <div class="layui-input-block" style="width: 650px">\n' +
+                 '                                    <textarea name="remarks"  placeholder="请输入" class="layui-textarea"></textarea>\n' +
+                 '                                </div>\n' +
+                 '                            </div>\n' +
+                 '                        </div>\n' +
+                 '                    </div>\n' +
+                 '                </div>\n' +
+                 '                <fieldset class="layui-elem-field layui-field-title">\n' +
+                 '                </fieldset>\n');
+             parts.append(my_input);
+         });*/
+</script>
+
+{/block}
+</body>

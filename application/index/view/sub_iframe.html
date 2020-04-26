@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<!--设备管理 iframe页面 左侧导航加右侧内容页-->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>管理</title>
+    <meta name="renderer"  content="ie-stand">
+    <link rel="stylesheet" href="__STATIC__/css/common.css">
+    <link rel="stylesheet" href="__STATIC__/css/equipment.css">
+    <link rel="stylesheet" href="__STATIC__/layui/css/layui.css">
+    <link rel="stylesheet" href="__STATIC__/css/eqpt.css">
+</head>
+<body class="backg">
+<div style="height: 100%">
+    <!--一级标签-->
+    <div class="main">
+        <!--二级标签-->
+        <div class="mainLeft mainBor" style="display: inline-block;float: left">
+            <ul>
+                {volist name="Sub" id="vo"}
+                <!-- <li>
+                    <a href="/index/{$vo.auth_c}/{$vo.auth_a}" target="contentEqpt">{$vo['auth_name']}</a>
+                </li>
+                <span></span> -->
+
+                {switch $vo['auth_isLink']}
+                {case 0 }
+                    <li>
+                        <a href="/index/{$vo.auth_c}/{$vo.auth_a}" target="contentEqpt">{$vo['auth_name']}</a>
+                    </li>
+                    <span></span>
+                {/case}
+                {case 1 }
+                    <li>
+                        <a href="{$vo['auth_url']}" target="contentEqpt">{$vo['auth_name']}</a>
+                    </li>
+                    <span></span>
+                {/case}
+                {/switch}
+
+                {/volist}
+            </ul>
+        </div>
+        <div class="eqptFrame">
+            
+            <!--默认设备台账页面-->
+            {if $is_http}
+                <iframe name="contentEqpt" id="iframe_default" src="{$defaultUrl}"></iframe>
+            {else /}
+                <iframe name="contentEqpt" id="iframe_default" src="{:url($defaultUrl)}"></iframe>
+            {/if}
+        </div>
+    </div>
+</div>
+
+<script src="/static/layui/layui.js"></script>
+
+<script src="/static/js/jquery-1.7.1.min.js"></script>
+<script>
+    //初始化第一子节点加选中  点击选中样式
+    $(function () {
+        $(".mainLeft li").children(":first").addClass("outline");
+        $(".mainLeft a").click(function(){
+            $(".mainLeft a").removeClass("outline");
+            $(this).addClass("outline");
+        });
+    });
+</script>
+</body>
+
+</html>

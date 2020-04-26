@@ -1,0 +1,266 @@
+{extend name="eqpt_layout"/}
+{block name="main"}
+<link rel="stylesheet" href="/static/css/eqpt.css">
+<style>
+    ::-webkit-scrollbar {
+        display: block;
+        width:15px;
+    }
+    ::-webkit-scrollbar-thumb{
+        border-radius: 5px;
+        background-color:#001e29;
+    }
+    .scrollber{
+        scrollbar-base-color:#001e29;
+    }
+</style>
+    <div class="mainMiddle mainBor"  style="display:inline-block;width: 100%;border: 0px">
+        <div class="middleNav">
+            <i class="layui-icon">&#xe653;</i> &nbsp;
+            应急物资
+        </div>
+
+        <form class="layui-form"  action="" method="post">
+            <!--已安装未安装筛选-->
+            <!--<div class="layui-form-item" style="margin-left: 40px">
+                <input type="checkbox" id="sadf"  lay-filter="check" name="Installed" title="已安装" lay-skin="primary" checked>
+                <input type="checkbox"  lay-filter="check" name="unerected" title="未安装" lay-skin="primary" checked>
+                <span>|</span>&nbsp;
+                <input type="checkbox"  lay-filter="check" name="normal" title="正常" lay-skin="primary" checked>
+                <input type="checkbox"  lay-filter="check" name="fault" title="故障" lay-skin="primary" checked>
+                <input type="checkbox"  lay-filter="check" name="scrap" title="报废" lay-skin="primary" checked>
+            </div>-->
+
+            <div class="layui-form-item" style="margin-top: 15px">
+                <div class="layui-inline">
+                    <label class="layui-form-label" style="float: left">物资类别</label>
+                    <select name="cate" class="select">
+                        <option value="">请选择设备分类</option>
+                        {volist name="Cates" id="vo"}
+                        <option value="{$vo.s_c_id}" is_car="{$vo.is_car}">{$vo.s_c_name}</option>
+                        {/volist}
+                    </select>
+                </div>
+
+                <div class="layui-inline">
+                    <label class="layui-form-label" style="float: left">搜索：</label>
+                    <div style="position:absolute;right:43px;top:9px;cursor:pointer;display:inline;" class="input_clear">
+                        <button type="button" class="close layui-icon layui-icon-close" data-dismiss="modal" aria-hidden="true">
+                        </button>
+                    </div>
+                    <input class="layui-input w250" placeholder="名称/型号/位置/编号/管理人等" name="keyword" id="demoReload" autocomplete="off">
+                    <button class="layui-btn circle self-btn" lay-submit  lay-filter="reload">&nbsp;<i class="layui-icon" >&#xe615;</i></button>
+                </div>
+            </div>
+
+        </form>
+
+        <!--<div class="middleScreen" style="top: 65px;right: 20px">-->
+        <!--<button class="middleAdd" style="margin-right:20vh;" id="cate_add"><i class="layui-icon">&#xe654</i>&nbsp;添加</button>-->
+        <!--</div>-->
+        <div class="middleScreen" style="position: absolute;top: 65px;right: 20px">
+            <button class="middleAdd" id="supplies_add"><i class="layui-icon">&#xe654</i>&nbsp;添加</button>
+        </div>
+        <div class="mainTable scrollber">
+            <div>
+                <!--<div class="layui-inline">-->
+                <table class="layui-table" id="table" lay-filter="table"></table>
+                <!--</div>-->
+            </div>
+            <!--<table class="layui-hide" id="table" lay-filter="table"></table>-->
+            <script type="text/html" id="barTool">
+                <a class="layui-btn layui-btn-xs operBtn" lay-event="sup_details">详情</a>
+                <a class="layui-btn layui-btn-xs operBtn" lay-event="sup_edit">编辑</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="sup_del">删除</a>
+            </script>
+        </div>
+    </div>
+{/block}
+{block name="script"}
+<script>
+    $("input").focus(function(){
+        $(this).parent().children(".input_clear").show();
+    });
+    $("input").blur(function(){
+        if($(this).val()=='')
+        {
+            $(this).parent().children(".input_clear").hide();
+        }
+    });
+    $(".input_clear").click(function(){
+        $(this).parent().find('input').val('');
+        $(this).hide();
+    });
+</script>
+<script>
+    layui.use(['table','form','layer'], function(){
+        var table = layui.table,
+            form = layui.form,
+            layer = layui.layer,
+            $ = layui.$;
+        //监听 reload table
+        form.on('submit(reload)', function(data){
+            /*(data.field.Installed == 'on')? data.field.Installed = '1' : data.field.Installed = '0';
+            (data.field.unerected == 'on') ? data.field.unerected = '2' : data.field.unerected = '0';
+            (data.field.normal == 'on') ? data.field.normal = '1' : data.field.normal = '0';
+            (data.field.fault == 'on') ? data.field.fault = '2' : data.field.fault = '0';
+            (data.field.scrap == 'on') ? data.field.scrap = '4' : data.field.scrap = '0';*/
+            // console.dir(data.field.keyword);
+            console.dir('aaaaaaaaaaaaaaaaaaa');
+            console.dir(data.field.cate);
+            console.dir(data.field.keyword);
+            console.dir('aaaaaaaaaaaaaaaaaaa');
+            table.reload('table', {
+                where: {
+                    cate:data.field.cate,
+                    keyword:data.field.keyword
+
+                    /* ,Installed:data.field.Installed
+                     ,unerected:data.field.unerected
+                     ,normal:data.field.normal
+                     ,fault:data.field.fault
+                     ,scrap:data.field.scrap*/
+                } //设定异步数据接口的额外参数
+            });
+            return false;
+        });
+
+
+        table.render({
+            elem: '#table',
+            height:  'full-140',//容器高度,
+            url: '{:url("index/contingency/supplies")}',
+            // width: 1200,
+            page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
+            //layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] //自定义分页布局
+            //,curr: 5 //设定初始在第 5 页
+            groups: 5 //只显示 1 个连续页码
+                //,first: false //不显示首页
+                ,limit: 10 //每页显示数量
+                ,limits: [5, 10, 20, 30, 40]  //每页条数的选择项
+            //,last: false //不显示尾页
+//                ,theme:'#00ffff'
+            },
+            cols: [
+                [
+                    // { field: 'listorder', width: 70, title: '排序', edit: 'text' },
+                    { field: 's_number', width: '10%', title: '编号' },
+                    { width: '15%', field: 's_name', title: '名称' },
+                    { width: '15%', field: 's_position', title: '位置' },
+                    { width: '15%', field: 's_c_name', title: '类别' },
+                    { width: '5%', field: 's_num', title: '数量' },
+                    { width: '10%', field: 'nickname', title: '管理人' },
+                    { width: '15%', field: 'phone', title: '联系方式' },
+                    { width: '15%', title: '操作', toolbar: '#barTool' }
+                ]
+            ],
+        });
+        $('#Table-Refresh').on('click', function() {
+            table.reload("table");
+        });
+
+        // //监听单元格编辑
+        // table.on('edit(table)', function(obj) {
+        //     var value = obj.value,data = obj.data;
+        //     $.post('{:url("menu/listorder")}', { 'id': data.sup_id,'value':value }, function(data) {
+        //         if (data.code == 1) {
+        //             layer.msg(data.msg);
+        //         }else{
+        //             layer.msg(data.msg);
+        //         }
+        //     })
+        // });
+
+        $('#supplies_add').on('click', function() {
+            layer.open({
+
+                title:"应急物资新增",
+                type: 2,
+                offset: ['30px', '200px'],
+                area: ['1070px', '650px'],
+                fixed: true, //不固定
+                maxmin: true,
+                content: ['{:url("contingency/supplies_add")}', 'no'],
+                shade: [0.8, '#393D49'],
+                cancel: function(){
+                    //右上角关闭回调  刷新父页面
+                    var index = layer.open();
+                    layer.close(index);
+                    window.location.reload();
+                }
+            })
+        });
+
+        //监听行工具事件
+        table.on('tool(table)', function(obj) {
+            var data = obj.data;
+            //console.log(obj);
+            if (obj.event === 'sup_del') {
+                layer.confirm('确定删除此应急物资？', { icon: 3, title: '提示' }, function(index) {
+                    layer.close(index);
+                    $.post('{:url("contingency/sup_del")}', { 'sup_id': data.sup_id }, function(data) {
+                        if (data.code == 1) {
+                            if (data.url) {
+                                layer.msg(data.msg + ' 页面即将自动跳转~');
+                            } else {
+                                layer.msg(data.msg);
+                            }
+                            setTimeout(function() {
+                                if (data.url) {
+                                    location.href = data.url;
+                                } else {
+                                    location.reload();
+                                }
+                            }, 1500);
+                        } else {
+                            layer.msg(data.msg);
+                            setTimeout(function() {
+                                if (data.url) {
+                                    location.href = data.url;
+                                }
+                            }, 1500);
+                        }
+
+                    });
+                });
+            } else if (obj.event === 'sup_details') {
+                layer.open({
+
+                    title:"查看应急物资详情",
+                    type: 2,
+                    offset: ['30px', '200px'],
+                    area: ['1070px', '650px'],
+                    fixed: true, //不固定
+                    maxmin: true,
+                    content: ['{:url("contingency/sup_details")}' + "?sup_id=" + data.sup_id],
+                    shade: [0.8, '#393D49'],
+                    // cancel: function(){
+                    //     //右上角关闭回调  刷新父页面
+                    //     var index = layer.open();
+                    //     layer.close(index);
+                    //     window.location.reload();
+                    // }
+                })
+
+            } else if (obj.event === 'sup_edit') {
+                layer.open({
+                    title:"编辑应急物资",
+                    type: 2,
+                    offset: ['30px', '200px'],
+                    area: ['1070px', '650px'],
+                    fixed: true, //不固定
+                    maxmin: true,
+                    content: ['{:url("contingency/sup_edit")}' + "?sup_id=" + data.sup_id],
+                    shade: [0.8, '#393D49'],
+                    cancel: function(){
+                        //右上角关闭回调  刷新父页面
+                        var index = layer.open();
+                        layer.close(index);
+                        window.location.reload();
+                    }
+                })
+            }
+        });
+    });
+</script>
+{/block}

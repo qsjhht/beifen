@@ -1,0 +1,6 @@
+2020-03-26 06:12:54 pid:1 Worker process terminated with ERROR: E_ERROR "Call to undefined method Ws::res() in E:\WWW\new\start_udp.php on line 34"
+2020-03-26 06:33:49 pid:1 Worker process terminated with ERROR: E_ERROR "Call to undefined function file_get_content() in E:\WWW\new\start_udp.php on line 65"
+2020-03-31 11:14:17 pid:1 Worker process terminated with ERROR: E_ERROR "Call to a member function send() on null in E:\WWW\new\start_udp.php on line 63"
+2020-03-31 13:34:02 pid:1 Worker process terminated with ERROR: E_ERROR "Call to a member function connect() on null in E:\WWW\new\start_udp.php on line 87"
+2020-03-31 13:34:13 pid:1 Worker process terminated with ERROR: E_ERROR "Call to a member function send() on null in E:\WWW\new\start_udp.php on line 57"
+2020-04-02 08:18:23 pid:1 Worker process terminated with ERROR: E_ERROR "Call to undefined function dump() in E:\WWW\new\start_udp.php on line 76"

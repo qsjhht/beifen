@@ -1,0 +1,761 @@
+{extend name="demo_layout"/}
+{block name="maincss"}
+<title>Left</title>
+
+
+<link rel="stylesheet" href="__STATIC__/new/demoOne.css">
+<link rel="stylesheet" href="__STATIC__/new/gis/dist/ol.css">
+<link rel="stylesheet" href="__STATIC__/new/gis/dist/iclient9-openlayers.css">
+<link rel="stylesheet" href="__STATIC__/layui/css/layui.css">
+<script src="__STATIC__/new/echarts.js"></script>
+<script src="__STATIC__/new/gis/dist/iclient9-openlayers.js"></script>
+<script src="__STATIC__/new/gis/dist/ol.js"></script>
+<script src="__STATIC__/new/gis/dist/iclient9-openlayers-es6.min.js"></script>
+<!--<script src="__STATIC__/new/gis/SecRealData.js"></script>-->
+
+<style>
+    .galRoad{text-align: center;font-size: 20px;padding-top: 30px}
+    .section{text-align: center;font-size: 15px;height: 30px;border-bottom: 1px dashed #ffffff}
+    .xianShiDiv{padding: 10px}
+    .xianShiDiv span{color: aquamarine;padding-left:5px}
+    .div-center{
+        text-align: center;
+    }
+    .s-e{
+        font-size: 1.3rem;
+        padding: 1.5%;
+    }
+    .progressFro{
+        padding: 1.5%;
+    }
+
+    thead tr {
+        background: rgba(47,69,84,0.3);
+    }
+    .callTab thead tr th {
+        color: #00ffff;
+    }
+    .callTab thead,.callTab tbody tr {
+        display: table;
+        width: 100%;
+        table-layout: fixed;
+        height: 30px;
+    }
+    .callTab tbody {
+        display: block;
+        height:  20.3vh;
+        overflow-y: scroll;
+    }
+    ::-webkit-scrollbar{
+        display: none;
+    }
+</style>
+{/block}
+{block name="main"}
+
+<!--特效-->
+<div class="special">
+     <div></div>
+</div>
+<!--top-->
+<div class="mainTop">
+     <!-- 管廊GIS图 -->
+     <div  class='topMap mainBor' style="position: relative">
+          <!--地图-->
+          <div id="map" style="width: 100%;height: 100%;background-color: #eeeeee"></div>
+          <div id="deletBtn" style="display:none;position: absolute;top: 16px;right: 16px;background-color: #470313;border: 1px solid #df3d38;color: #df3d38;width: 30px;height: 30px;padding: 10px;border-radius: 8px">X</div>
+
+          <div id="popu" style="display: none;height:100%;width: 170px;position: absolute;top: 0;right: 0px;background-color: rgba(17,76,91,0.8);color: white">
+               <div id="galRoad" class="galRoad"></div>
+               <div id="section" class="section"></div>
+               <!--水仓-->
+               <div class="sc">
+                    <div>水仓</div>
+                    <div class="xianShi">
+                         <div class="xianShiDiv">温度<span id="Ts"></span>°C</div>
+                    </div>
+                    <div class="xianShi">
+                         <div class="xianShiDiv">湿度<span id="Ms"></span>%</div>
+                    </div>
+                    <div class="xianShi">
+                         <div class="xianShiDiv">氧气<span id="O2s"></span>%VOL</div>
+                    </div>
+                    <div class="xianShi">
+                         <div class="xianShiDiv">甲烷<span id="CH4s"></span>%LEL</div>
+                    </div>
+                    <div class="xianShi">
+                         <div class="xianShiDiv">硫化氢<span id="H2Ss"></span>PPM</div>
+                    </div>
+                    <div class="xianShi">
+                         <div class="xianShiDiv">水位<span id="LTs"></span>CM</div>
+                    </div>
+               </div>
+               <br>
+               <hr>
+               <!--电仓-->
+               <div class="dc">
+                    <div>电仓</div>
+                    <div class="xianShi">
+                         <div class="xianShiDiv">温度<span id="Td"></span>°C</div>
+                    </div>
+                    <div class="xianShi">
+                         <div class="xianShiDiv">湿度<span id="Md"></span>%</div>
+                    </div>
+                    <div class="xianShi">
+                         <div class="xianShiDiv">氧气<span id="O2d"></span>%VOL</div>
+                    </div>
+                    <div class="xianShi">
+                         <div class="xianShiDiv">甲烷<span id="CH4d"></span>%LEL</div>
+                    </div>
+                    <div class="xianShi">
+                         <div class="xianShiDiv">硫化氢<span id="H2Sd"></span>PPM</div>
+                    </div>
+                    <div class="xianShi">
+                         <div class="xianShiDiv">水位<span id="LTd"></span>CM</div>
+                    </div>
+               </div>
+          </div>
+     </div>
+     <!-- 管廊信息 -->
+     <div class="topInfo">
+          <!-- 信息 -->
+          <div class="contentInfo mainBor">
+               <div class="infoDate" id="infoDate"></div>
+               <div class="infoRun">
+                    <ul class="infoRunUl">
+                         <li class="infoRunLi">安全运行</li>
+                         <li class="infoRunNum" id="units">0</li>
+                         <li class="infoRunNum" id="tens">0</li>
+                         <li class="infoRunNum" id="hundreds">0</li>
+                         <li class="infoRunNum" id="thousands">0</li>
+                         <li class="infoRunLi">天</li>
+                    </ul>
+               </div>
+               <div class="infoDate div-center" id="infoDty" style="font-size:1.3rem">
+                    <input type="hidden" id="alarmnum" name="p_id" class="layui-input" value="{$Alarmnum}">
+                    <div class="layui-inline s-e" style="padding-right: 0"> 值班：</div>
+                    <div class="layui-inline s-e" style="padding-left: 0" id="nickname">－－</div>
+                    <div id="stime" class="layui-inline s-e"></div>
+                    <div class="progress"><div class="progressFro"></div>
+                         <div class="layui-progress" lay-filter="demo">
+                              <div class="layui-progress-bar layui-bg-blue" lay-percent="0%"></div>
+                         </div>
+                    </div>
+                    <div id="etime" class="layui-inline s-e"></div>
+               </div>
+          </div>
+          <!-- 动力配电检测 -->
+          <div class="contentEle mainBor" id="contentEle"></div>
+     </div>
+</div>
+<!--bottm-->
+<div class="mainBot">
+     <div class="botUse mainBor" id="botUse"></div>
+     <div class="botCall mainBor">
+          <div class="callIcon" id="callIcon"></div>
+
+          <div class="callUl">
+               <div class="callTab scrollber">
+                    <table class="callTable">
+                         <thead>
+                         <tr>
+                              <th>时间</th>
+                              <th>级别</th>
+                              <th>名称</th>
+                              <th>位置</th>
+                         </tr>
+                         </thead>
+                         <tbody id="appends">
+                         {volist name="Alarms" id="vo"}
+                         <tr>
+                              <th class='callTime'>{$vo.alarm_time}</th>
+                              <th class='callGrade'>{$vo.lvlcontent}</th>
+                              <th>{$vo.cate_name}</th>
+                              <th>{$vo.eqpt_site}</th>
+                         </tr>
+                         {/volist}
+                         </tbody>
+                    </table>
+               </div>
+          </div>
+     </div>
+</div>
+
+{/block}
+{block name="script"}
+<script>
+
+    /**
+     * Created by Administrator on 2020/4/3.
+     */
+
+    var map;
+    var url;
+    var gis_arr = [];
+    $(function () {
+        // alert('11');
+
+         url = "http://192.168.10.18:8090/iserver/services/map-zhengDing/rest/maps/zhengDing";
+         map = new ol.Map({
+            target: 'map',
+            view: new ol.View({
+                center: [114.62 , 38.14],
+                zoom: 14,
+                maxZoom:20,
+                minZoom:12,
+                projection: 'EPSG:4326'
+            })
+        });
+
+//获取坐标系统
+// ol.View.getProjection();
+        var layer = new ol.layer.Tile({
+            source: new ol.source.TileSuperMapRest({
+                url: url,
+                wrapX: true
+            }),
+            projection: 'EPSG:4326'
+        });
+        map.addLayer(layer);
+
+        query();
+
+        // 鼠标事件
+        var stylesOptions = {
+            url: url,
+            view: map.getView()
+        };
+        var sections;
+        var vectorTileStyles = new ol.supermap.VectorTileStyles(stylesOptions);
+
+        var Ts,Ms,O2s,CH4s,H2Ss,LTs,Td,Md,O2d,CH4d,H2Sd,LTd,Section,urld,urls,urlT = 'http://192.168.10.18/real/real_time';
+        map.on('pointermove',function (e) {
+            if(typeof(feature)== 'undefined'){
+                $('#popu').css('display','none');
+            }
+            var features = map.forEachFeatureAtPixel(e.pixel,function (feature) {
+
+                //            console.log(feature);
+                if(sections !== feature.N.Section){
+                    $('#popu').css("display","block");
+                    Section = feature.N.Section;
+                    urls = urlT+'?zone='+Section+'S';
+                    urld = urlT+'?zone='+Section+'D';
+                    Ts = 'T_'+Section+'S';
+                    Ms = 'M_'+Section+'S';
+                    O2s = 'O2_'+Section+'S';
+                    CH4s = 'CH4_'+Section+'S';
+                    H2Ss = 'H2S_'+Section+'S';
+                    LTs = 'LT_'+Section+'S';
+
+                    Td = 'T_'+Section+'D';
+                    Md = 'M_'+Section+'D';
+                    O2d = 'O2_'+Section+'D';
+                    CH4d = 'CH4_'+Section+'D';
+                    H2Sd = 'H2S_'+Section+'D';
+                    LTd = 'LT_'+Section+'D';
+                    // console.log(Ts);
+                    // console.log(Section);
+
+
+                    $("#galRoad").html(feature.N.Name);
+                    $("#section").html(Section);
+                    //                请求水仓
+                    $.ajax({
+                        url:urls,
+                        async:true,
+                        success:function(result){
+                            var obj = eval('('+result+')');
+                            Ts = 'T_'+feature.N.Section+'S';
+                            if (obj.length !==0){
+                                $("#Ts").html(obj[Ts]);
+                                $("#Ms").html(obj[Ms]);
+                                $("#O2s").html(obj[O2s]);
+                                $("#CH4s").html(obj[CH4s]);
+                                $("#H2Ss").html(obj[H2Ss]);
+                                $("#LTs").html(obj[LTs]);
+                            }else {
+                                $("#Ts").html("--");
+                                $("#Ms").html("--");
+                                $("#O2s").html("--");
+                                $("#CH4s").html("--");
+                                $("#H2Ss").html("--");
+                                $("#LTs").html("--");
+                            }
+
+
+                        }
+                    });
+                    //                请求电仓
+                    $.ajax({
+                        url:urld,
+                        async:true,
+                        success:function(result){
+                            var obj = eval('('+result+')');
+
+                            if (obj.length !==0){
+                                $("#Td").html(obj[Td]);
+                                $("#Md").html(obj[Md]);
+                                $("#O2d").html(obj[O2d]);
+                                $("#CH4d").html(obj[CH4d]);
+                                $("#H2Sd").html(obj[H2Sd]);
+                                $("#LTd").html(obj[LTd]);
+                            }else {
+                                $("#Td").html("--");
+                                $("#Md").html("--");
+                                $("#O2d").html("--");
+                                $("#CH4d").html("--");
+                                $("#H2Sd").html("--");
+                                $("#LTd").html("--");
+                            }
+
+                        }
+                    });
+                }
+                //            sections = feature.N.Section;
+                // alert(feature.N.Section);
+                // alert(feature.N.Section);
+
+                // console.log(e.pixel);
+                // var x = e.pixel[0]+"px";
+                // var y = e.pixel[1]+'px';
+                // popu.style.top = y;
+                // popu.style.left = x;
+                // // vectorTileStyles.dispatchEvent({type: 'featureSelected',
+                //     selectedId: feature.getProperties().id,
+                //     layerName: feature.getProperties().layerName
+                // });
+                return true;
+            },{hitTolerance:5})});
+
+
+        // SQL查询
+        function query() {
+            var param = new SuperMap.QueryBySQLParameters({
+                queryParams: {
+                    name: "gallery_L@zhengDing.1",
+                    // attributeFilter: "NAME = 新城大街",
+                    fields:["Name",'Section']
+                }
+            });
+            new ol.supermap.QueryService(url).queryBySQL(param, function (serviceResult) {
+                // console.log('111');
+                // console.log(serviceResult);
+                /*console.log(serviceResult.result.recordsets[0].features.forEach);
+                console.log(serviceResult.result.recordsets[0].features.features[0].properties.Section);*/
+
+                var vectorSource = new ol.source.Vector({
+                    features: (new ol.format.GeoJSON()).readFeatures(serviceResult.result.recordsets[0].features),
+                    wrapX: false,
+                });
+                // console.log(vectorSource);
+                resultLayer = new ol.layer.Vector({
+                    source: vectorSource
+                });
+                map.addLayer(resultLayer);
+            });
+        }
+    })
+
+
+
+    $('.callTime').each(function(){
+
+        // console.dir($(this).text());
+
+        $(this).text(DateToTime($(this).text()));
+    });
+
+    // 报警类型
+    var callIcon = echarts.init(document.getElementById('callIcon'));
+    // 连接服务端，workerman.net:2120换成实际部署web-msg-sender服务的域名或者ip
+    var socket = io('http://192.168.10.18:2120');
+    // uid可以是自己网站的用户id，以便针对uid推送以及统计在线人数
+    var uid = '2333';
+    console.dir(uid);
+    var audio = document.getElementById("myAudio");
+    // socket连接后以uid登录
+    socket.on('connect', function(){
+        socket.emit('login', uid);
+    });
+
+    new Vue({
+        el: '#app',
+        data: function() {
+            return {
+                visible: false ,
+                dialogVisible:false,
+                alarm_tips:'',
+                audio:''
+            }
+        },
+        created(){
+            let ccc = this.$options.methods.alarm_tips.bind(this);
+            socket.on('new_msg',(data) => {
+                ccc(data);
+                console.dir('cccccccccccccccc');
+                console.dir(data);
+            })
+        },
+        methods:{
+            alarm_tips:function(a){
+                let _this = this;
+                let evala = eval('('+ a +')').real_alarm;
+                _this.alarm_tips = evala;
+                if(evala.lvlcontent == '普通'){
+                    // return;
+                }else if(evala.lvlcontent == '设备'){
+                    return ;
+                }else if(evala.lvlcontent == '紧急'){
+                    audio.play();
+                    audio.loop = true;
+                    _this.$notify({
+                        title:`${evala.lvlcontent}报警`,
+                        message:`${new Date(evala.alarm_time*1000).toLocaleString()}\r ${evala.zone}\r ${evala.cate_name}
+                              <a style="float: right" href="javascript:void(0)" onclick="alarmtips(${evala.id},${evala.is_manage})">[详情]</a>`,
+                        duration:0,
+                        dangerouslyUseHTMLString:true,
+                        iconClass:'el-icon-bell',
+                        customClass:'bulletion_yellow',
+                        onClick:function(){
+                            audio.pause();
+                            // dialogVisible = true;
+                        },
+                        onClose(){
+                            audio.pause();
+                            let name = "layer_"+evala.id;
+                            map.removeLayer(gis_arr[name]);
+                        }
+                    })
+                }else if(evala.lvlcontent == '严重'){
+                    audio.play();
+                    audio.loop = true;
+                    _this.$notify({
+                        title:`${evala.lvlcontent}报警`,
+                        message:`${new Date(evala.alarm_time*1000).toLocaleString()}\r ${evala.zone}\r ${evala.cate_name}
+                              <a style="float: right" href="javascript:void(0)" onclick="alarmtips(${evala.id},${evala.is_manage})">[详情]</a>`,
+                        duration:0,
+                        dangerouslyUseHTMLString:true,
+                        iconClass:'el-icon-bell',
+                        customClass:'bulletin_red',
+                        onClick:function(){
+                            audio.pause();
+                            // _this.dialogVisible = true;
+                        },
+                        onClose(){
+                            audio.pause();
+                            let name = "layer_"+evala.id;
+                            map.removeLayer(gis_arr[name]);
+                        }
+                    })
+                }
+                _this.alarm_tips.alarm_time = new Date(_this.alarm_tips.alarm_time*1000).toLocaleString();
+                if(_this.alarm_tips.is_manage == 0){
+                    _this.alarm_tips.is_manage = '否'
+                }else if(_this.alarm_tips.is_manage == 1){
+                    _this.alarm_tips.is_manage = '是'
+                }
+
+            }
+        }
+    });
+    // $("#deletBtn").click(function () {
+    //     map.removeLayer(resultLayer);
+    //     // $("#deletBtn").hide();
+    // });
+
+    function codeChangeLay(data) {
+        var namelayer;
+        switch (data){
+            case '4'||'2':
+                namelayer = 'Camera_P';
+                break;
+            case '10':
+                namelayer = 'RQBJ_P';
+                break;
+            case '29':
+                namelayer = 'H2S_P';
+                break;
+            case '9':
+                namelayer = 'TX_P';
+                break;
+            case '8':
+                namelayer = 'IR_P';
+                break;
+            case '13':
+                namelayer = 'MQ_P';
+                break;
+            case '14':
+                namelayer = 'DK_P';
+                break;
+            case '16':
+                namelayer = 'MS_P';
+                break;
+            case '86':
+                namelayer = 'S_P';
+                break;
+            case '87':
+                namelayer = 'SGBJ_P';
+                break;
+            case '89':
+                namelayer = 'SYDL_P';
+                break;
+            case '90':
+                namelayer = 'CW_P';
+                break;
+            case '17':
+                namelayer = 'MCKG_P';
+                break;
+            case '96':
+                namelayer = 'GFMH_P';
+                break;
+            case '94':
+                namelayer = 'JZDY_P';
+                break;
+            case '93':
+                namelayer = 'FPD_P';
+                break;
+            case '27':
+                namelayer = 'WSD_P';
+                break;
+            case '30':
+                namelayer = 'O2_P';
+                break;
+            case '28':
+                namelayer = 'CH4_P';
+                break;
+            case '31':
+                namelayer = 'SWJ_P';
+                break;
+            case '49':
+                namelayer = 'FHFS_P';
+                break;
+            case '50':
+                namelayer = 'FHFP_P';
+                break;
+            case '44'||'51'||'52':
+                namelayer = 'FJ_P';
+                break;
+            case '110':
+                namelayer = 'PUMP_P';
+                break;
+            case '57'||'58':
+                namelayer = 'AP_P';
+                break;
+            case '61':
+                namelayer = 'AL_P';
+                break;
+            case '63':
+                namelayer = 'AP_P';
+                break;
+            case '64':
+                namelayer = 'UPS_P';
+                break;
+            case '22':
+                namelayer = 'JQR_P';
+                break;
+            case '83':
+                namelayer = 'JLSZ_P';
+                break;
+            case '82':
+                namelayer = 'QJ_P';
+                break;
+            case '80':
+                namelayer = 'LXWY_P';
+                break;
+            case '81':
+                namelayer = 'SJCJ_P';
+                break;
+            case '68':
+                namelayer = 'WXAP_P';
+                break;
+            case '42':
+                namelayer = 'IPDH_P';
+                break;
+            default:
+
+        }
+        var queryName = namelayer+"@zdSheBei#4";
+        return queryName;
+    }
+
+    function query_alarm(alarmData) {
+        var alarmData = alarmData;
+
+        var section = alarmData.zone.split('/')[0];
+        var queryName = codeChangeLay(alarmData.cate_code);
+        var param = new SuperMap.QueryBySQLParameters({
+            queryParams: {
+                name: queryName,
+                attributeFilter: "Section='"+section+"'"
+            }
+        });
+        new ol.supermap.QueryService(url).queryBySQL(param, function (serviceResult) {
+            var features = (new ol.format.GeoJSON()).readFeatures(serviceResult.result.recordsets[0].features);
+            var iconStyle = new ol.style.Style({
+                image: new ol.style.Icon(({
+                    imgSize:[32,32],
+                    anchor: [0.5, 0.5],
+                    src: '../../../static/new/image/gis_alarm.png',
+//                    scale:0.1
+                }))
+            });
+            for (var i = 0; i < features.length; i++) {
+                features[i].setStyle(iconStyle);
+            }
+            var vectorSource = new ol.source.Vector({
+                features: features,
+                wrapX: false
+            });
+            let name = "layer_"+alarmData.id;
+            gis_arr[name] = new ol.layer.Vector({
+                source: vectorSource
+            });
+            map.addLayer(gis_arr[name]);
+        });
+    }
+
+
+
+    // 后端推送来消息时
+    socket.on('new_msg', function(msg){
+
+
+
+
+        let objs =  eval('('+msg+')');
+        var gis_alarm = objs.real_alarm;
+        query_alarm(gis_alarm);
+        // $("#deletBtn").show();
+
+        if(objs.reload){
+            console.dir('patrol_reload');
+        }else{
+            let arrs = "<tbody id='appends'>";
+            console.dir(objs);
+            let alarms = objs.alarms;
+            let alarmnum= objs.alarmnum;
+            let real_alarm = objs.real_alarm;
+            console.dir(real_alarm);
+            for (var i in alarms) {
+                /*var o={};
+                o[i]=array[i];
+                arrDate.push(o);*/
+                var dates = DateToTime(alarms[i].alarm_time);
+                arrs +=  "<tr><th class='callTime'>" +dates+ "</th><th class='callGrade'>" +alarms[i].lvlcontent+ "</th><th>" +alarms[i].cate_name+ "</th><th>" +alarms[i].eqpt_site+ "</th></tr>";
+                // console.dir(alarms[i]);
+            }
+            arrs += "</tbody>";
+
+            $("#appends").replaceWith(arrs);//重写如页面
+            // console.log(arrs);
+            arrs = '';
+
+            let alarmoption = {
+                series : [
+                    {
+                        data: alarmnum,
+                    }
+                ]
+            };
+
+            callIcon.setOption(alarmoption);
+        }
+
+    });
+    // 后端推送来在线数据时
+    socket.on('update_online_count', function(online_stat){
+        console.log(online_stat);
+    });
+    function DateToTime(unixTime,type="Y-M-D H:i:s"){
+        var date = new Date(unixTime * 1000);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+        var datetime = "";
+        datetime += date.getFullYear() + type.substring(1,2);
+        datetime += (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + type.substring(3,4);
+        datetime += (date.getDate() < 10 ? '0'+(date.getDate()) : date.getDate());
+        if (type.substring(5,6)) {
+            if (type.substring(5,6).charCodeAt() > 255) {
+                datetime += type.substring(5,6);
+                if (type.substring(7,8)) {
+                    datetime += " " + (date.getHours() < 10 ? '0'+(date.getHours()) : date.getHours());
+                    if (type.substring(9,10)) {
+                        datetime += type.substring(8,9) + (date.getMinutes() < 10 ? '0'+(date.getMinutes()) : date.getMinutes());
+                        if (type.substring(11,12)) {
+                            datetime += type.substring(10,11) + (date.getSeconds() < 10 ? '0'+(date.getSeconds()) : date.getSeconds());
+                        };
+                    };
+                };
+            }else{
+                datetime += " " + (date.getHours() < 10 ? '0'+(date.getHours()) : date.getHours());
+                if (type.substring(8,9)) {
+                    datetime += type.substring(7,8) + (date.getMinutes() < 10 ? '0'+(date.getMinutes()) : date.getMinutes());
+                    if (type.substring(10,11)) {
+                        datetime += type.substring(9,10) + (date.getSeconds() < 10 ? '0'+(date.getSeconds()) : date.getSeconds());
+                    };
+                };
+            };
+        };
+        return datetime;
+    }
+</script>
+
+<script>
+
+
+
+
+
+    layui.use('element', function(){
+        var $ = layui.jquery
+            ,element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
+        //触发事件
+        element.progress('demo', '0%');
+        // ajax 安全运行时间
+        function safety() {
+            $.get('http://192.168.10.18/bigdata/get_data', function(data) {
+                data = JSON.parse(data);
+                if(data.code == '200'){
+                    datas = data.data;
+                    // console.dir(datas);
+                    $('#units').html(datas.date_num.substr(0,1));
+                    $('#tens').html(datas.date_num.substr(1,1));
+                    $('#hundreds').html(datas.date_num.substr(2,1));
+                    $('#thousands').html(datas.date_num.substr(3,1));
+                    if(datas.nickname !== ''){
+                        $('#nickname').html(datas.nickname);
+                    }
+                    if(datas.person_num !== ''){
+                        $('#person_num').html(datas.person_num);
+
+                    }
+                    $('#stime').html(datas.stime);
+                    $('#etime').html(datas.etime);
+                    element.progress('demo', datas.per);
+                }else{
+                    $('#stime').html('--');
+                    $('#etime').html('--');
+                }
+
+            });
+            /*$.ajax({url:'http://localhost:8888/bigdata/date'
+                ,type: 'GET'
+               ,dataType:'json'
+                ,async:false
+                ,success:function(data){
+                    data = JSON.parse(data);
+                    console.dir(data);
+                    $('#units').html(data.units);
+                    $('#tens').html(data.tens);
+                    $('#hundreds').html(data.hundreds);
+                    $('#thousands').html(data.thousands);
+                }});*/
+        }
+
+        $(function(){
+            safety();
+            setInterval(safety,60000);
+        });
+    });
+</script>
+<script src="__STATIC__/new/itemJS/demoOne.js"></script>
+{/block}

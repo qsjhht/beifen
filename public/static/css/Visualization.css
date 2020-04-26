@@ -1,0 +1,168 @@
+/*一级菜单显示框*/
+.headerNav li:nth-child(2){
+    outline:1px solid #247998;
+    box-shadow: 0 0 6px #247998 inset;
+}
+
+/*左边*/
+.main .mainLeft{
+    width:22.8%;
+    height:98.9%;
+    display:inline-block;
+    vertical-align: top;
+    background:rgba(00 99 00 0.3);
+}
+.mainLeft .mainLeft1{
+    margin:1% 2% 4% 0;
+    width:98%;
+    height:34%;
+}
+.mainLeft .mainLeft3{
+    margin:1% 2% 0 0;
+    width:98%;
+    height:28%;
+}
+/*中间*/
+.main .mainMiddl{
+    width:54%;
+    height:98.9%;
+    display:inline-block;
+    vertical-align: top;
+    background:rgba(00 99 00 0.3);
+}
+.mainMiddl .mainMiddle1{
+    margin:0.5% 1% 1.7% 1%;
+    width:98%;
+    height:42%;
+}
+.mainMiddle2{
+    margin:0.5% 1% 1.7% 1%;
+    width:98%;
+    height:26%;
+}
+.mainMiddle3{
+    margin:0.5% 1% 1.7% 1%;
+    width:98%;
+    height:28%;
+}
+/*右边*/
+.main .mainRight{
+    width:23%;
+    height:98.8%;
+    display:inline-block;
+    vertical-align: top;
+    background:rgba(00 99 00 0.3);
+}
+.main .mainRight .mainRight1{
+    margin:1% 0 4% 2%;
+    width:98%;
+    height:34%;
+}
+.main .mainRight .mainRight3{
+    margin:1% 0 0 2%;
+    width:98%;
+    height:28%;
+}
+/*标题*/
+.mainHeader{
+    width:97%;
+    height:10%;
+    line-height:40px;
+    padding-left:3%;
+}
+/*内容*/
+.mainCont{
+    padding:1%;
+    width:98%;
+    height:88%;
+}
+
+.mainMiddl .mainMiddle2 .middleLeft{
+    width:32%;
+    display:inline-block;
+    vertical-align: top;
+    height:100%;
+}
+.mainMiddl .mainMiddle2 .middleMid{
+    width:32%;
+    display:inline-block;
+    vertical-align: top;
+    height:100%;
+    margin:0 1.1%;
+}
+
+
+/*列表*/
+.table{
+    width:90%;
+    height:80%;
+    margin:5px auto;
+}
+.table tbody tr{
+    height:35px;
+}
+.table tr:nth-child(even){
+    background:rgba(47,69,84,0.3);
+}
+.table tbody:nth-child(1) tr{
+    background:rgba(47,69,84,0.3);
+}
+.table tbody:nth-child(2) tr:hover{
+    background-color: #237b99;
+}
+table tbody:nth-child(2) tr th{
+    color:#ffffff;
+    font-weight:400;
+}
+
+/*电仓*/
+#dv10{
+    font-size:0;
+    text-align:center;
+}
+#dv10 div{
+    width:50%;
+    height:45%;
+    display:inline-block;
+    vertical-align: top;
+}
+
+
+/*进度条*/
+.main .mainMiddl .mainMiddle2 .middleLeft .mainCont .progress{
+    text-align:center;
+    padding:3% 0;
+}
+
+.main .mainMiddl .mainMiddle2 .middleLeft .mainCont .progress div{
+    width:70%;
+    display:inline-block;
+    vertical-align: top;
+}
+.plant{
+    display:inline-block;
+    vertical-align: top;
+    position:relative;
+    top:-40px;
+    color:#00ffff;
+}
+.plant1{
+    display:inline-block;
+    vertical-align: top;
+    width:36%;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

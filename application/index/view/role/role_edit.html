@@ -1,0 +1,132 @@
+{extend name="sub_layout"/}
+{block name="main"}
+<div class="layui-card">
+    <div class="layui-card-body">
+        <form class="layui-form form-horizontal" action="" method="post">
+            <div class="layui-form-item">
+                <label class="layui-form-label">角色名称</label>
+                <div class="layui-input-inline w400" >
+                    <input type="text" name="role_name" autocomplete="off" value="{$details['role_name']}"  placeholder="角色名称" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">角色详情</label>
+                <div class="layui-input-inline w400" >
+                    <textarea name="role_detail" required="" lay-verify="required"  placeholder="角色详情" class="layui-textarea">{$details['role_detail']}</textarea>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <div class="eleTree ele2 w400" lay-filter="data2"></div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-input-inline w400" >
+                    <input type="text" name="role_auth_ids" value="{$details['role_auth_ids']}" id="role_auth_ids" class="layui-input" style="display: none">
+                    <input type="text" name="role_auth_names" id="role_auth_names" class="layui-input" style="display: none">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{/block}
+{block name="script"}
+<script>
+    layui.config({
+        base : '__STATIC__/layui/'
+    }).use(['layer','form','jquery','selectN','selectM','eleTree'],function(){
+        $ = layui.jquery;
+        var form = layui.form;
+        var eleTree= layui.eleTree;
+        var role_auth_ids = $('#role_auth_ids').attr('value').split(',');
+        $ .ajax({
+            type: 'GET',
+            url: '/index/role/get_tree_data',//发送请求
+            //data: {'lamp_num':lamp_num},
+            dataType:'json',
+            async:false,
+            success: function(result) {
+                console.dir(role_auth_ids);
+                //document.getElementById("Lamp").value = result;
+                //由于 JSON 语法是 JavaScript 语法的子集，JavaScript 函数 eval() 可用于将 JSON 文本转换为 JavaScript 对象。
+
+                //var tagData =JSON.stringify(eval(result));
+
+                //var tagData = eval(document.getElementById("Lamp").value);
+                //console.log(result);
+
+                el2=eleTree.render({
+                    elem: '.ele2',
+                    data: result,
+                    // url: "../eleTree/tree.json",
+                    showCheckbox: true,
+                    defaultExpandAll: true,
+                    defaultCheckedKeys: role_auth_ids,
+                    done: function() {
+                        // el2.remove(24);
+                    }
+                });
+                eleTree.on("nodeChecked(data2)",function(d) {
+                    get_data(el2.getChecked(true,false));
+                })
+            }
+        });
+
+        //监听返回按钮
+        /*$('#go_back').on('click', function()
+         {
+         window.open('{:url("user/index",array("menuid"=>"24"))}',  '_self');
+         });*/
+
+        //监听提交
+        /*   form.on('submit(demo1)', function(data){
+         console.log(el2.getChecked(true,false));
+
+
+         $.ajax({   
+         url:'./role_add',       
+         method:'post',       
+         data:data.field,        
+         dataType:'JSON',         
+         success:function(res){     
+         if(res.code='0'){    
+         layer.alert('success');  
+         //parent.closeIframe(res.msg);
+         return false;
+         }                
+         else{
+         layer.alert('sss')  
+         return false;
+         }
+         },              
+         error:function (data) {
+         layer.alert('error')
+         return false;
+         }
+            }) ;
+         });*/
+        function get_data(arr) {
+            var ids = '';
+            var names = '';
+            for(let index in arr) {
+                ids = ids + arr[index].id + ',';
+                names = names + arr[index].label + ',';
+            }
+            $('#role_auth_names').val(names);
+            $('#role_auth_ids').val(ids);
+            console.log(ids);
+            console.log(names);
+
+        }
+
+    });
+</script>
+{/block}

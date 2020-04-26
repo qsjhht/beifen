@@ -1,0 +1,154 @@
+{extend name="sub_layout"/}
+{block name="main"}
+<style type="text/css">
+    div img {
+        width: 100px;
+    }
+</style>
+<div class="layui-card">
+    <div class="layui-card-body">
+        <form class="layui-form form-horizontal" action="" method="post">
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">用户名</label>
+                <div class="layui-input-inline w400" >
+                    <input type="text" name="username" autocomplete="off" value=""  placeholder="登录用户名" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">用户昵称</label>
+                <div class="layui-input-inline w400" >
+                    <input type="text" name="nickname" autocomplete="off" value=""  placeholder="用户昵称" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">用户手机</label>
+                <div class="layui-input-inline w400" >
+                    <input type="text" name="phone" autocomplete="off" value=""  placeholder="用户手机" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">性别</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="sex" value="1" title="男" checked>
+                    <input type="radio" name="sex" value="0" title="女" >
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">所属部门</label>
+                <div class="layui-input-block">
+                    <input type="text" name="label" required="" value="" lay-verify="required" placeholder="请选择所属部门" readonly="" autocomplete="off" class="layui-input eletxea w400">
+                    <input type="text" name="user_dept_id"  class="layui-input" style="display: none">
+                    <div class="eleTree ele5 w400" lay-filter="data5"></div>
+                </div>
+            </div>
+
+            <div class="layui-form-item" style="width: 450px;">
+                <label class="layui-form-label">所属角色</label>
+                <div class="layui-input-block">
+                    <select name="roleid" lay-verify="required">
+                        <option value="">请选择所属角色</option>
+                        {volist name="Role" id="vo"}
+                        <option value="{$vo.role_id}">{$vo.role_name}</option>
+                        {/volist}
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{/block}
+{block name="script"}
+<script>
+    layui.config({
+        base : '__STATIC__/layui/'
+    }).use(['layer','form','jquery','selectN','selectM','eleTree'],function(){
+        $ = layui.jquery;
+        var el5;
+        var form = layui.form;
+        var eleTree= layui.eleTree;
+        $ .ajax({
+            type: 'GET',
+            url: '/index/user/get_tree_data',//发送请求
+            //data: {'lamp_num':lamp_num},
+            dataType:'json',
+            async:false,
+            success: function(result) {
+
+                //document.getElementById("Lamp").value = result;
+                //由于 JSON 语法是 JavaScript 语法的子集，JavaScript 函数 eval() 可用于将 JSON 文本转换为 JavaScript 对象。
+
+                //var tagData =JSON.stringify(eval(result));
+
+                //var tagData = eval(document.getElementById("Lamp").value);
+                console.log(result);
+
+                $("[name='label']").on("click",function (e) {
+                    e.stopPropagation();
+                    if(!el5){
+                        el5=eleTree.render({
+                            elem: '.ele5',
+                            data: result,
+                            defaultExpandAll: false,
+                            expandOnClickNode: false,
+                            highlightCurrent: true
+                        });
+                    }
+                    $(".ele5").toggle();
+                })
+                eleTree.on("nodeClick(data5)",function(d) {
+                    $("[name='label']").val(d.data.currentData.label);
+                    $("[name='user_dept_id']").val(d.data.currentData.id);
+                    $(".ele5").hide();
+                })
+                $(document).on("click",function() {
+                    $(".ele5").hide();
+                })
+
+            }
+        });
+
+        //监听返回按钮
+        /*$('#go_back').on('click', function()
+        {
+          window.open('{:url("user/index",array("menuid"=>"24"))}',  '_self');
+        });*/
+
+        //监听提交
+        form.on('submit(demo1)', function(data){
+            //alert('adsfdfs');
+            //console.dir(data.field);
+            //alert('adsfdfs');
+        $.ajax({
+            url: '{:url("index/user/user_add_ajax")}',
+            method:'post',       
+            data:data.field,        
+            dataType:'JSON',
+            success:function(res){
+                if(res.code=='1'){
+
+                    //parent.closeIframe(res.msg);
+                    var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                    window.parent.location.reload();//刷新父页面
+                    parent.layer.close(index);//关闭弹出层
+
+                }                
+                else{
+                    return false;
+                }
+            },              
+            error:function (res) {
+                console.dir(res.code);
+                    return false;
+            }           
+               }) ;         
+        });
+    });
+</script>
+{/block}

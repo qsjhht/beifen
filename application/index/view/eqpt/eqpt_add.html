@@ -1,0 +1,358 @@
+{extend name="eqpt_layout"/}
+<body class="backg">
+{block name="main"}
+<link rel="stylesheet" href="/static/css/equipment.css">
+<link rel="stylesheet" href="/static/css/eqpt.css">
+<!--<style>
+    #layui-laydate1 .layui-laydate-main{width:350px;}
+    #layui-laydate1 .l  ayui-laydate-content td,#test-n1 .layui-laydate-content th{width:87px;height: 50px;}
+</style>-->
+<div class="mainMiddle mainBor"  style="display:inline-block;width: 100%;border: 0px;background-image: url('/static/image/bgSmall.png')">
+    <!--设备台账-->
+    <div class="layerMiddle divCenter">
+        <div class="layerNav">
+            <div class="floatLeft">
+                <i class="layui-icon">&#xe653;</i> &nbsp;
+                添加设备
+            </div>
+        </div>
+        <div class="scrollber" >
+            <form class="layui-form" action="" method="post">
+                <fieldset class="layui-elem-field layui-field-title">
+                    <legend>设备信息</legend>
+                </fieldset>
+                <!--&lt;!&ndash;左上角图片&ndash;&gt;
+                <div class="layerImage"  id="test1">
+                    <div class="image3D" id="image3D" >
+                        <p>点击上传设备图片</p>
+                        <img src="/static/image/camera.png" alt="" width="120" height="120" id="demo2">
+                    </div>
+                    &lt;!&ndash; <button type="button" class="layui-btn" id="test1">
+                         <i class="layui-icon">&#xe67c;</i>上传图片
+                     </button>&ndash;&gt;
+
+                    <div class="canvas">
+                        <img src="/static/image/camera_1.png" alt="" width="17" height="15" id="img1">
+                        <canvas id="3D"></canvas>
+                    </div>
+                </div>-->
+                <!--<div class="layui-upload-drag" id="test10">
+                    <i class="layui-icon"></i>
+                    <p>点击上传，或将文件拖拽到此处</p>
+                </div>-->
+                <!--右上角信息-->
+                <div class="layui-show-md-inline-block">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label" style="float: left">设备类型</label>
+                            <select name="eqpt_cate" class="layui-self-select"  lay-verify="select_cat">
+                                <option value="0">请选择设备分类</option>
+                                {$select_categorys|raw}
+                            </select>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label"  style="float: left">设备名称</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="eqpt_type" lay-verify="eqpt_name" placeholder="请输入设备名称" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">设备品牌</label>
+                            <input type="text" name="eqpt_brand" required  lay-verify="input_brand" placeholder="请输入设备品牌" autocomplete="off" class="layui-input">
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">设备型号</label>
+                            <input type="text" name="eqpt_model" required  lay-verify="input_type" placeholder="请输入设备型号" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label" style="float: left">设备状态</label>
+                            <select name="eqpt_status" class="layui-self-select">
+                                <option selected value="正常">正常</option>
+                                <option value="故障">故障</option>
+                                <option value="报废">报废</option>
+                            </select>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label"   style="float: left">安装时间</label>
+                            <input type="text" lay-verify="required" name="eqpt_ins_time" class="layui-input" id="test5" placeholder="" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">额定功率</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="eqpt_rated" placeholder="请输入设备额定功率" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label" style="float: left">使用年限</label>
+                            <div class="layui-input-inline">
+                                <select name="eqpt_durable" class="layui-self-select">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option selected value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6-10</option>
+                                    <option value="7">11-15</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">供应商</label>
+                            <input type="text" name="eqpt_supplier" placeholder="请输入设备供应商" autocomplete="off" class="layui-input">
+                        </div>
+                        <div class="layui-inline">
+                            <label class="layui-form-label">采购员</label>
+
+                            <input type="text" name="eqpt_buyer" placeholder="请输入采购员姓名" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">维修电话</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="eqpt_service_MP" placeholder="请输入维修电话" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <!--<div class="layui-inline">-->
+                        <!--<label class="layui-form-label">设备数量</label>-->
+                        <!--<div class="layui-input-block">-->
+                        <!--<input type="text" name="eqpt_name" required  lay-verify="required" placeholder="请输入设备名称" autocomplete="off" class="input">-->
+                        <!--</div>-->
+                        <!--</div>-->
+                    </div>
+
+                    <!--底部信息-->
+                    <!--<div class="layui-form-item" style="display: none">
+                        <label class="layui-form-label" style="float: left">设备位置</label>
+                        <div class="layui-input-inline" style="margin-right: 18px">
+                            <select name="eqpt_site" lay-verify="required">
+                                <option value="0">请选择设备位置</option>
+                                {$select_sites|raw}
+                            </select>
+                        </div>
+
+                        <label class="layui-form-label">IP地址</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="eqpt_IP_address" placeholder="请输入设备IP地址" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>-->
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">质保信息</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="eqpt_quality" maxlength="150" placeholder="请输入设备质保信息"  style="width: 650px" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">保养提示</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="eqpt_upkeep_info" maxlength="255" placeholder="请输入设备保养提示"  style="width: 650px" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">备注信息</label>
+                        <div class="layui-input-block" style="width: 650px">
+                            <textarea name="eqpt_remarks"  placeholder="请输入" class="layui-textarea"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <!--<fieldset class="layui-elem-field layui-field-title">
+                </fieldset>
+                <div class="addParets" id='parts'  data-type="openSelect">
+                    <i class="layui-icon">&#xe654;</i>
+                    添加配件
+                </div>
+                <fieldset class="layui-elem-field layui-field-title">
+                </fieldset>-->
+
+                <div class="layui-form-item">
+                    <div class="layui-input-block margin-top-seven">
+                        <!--<button type="button" class="layui-btn">
+                            <i class="layui-icon">&#xe857;</i>提交并绑定设备模型
+                        </button>-->
+                        <button class="layui-btn" id="sub" lay-submit lay-filter="sub">立即提交</button>
+                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{/block}
+
+{block name="script"}
+<script>
+    layui.use(['form', 'laydate','upload'], function(){
+        var form = layui.form,
+            laydate = layui.laydate,
+            upload = layui.upload;
+        var $ = layui.$;
+        //监听提交
+        /* form.on('submit(demo1)', function(data){
+             layer.alert(JSON.stringify(data.field), {
+                 title: '最终的提交信息'
+             });
+             return false;
+         });*/
+        //日期时间选择器
+        laydate.render({
+            elem: '#test5'
+            ,type: 'datetime'
+//            ,showBottom:false
+            ,value: new Date()
+        });
+
+        form.verify({
+            select_cat: function(value, item){ //value：表单的值、item：表单的DOM对象
+                if(new RegExp("^\\b0$").test(value)){
+                    return '请选择设备类型';
+                }
+                /* if(/(^\_)|(\__)|(\_+$)/.test(value)){
+                     return '用户名首尾不能出现下划线\'_\'';
+                 }
+                 if(/^\d+\d+\d$/.test(value)){
+                     return '用户名不能全为数字';
+                 }*/
+            }
+            ,input_brand: function(value, item) { //value：表单的值、item：表单的DOM对象
+                if (new RegExp("^[\\s]*$").test(value)) {
+                    return '设备品牌不能为空';
+                }
+            }
+            ,input_type: function(value, item) { //value：表单的值、item：表单的DOM对象
+                if (new RegExp("^[\\s]*$").test(value)) {
+                    return '设备型号不能为空';
+                }
+            }
+            //我们既支持上述函数式的方式，也支持下述数组的形式
+            //数组的两个值分别代表：[正则匹配、匹配不符时的提示文字]
+            /*,select: [
+                /^\b0$/
+                ,'密码必须6到12位，且不能出现空格'
+            ]*/
+        });
+
+        //普通图片上传
+        /*var uploadInst = upload.render({
+            elem: '#test1'
+            ,url:'{:url("index/eqpt/upload_file")}'
+            ,auto:false
+            ,bindAction: '#sub'
+            ,progress: function(e , percent) {
+                console.log("进度：" + percent + '%');
+                element.progress('progressBar',percent  + '%');
+            }
+            ,choose: function(obj){
+                //将每次选择的文件追加到文件队列
+                var files = obj.pushFile();
+                //预读本地文件，如果是多文件，则会遍历。(不支持ie8/9)
+                obj.preview(function(index, file, result){
+                    //console.log(index); //得到文件索引
+                    //console.log(file); //得到文件对象
+                    //console.log(result); //得到文件base64编码，比如图片
+                    $('#demo2').attr('src', result); //图片链接（base64）
+                    //obj.resetFile(index, file, '123.jpg'); //重命名文件名，layui 2.3.0 开始新增
+
+                    //这里还可以做一些 append 文件列表 DOM 的操作
+
+                    //obj.upload(index, file); //对上传失败的单个文件重新上传，一般在某个事件中使用
+                    //delete files[index]; //删除列表中对应的文件，一般在某个事件中使用
+                });
+            }
+            /!*,before: function(obj){
+                //预读本地文件示例，不支持ie8
+                obj.preview(function(index, file, result){
+                    console.log(result);
+                    $('#demo2').attr('src', result); //图片链接（base64）
+                });
+            }*!/
+            ,done: function(res,index,upload){
+                var item = this.item;
+                //console.log(item);
+                //如果上传失败
+                if(res.code > 0){
+                    return layer.msg('上传失败');
+                }
+                //上传成功
+                return layer.msg(res.url);
+            }
+            ,error: function(r){
+                //演示失败状态，并实现重传
+                var demoText = $('#demoText');
+                demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+                demoText.find('.demo-reload').on('click', function(){
+                    uploadInst.upload();
+                });
+                layer.msg(r.msg);
+            }
+        });*/
+        /* $(document).on('click','#parts',function(){
+             var parts = $("form").find("fieldset").eq(-2);
+             var num = $("form").find("fieldset").length/2;
+
+             var my_input = $('<fieldset class="layui-elem-field layui-field-title">\n' +
+                 '                    <legend>配件信息</legend>\n' +
+                 '                </fieldset>\n' +
+                 '                <div class="layui-show-md-inline-block">\n' +
+                 '                    <div class="layui-form-item">\n' +
+                 '                        <!--<div class="layui-inline">\n' +
+                 '                            <div class="layui-upload">\n' +
+                 '                                <button type="button" class="layui-btn" id="">上传图片</button>\n' +
+                 '                                <div class="layui-upload-list">\n' +
+                 '                                    <img class="layui-upload-img" id="demo1">\n' +
+                 '                                    <p id="demoText"></p>\n' +
+                 '                                </div>\n' +
+                 '                            </div>\n' +
+                 '                        </div>-->\n' +
+                 '\n' +
+                 '                        <div class="layui-inline">\n' +
+                 '                            <div class="layui-form-item">\n' +
+                 '                                <div class="layui-inline">\n' +
+                 '                                    <label class="layui-form-label">配件名称</label>\n' +
+                 '                                    <div class="layui-input-inline">\n' +
+                 '                                        <input type="text" class="layui-input" placeholder="00-01号线缆">\n' +
+                 '                                    </div>\n' +
+                 '                                </div>\n' +
+                 '                                <div class="layui-inline">\n' +
+                 '                                    <label class="layui-form-label">型号规格</label>\n' +
+                 '                                    <div class="layui-input-inline">\n' +
+                 '                                        <input type="text" class="layui-input" placeholder="20*20*20">\n' +
+                 '                                    </div>\n' +
+                 '                                </div>\n' +
+                 '                            </div>\n' +
+                 '                            <div class="layui-form-item">\n' +
+                 '                                <div class="layui-inline">\n' +
+                 '                                    <label class="layui-form-label">需要数量/个</label>\n' +
+                 '                                    <div class="layui-input-inline">\n' +
+                 '                                        <input type="text" class="layui-input" placeholder="备注信息">\n' +
+                 '                                    </div>\n' +
+                 '                                </div>\n' +
+                 '                            </div>\n' +
+                 '                            <div class="layui-form-item">\n' +
+                 '                                <label class="layui-form-label">备注信息</label>\n' +
+                 '                                <div class="layui-input-block" style="width: 650px">\n' +
+                 '                                    <textarea name="remarks"  placeholder="请输入" class="layui-textarea"></textarea>\n' +
+                 '                                </div>\n' +
+                 '                            </div>\n' +
+                 '                        </div>\n' +
+                 '                    </div>\n' +
+                 '                </div>\n' +
+                 '                <fieldset class="layui-elem-field layui-field-title">\n' +
+                 '                </fieldset>\n');
+             parts.append(my_input);
+         });*/
+    });
+</script>
+{/block}
+</body>

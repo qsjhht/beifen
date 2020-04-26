@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>报警日志详情</title>
+    <link rel="stylesheet" href="__STATIC__/new/inno/common.css">
+    <link rel="stylesheet" href="__STATIC__/layui/css/layui.css">
+    <link rel="stylesheet" href="__STATIC__/new/inno/police.css">
+    <link rel="stylesheet" href="/static/css/equipment.css">
+    <link rel="stylesheet" href="/static/css/eqpt.css">
+    <script src="__STATIC__/layui/layui.js"></script>
+    <script src="__STATIC__/js/jquery-1.7.1.min.js"></script>
+</head>
+<style>
+    .evirSelect{
+        height:30px;
+        width:120px;
+        border-radius:3px;
+        border:1px solid #00ffff;
+        appearance:none;
+        -moz-appearance:none;
+        -webkit-appearance:none;
+        background-color:#000000;
+        color:#FFFFFF;
+        text-align:center;
+        text-align-last:center;
+        margin:10px 10px;
+    }
+    .layui-form select {
+         display: inline;
+    }
+    *{
+        overflow-x: hidden;
+        overflow-y: hidden;
+    }
+</style>
+<body class="backg">
+<div class="layer">
+    <!-- header -->
+    <!-- 内容 -->
+    <div class="layerMiddle scrollber" style="overflow-y:auto;">
+        <ul class="layerUl" >
+            <li class="layui-row policeBorder">
+                <ul class="layui-row">
+                    <li class="layui-col-md3">
+                        系统/设备名：<span>{$cate_name['cate_name']}</span>
+                    </li>
+                </ul>
+                <input id="haschild" type="text" value="{$haschild}" style="display: none">
+                <ul class="layui-row">
+                    <div class="evirMainSele">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">报警级别</label>
+                            <select class="evirSelect"  id="seleTwo" lay-verify="required">
+                                {volist name="alarm_lvl" id="vo"}
+                                {if $vo.level == $cate_name['alarm_lvl']}
+                                <option value="{$vo.level}" selected>{$vo.lvlcontent}</option>
+                                {else/}
+                                <option value="{$vo.level}">{$vo.lvlcontent}</option>
+                                {/if}
+                                {/volist}
+                            </select>
+                        </div>
+                    </div>
+                </ul>
+                <ul class="layui-row policeTop">
+
+                    <li class="layui-col-md3">
+
+                        <div data-cateid="{$cate_name['id']}" align="center" class="see_class">
+                            <input type="button" class="layui-btn" name="1000" value="确认">
+                        </div>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
+
+</body>
+<script>
+    layui.use(['layer'], function(){
+        var layer = layui.layer;
+        var $ = layui.$;
+        $(function(){
+            $("input:button").click(function() {
+                var lvl = $('.evirSelect option:selected').val(); // $(this)表示获取当前被点击元素的name值
+                var cateid = $(this).parents('div').data('cateid');
+                var haschild = $('#haschild').val();
+                if(haschild == '1'){
+                    var mss = '修改该系统下所有设备报警级别！'
+                }else{
+                    var mss = '修改该设备报警级别？';
+                }
+                layer.confirm(mss, { icon: 3, title: '提示' }, function(index) {
+                    $.get('{:url("alarm/alarm_edit_ajax")}', { 'cateid': cateid ,'lvl':lvl ,'haschild':haschild}, function(data) {
+                        if (data.code == 1) {
+                            layer.msg(data.msg);
+                            // top.hide();
+                            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                            window.parent.location.reload();//刷新父页面
+                            parent.layer.close(index);//关闭弹出层
+                            // setTimeout(parent.layer.close(index),60000);
+                            // layer.alert("处置成功！",function(){
+                            //     window.parent.location.reload();//刷新父页面
+                            //     parent.layer.close(index);//关闭弹出层
+                            // });
+
+                        } else {
+                            // var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                            layer.msg(data.msg);
+                            // layer.close(index);
+                        }
+
+                    });
+                });
+
+
+
+            });
+        })
+    });
+</script>
+</html>
