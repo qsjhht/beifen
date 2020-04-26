@@ -62,7 +62,7 @@ class Real extends Common
             /* $compname=odbc_result($rs,"TagName");*/
             //$conname=odbc_result($rs,"DataTime");
 //            if($name == $zone){
-                $yk_arr[substr(odbc_result($rs,"TagName"),3)] =odbc_result($rs,"DataValue");
+                $yk_arr[substr(odbc_result($rs,"TagName"),16)] =odbc_result($rs,"DataValue");
 //            }
 //            $yk_arr[$name]['TagName'] = $name;
 //            $yk_arr[$name]['DataTime'] = odbc_result($rs,"DataTime");
