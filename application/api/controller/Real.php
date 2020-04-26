@@ -485,13 +485,13 @@ class Real extends Common
     public function get_s_logs()
     {
         $sensor = $this->request->param('sensor');
-        $conn=odbc_connect('kinghistory','sa','sa');
+        $conn=odbc_connect('kinghistory','sas','sa');
         if (!$conn)
         {
             exit("连接失败: " . $conn);
         }
 
-        $sql="SELECT top 500 * FROM history where TagName like '".$sensor."_%' and DataTime > '2019-10-10' order by DataTime desc";
+        $sql="SELECT top 500 * FROM history where TagName like '".$sensor."_%' and DataTime > '2019-12-10' order by DataTime desc";
         $rs=odbc_exec($conn,$sql);
 
         if (!$rs)
