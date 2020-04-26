@@ -1,7 +1,7 @@
 console.log('调用了GIS');
 var map,layer,utfgrid,control,infowin,name,
 //            url = "http://localhost:8090/iserver/services/map-first/rest/maps/TrafficMap@BaiduMap";
-    url = 'http://192.168.10.18:8090/iserver/services/map-map/rest/maps/map';
+    url = 'http://10.3.100.6:8090/iserver/services/map-map/rest/maps/map';
 
 function init() {
     map = new SuperMap.Map ("map",{controls:[
