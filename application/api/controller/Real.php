@@ -199,7 +199,7 @@ class Real extends Common
 //        }
 //        echo json_encode($realdata,JSON_UNESCAPED_UNICODE);die;
 
-        $pars = 'QS_'.$name.'_'.$zone;  //区分 T LT
+        $pars = 'T_'.$name.'_'.$zone;  //区分 T LT
         $conn=odbc_connect('kinghistory','sa','sa');
         if (!$conn)
         {
