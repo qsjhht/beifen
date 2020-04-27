@@ -89,140 +89,386 @@ let data = {
 data.water(6,60);//水位
     // console.dir(data.arr.slice(0,data.number()));
     // console.dir(data.arr.slice(0,data.number()));
-// 水位监测
-//获取历史数据
-    let waters = [];
+    // 水位监测
+    //获取历史数据
+    let sensor_waters = [];
     $.ajax({
         url:"http://192.168.10.18/real/get_s_logs?sensor=LT",
         async:false,
         success:function(json){
             let data = JSON.parse(json);
-            waters = data.data.avg;
+            sensor_waters = data.data.avg;
+            let firmOption = {
+                title:{
+                    text:'水位监测',
+                    textStyle:{
+                        color:'#00ffff',
+                        fontWeight:'normal',
+                        fontSize:16
+                    },
+                    padding:[15,10]
+                },
+                xAxis:{
+                    name:'时间',
+                    type:'time',
+                    boundarGap:false,
+                    axisLine:{
+                        lineStyle:{
+                            color:'#FFFFFF'
+                        }
+                    },
+                    splitLine: {
+                        show: false
+                    },
+                    axisLabel:{
+                        formatter:function (value,index) {
+                            var date = new Date(value);
+                            return date.format("hh:mm");
+                        }
+                    }
+                },
+                grid: {
+                    top: '15%',
+                    bottom: '9%',
+                    left: '15',
+                    right: '7%',
+                    containLabel: true
+                },
+                yAxis:{
+                    type:'value',
+                    boundarGap:[0,'100%'],
+                    axisLine:{
+                        lineStyle:{
+                            color:'#FFFFFF'
+                        }
+                    },
+                    splitLine: {
+                        show: false
+                    },
+                    min:0,
+                    max:100
+                },
+                dataZoom:[{
+                    start:95,
+                    end:100,
+                    backgroundColor:'rgb(ff,ff,ff)',
+                    height:'15',
+                    bottom:'3%'
+                },{
+                    type:'slider',
+                    //borderColor:'rgb(30,255,05)',
+                    height:'15',
+                    bottom:'3%'
+                }],
+                series:[{
+                    name:'水位高度',
+                    type:'line',
+                    smooth:true,
+                    itemStyle:{
+                        color:'#0e628e'
+                    },
+                    areaStyle: {
+                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                            offset: 0,
+                            color: '#1396bc'
+                        }, {
+                            offset: 1,
+                            color: '#0e628e'
+                        }])
+                    },
+                    data:sensor_waters,
+                    markLine:{
+                        silent:true,
+                        lineStyle:{
+                            color:'red',
+                            width:2
+                        },
+                        data:[{
+                            yAxis:80
+                        },{
+                            yAxis:50
+                        }]
+                    }
+                }]
+            };
+            $.ajax({
+                url:"http://192.168.10.18/real/get_sensor?sensor=LT",
+                async:true,
+                success:function(result){
+                    let water_obj = JSON.parse(result).data.s_avg;
+                    let firstr =  sensor_waters[0][0];
+                    let firsto =  water_obj[0];
+                    // console.dir(firstr);
+                    // console.dir(firsto);
+                    if(firsto !== firstr) {
+                        sensor_waters.unshift(water_obj);
+                        sensor_waters.pop();
+                    }
+                    contentFirm.setOption(firmOption);
+                }
+            });
+            // 实时更新
+            setInterval(function(){
+                $.ajax({
+                    url:"http://192.168.10.18/real/get_sensor?sensor=LT",
+                    async:true,
+                    success:function(result){
+                        let water_obj = JSON.parse(result).data.s_avg;
+                        let firstr =  sensor_waters[0][0];
+                        let firsto =  water_obj[0];
+                        console.dir(firstr);
+                        console.dir(firsto);
+                        if(firsto !== firstr) {
+                            sensor_waters.unshift(water_obj);
+                            sensor_waters.pop();
+                            // 水位更新
+                            contentFirm.setOption({
+                                series: [{
+                                    data: sensor_waters
+                                }]
+                            });
+                        }
+                    }
+                });
+            },60000);
         },
         error: function(){
             console.error('ajax请求错误 ');
         }
     });
-    console.dir(waters);
-    console.dir(waters);
-    console.dir(waters);
-let contentFirm = echarts.init(document.getElementById('contentFirm'));
-let firmOption = {
-    title:{
-        text:'水位监测',
-        textStyle:{
-            color:'#00ffff',
-            fontWeight:'normal',
-            fontSize:16
-        },
-        padding:[15,10]
-    },
-    xAxis:{
-        name:'时间',
-        type:'time',
-        boundarGap:false,
-        axisLine:{
-            lineStyle:{
-                color:'#FFFFFF'
-            }
-        },
-        splitLine: {
-            show: false
-        }
-    },
-    yAxis:{
-        name:'水位（cm）',
-        type:'value',
-        boundarGap:[0,'100%'],
-        axisLine:{
-            lineStyle:{
-                color:'#FFFFFF'
-            }
-        },
-        splitLine: {
-            show: false
-        },
-        min:0,
-        max:100
-    },
-    dataZoom:[{
-	start:95,
-	end:100,
-	backgroundColor:'rgb(ff,ff,ff)',
-	height:'15',
-	bottom:'3%'
-    },{
-        type:'slider',
-	//borderColor:'rgb(30,255,05)',
-	height:'15',
-	bottom:'3%'
-    }],
-    series:[{
-        name:'水位高度',
-        type:'line',
-        smooth:true,
-        itemStyle:{
-            color:'#0e628e'
-        },
-        areaStyle: {
-            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-                offset: 0,
-                color: '#1396bc'
-            }, {
-                offset: 1,
-                color: '#0e628e'
-            }])
-        },
-        data:waters,
-        markLine:{
-            silent:true,
-            lineStyle:{
-                color:'red',
-                width:2
-            },
-            data:[{
-                yAxis:80
-            },{
-                yAxis:50
-            }]
-        }
-    }]
-};
-contentFirm.setOption(firmOption);
 
-    // 实时更新
-    setInterval(function(){
-        $.ajax({
-            url:"http://192.168.10.18/real/get_sensor?sensor=LT",
-            async:false,
-            success:function(result){
-                let water_obj = JSON.parse(result).data.s_avg;
-                waters.unshift(water_obj);
-                waters.pop();
+let contentFirm = echarts.init(document.getElementById('contentFirm'));
+
+    // -----------------------------环境监测-----------------------------------
+    // 环境监测
+    //日期格式化
+    Date.prototype.format = function(fmt) {
+        var o = {
+            "M+" : this.getMonth()+1,                 //月份
+            "d+" : this.getDate(),                    //日
+            "h+" : this.getHours(),                   //小时
+            "m+" : this.getMinutes(),                 //分
+            "s+" : this.getSeconds(),                 //秒
+            "q+" : Math.floor((this.getMonth()+3)/3), //季度
+            "S"  : this.getMilliseconds()             //毫秒
+        };
+        if(/(y+)/.test(fmt)) {
+            fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));
+        }
+        for(var k in o) {
+            if(new RegExp("("+ k +")").test(fmt)){
+                fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
             }
-        });
-        // 水仓
-        contentFirm.setOption({
-            series: [{
-                data: waters
-            }]
-        });
-        console.dir(waters);
-    },60000);
-// 环境监测
-let borCont = echarts.init(document.getElementById('borCont'));
-// 温度
-//     console.dir(data.environ(1,21));
-//     console.dir(data.environ(1,19));
-//     console.dir(data.environ(1,17));
-    res = {};
+        }
+        return fmt;
+    }
+
+    // 数据变更 数组
+    function objToArray(obj,shift) {
+        console.dir('ooooooooooooooooooooooooooooooooooooooooooooooo');
+
+        let firstr =  sensor_res.avg[0][0];
+        let firsto =  obj.s_avg[0];
+
+        if(firsto !== firstr){
+            sensor_res.avg.unshift(obj.s_avg);
+            sensor_res.max.unshift(obj.s_max);
+            sensor_res.min.unshift(obj.s_min);
+            // console.dir('nnnnnnnnnnnnnnnnnnnn');
+            // console.dir(res.avg);
+            if (shift) {
+                sensor_res.avg.pop();
+                sensor_res.max.pop();
+                sensor_res.min.pop();
+                // console.dir('sssssssssssssssssssssssssssssssss');
+                // console.dir(res.avg);
+                // console.dir('aaaaaaaaaaaaaaaaaavvvvvvvvvvvvvvvvvvvvvvggggggggggggggggg');
+            }
+        }
+    }
+
+    // 后续修改echarts option
+    function set_option(e_y_name,e_unit) {
+        e_option = {
+
+            legend: {
+                textStyle:{
+                    color:'#00ffff'
+                },
+                data:['最高'+e_y_name,'平均'+e_y_name,'最低'+e_y_name]
+            },
+            yAxis: {
+                name:e_unit,
+                type: 'value',
+                axisLine:{
+                    lineStyle:{
+                        color:'#FFFFFF'
+                    }
+                },
+                min:0,
+                splitLine: {
+                    show: false
+                }
+            },
+            series: [
+                {
+                    name:'最高'+e_y_name,
+                    type:'line',
+                    smooth:true,
+                    data:sensor_res.max
+                },
+                {
+                    name:'平均'+e_y_name,
+                    type:'line',
+                    smooth:true,
+                    data:sensor_res.avg
+                },
+                {
+                    name:'最低'+e_y_name,
+                    type:'line',
+                    smooth:true,
+                    data:sensor_res.min
+                }
+            ]
+        };
+    }
+
+    //获取初始历史数据 并定期更新
     function get_sensor(sensor) {
         $.ajax({
             url:"http://192.168.10.18/real/get_s_logs?sensor="+sensor,
-            async:false,
+            async:true,
             success:function(json){
+                //初始化  获取一天内温度 赋值res
                 let data = JSON.parse(json);
-                res = data.data;
+                sensor_res = data.data;
+
+                //初始化option 赋值 res.data
+                e_i_option = {
+                    tooltip: {
+                        trigger: 'axis'
+                    },
+                    legend: {
+                        textStyle:{
+                            color:'#00ffff'
+                        },
+                        data:['最高'+e_y_name,'平均'+e_y_name,'最低'+e_y_name]
+                    },
+                    xAxis: {
+                        name:'时间',
+                        type: 'time',
+                        axisLine:{
+                            lineStyle:{
+                                color:'#FFFFFF'
+                            }
+                        },
+                        splitLine: {
+                            show: false
+                        },
+                        axisLabel:{
+                            formatter:function (value,index) {
+                                var date = new Date(value);
+                                return date.format("hh:mm");
+                            }
+                        }
+                    },
+                    grid: {
+                        top: '10%',
+                        bottom: '15%',
+                        left: '2%',
+                        right: '7%',
+                        containLabel: true
+                    },
+                    yAxis: {
+                        name:e_unit,
+                        type: 'value',
+                        axisLine:{
+                            lineStyle:{
+                                color:'#FFFFFF'
+                            }
+                        },
+                        min:0,
+                        splitLine: {
+                            show: false
+                        }
+                    },
+                    dataZoom:[{
+                        start:96,
+                        end:100,
+                        backgroundColor:'rgb(ff,ff,ff)',
+                        height:'15',
+                        bottom:'10%'
+                    },{
+                        type:'slider',
+                        //borderColor:'rgb(30,255,05)',
+                        height:'15',
+                        bottom:'10%'
+                    }],
+                    series: [
+                        {
+                            name:'最高'+e_y_name,
+                            type:'line',
+                            smooth:true,
+                            data:sensor_res.max
+                        },
+                        {
+                            name:'平均'+e_y_name,
+                            type:'line',
+                            smooth:true,
+                            data:sensor_res.avg
+                        },
+                        {
+                            name:'最低'+e_y_name,
+                            type:'line',
+                            smooth:true,
+                            data:sensor_res.min
+                        }
+                    ]
+                };
+                // 初始化echarts图表
+                borCont.setOption(e_i_option);
+                $.ajax({
+                    url:"http://192.168.10.18/real/get_sensor?sensor="+sensor,
+                    async:true,
+                    success:function(result){
+                        // 获取实时最新数据
+                        let jsonObj = JSON.parse(result).data;
+                        // console.dir('jsonObj');
+                        // console.dir(sensor);
+                        // console.dir(jsonObj);
+                        //加入数组
+                        objToArray(jsonObj,true);
+                        set_option(e_y_name,e_unit);
+                        borCont.setOption(e_option);
+                    }
+                });
+                if(typeof(Reallog) !== undefined){
+                    window.clearInterval(Reallog);
+                }
+                //定期更新echarts数据
+                Reallog = setInterval(function(){
+                    $.ajax({
+                        url:"http://192.168.10.18/real/get_sensor?sensor="+sensor,
+                        async:true,
+                        success:function(result){
+                            // 获取实时最新数据
+                            let jsonObj = JSON.parse(result).data;
+                            console.dir('jsonObj');
+                            // console.dir(sensor);
+                            // console.dir(jsonObj);
+                            //加入数组
+                            objToArray(jsonObj,true);
+
+                            // console.dir(sensor_res);
+                            // console.dir(sensor_res);
+                            // console.dir(sensor_res);
+                            set_option(e_y_name,e_unit);
+                            borCont.setOption(e_option);
+                        }
+                    });
+
+                    // console.dir(res);
+                },60000);
             },
             error: function(){
                 console.error('ajax请求错误 ');
@@ -230,160 +476,18 @@ let borCont = echarts.init(document.getElementById('borCont'));
         });
     }
 
-    function objToArray(obj,shift) {
-
-        // console.dir('ooooooooooooooooooooooooooooooooooooooooooooooo');
-        // console.dir(res.avg);
-
-        res.avg.unshift(obj.s_avg);
-        res.max.unshift(obj.s_max);
-        res.min.unshift(obj.s_min);
-        // console.dir('nnnnnnnnnnnnnnnnnnnn');
-        // console.dir(res.avg);
-        if (shift) {
-            res.avg.pop();
-            res.max.pop();
-            res.min.pop();
-            // console.dir('sssssssssssssssssssssssssssssssss');
-            // console.dir(res.avg);
-            // console.dir('aaaaaaaaaaaaaaaaaavvvvvvvvvvvvvvvvvvvvvvggggggggggggggggg');
-        }
-    }
-
-function set_option(e_y_name,e_unit) {
-    e_option = {
-
-        legend: {
-            textStyle:{
-                color:'#00ffff'
-            },
-            data:['最高'+e_y_name,'平均'+e_y_name,'最低'+e_y_name]
-        },
-
-        yAxis: {
-            name:e_unit,
-            type: 'value',
-            axisLine:{
-                lineStyle:{
-                    color:'#FFFFFF'
-                }
-            },
-            min:0,
-            splitLine: {
-                show: false
-            }
-        },
-        series: [
-            {
-                name:'最高'+e_y_name,
-                type:'line',
-                smooth:true,
-                data:res.max
-            },
-            {
-                name:'平均'+e_y_name,
-                type:'line',
-                smooth:true,
-                data:res.avg
-            },
-            {
-                name:'最低'+e_y_name,
-                type:'line',
-                smooth:true,
-                data:res.min
-            }
-        ]
-    };
-}
-//初始化  获取一天内温度 赋值res
-    get_sensor("T");
+    // 环境监测
+    //获取 echarts 对象
+let borCont = echarts.init(document.getElementById('borCont'));
+    // 初始变量 及 echart初始参数设置
+    sensor_res = {};
+    var Reallog;
     e_y_name = "温度";
     e_unit = "温度(℃)";
-    //option 赋值
-    e_i_option = {
-        tooltip: {
-            trigger: 'axis'
-        },
-        legend: {
-            textStyle:{
-                color:'#00ffff'
-            },
-            data:['最高'+e_y_name,'平均'+e_y_name,'最低'+e_y_name]
-        },
-        xAxis: {
-            name:'时间',
-            type: 'time',
-            axisLine:{
-                lineStyle:{
-                    color:'#FFFFFF'
-                }
-            },
-            splitLine: {
-                show: false
-            }
-        },
-        yAxis: {
-            name:e_unit,
-            type: 'value',
-            axisLine:{
-                lineStyle:{
-                    color:'#FFFFFF'
-                }
-            },
-            min:0,
-            splitLine: {
-                show: false
-            }
-        },
-        dataZoom:[{
-            start:98,
-            end:100,
-            backgroundColor:'rgb(ff,ff,ff)',
-            height:'15',
-            bottom:'3%'
-        },{
-            type:'slider',
-            //borderColor:'rgb(30,255,05)',
-            height:'15',
-            bottom:'3%'
-        }],
-        series: [
-            {
-                name:'最高'+e_y_name,
-                type:'line',
-                smooth:true,
-                data:res.max
-            },
-            {
-                name:'平均'+e_y_name,
-                type:'line',
-                smooth:true,
-                data:res.avg
-            },
-            {
-                name:'最低'+e_y_name,
-                type:'line',
-                smooth:true,
-                data:res.min
-            }
-        ]
-    };
-    //初始化 echart
-    borCont.setOption(e_i_option);
-    //定时更新 echart 数据
-    Reallog = setInterval(function(){
-        $.ajax({
-            url:"http://192.168.10.18/real/get_sensor?sensor=T",
-            async:false,
-            success:function(result){
-                let jsonObj = JSON.parse(result).data;
-                //更新 res 数组
-                objToArray(jsonObj,true);
-            }
-        });
-        set_option(e_y_name,e_unit);
-        borCont.setOption(e_option);
-    },60000);
+    res = {};
+
+    // 页面初始化 获取T值 并初始化echarts
+    get_sensor("T");
 
 
 // 下拉框判断
@@ -410,23 +514,6 @@ function select(e){
         e_unit = "硫化氢(ppm)";
     }
     get_sensor(e);
-    set_option(e_y_name,e_unit);
-    borCont.setOption(e_option);
-    window.clearInterval(Reallog);
-    //定时更新 echart 数据
-    Reallog = setInterval(function(){
-        $.ajax({
-            url:"http://192.168.10.18/real/get_sensor?sensor="+e,
-            async:false,
-            success:function(result){
-                let jsonObj = JSON.parse(result).data;
-                objToArray(jsonObj,true);
-            }
-        });
-        set_option(e_y_name,e_unit);
-        borCont.setOption(e_option);
-        // console.dir(res);
-    },60000);
 }
 
 // -----------------------------------------------------------
