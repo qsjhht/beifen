@@ -148,7 +148,7 @@ let data = {
         return arr1.reverse();
     }
 };
-data.water(6,60);//水位
+
 data.water(5,30);//用电量
 
 // 动力配电
@@ -370,6 +370,12 @@ $.ajax({
                 splitLine: {
                     show: false
                 }
+            },
+            grid: {
+                top: '20%',
+                bottom: '15%',
+                left: '15',
+                containLabel: true
             },
             yAxis:{
                 type:'value',
@@ -677,14 +683,14 @@ function get_sensor(sensor) {
                         // 获取实时最新数据
                         let jsonObj = JSON.parse(result).data;
                         console.dir('jsonObj');
-                        console.dir(sensor);
-                        console.dir(jsonObj);
+                        // console.dir(sensor);
+                        // console.dir(jsonObj);
                         //加入数组
                         objToArray(jsonObj,true);
 
-                        console.dir(sensor_res);
-                        console.dir(sensor_res);
-                        console.dir(sensor_res);
+                        // console.dir(sensor_res);
+                        // console.dir(sensor_res);
+                        // console.dir(sensor_res);
                         set_option(e_y_name,e_unit);
                         borCont.setOption(e_option);
                     }

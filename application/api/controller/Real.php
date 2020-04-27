@@ -470,7 +470,7 @@ class Real extends Common
 //        dump($msg);
 //        die;
         $msgs= iconv ( "utf-8", "gb2312//IGNORE", $msg );
-        $fp = stream_socket_client("udp://192.168.5.111:2008", $errno, $errstr);
+        $fp = stream_socket_client("udp://192.168.20.50:2008", $errno, $errstr);
         if (!$fp) {
             echo "ERROR: $errno - $errstr<br />\n";
         } else {
