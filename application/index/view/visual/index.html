@@ -104,15 +104,33 @@
           .section{text-align: center;font-size: 15px;height: 30px;border-bottom: 1px dashed #ffffff}
           .xianShiDiv{padding: 5px}
           .xianShiDiv span{color: aquamarine;padding-left:5px}
-          .borTitle select{
-               height: 20px;
-               padding: 0 1%;
-              float: right;
-          }
+         .sel option{
+             text-align:center;
+         }
+         .sel{
+             height: 20px;
+             padding: 0 0.3%;
+             float: right;
+             position:absolute;
+             text-align: center;
+             text-align-last: center;
+             right:10px;
+             margin-top: 10px;
+             z-index: 99;
+             border-radius:3px;
+             border:1px solid #00ffff;
+             appearance:none;
+             -moz-appearance:none;
+             -webkit-appearance:none;
+             background-color:#000000;
+             color:#FFFFFF;
+         }
          .borTitle{
+             padding:10px;
+             position:relative;
+             color:#00ffff;
              position:fixed;
              width: 27%;
-             z-index: 99;
          }
          .contentRobot{
              height: 14vh;
@@ -291,14 +309,15 @@
                     <div class="contentTop mainBor marginTop">
                         <div class="borTitle" style="font-size:16px;padding-bottom: 0px">
                             环境监测
-                            <select onchange="select(this.value)">
-                                <option value="T">温度</option>
-                                <option value="M">湿度</option>
-                                <option value="O2">氧气</option>
-                                <option value="CH4">甲烷</option>
-                                <option value="H2S">硫化氢</option>
-                            </select>
+
                         </div>
+                        <select class="sel" onchange="select(this.value)">
+                            <option value="T">温度</option>
+                            <option value="M">湿度</option>
+                            <option value="O2">氧气</option>
+                            <option value="CH4">甲烷</option>
+                            <option value="H2S">硫化氢</option>
+                        </select>
                         <div class="borCont" id="borCont" style="height: 100%"></div>
                     </div>
                </div>

@@ -494,8 +494,8 @@ class Real extends Common
         $count="SELECT * FROM realtime where TagName like '".$sensor."_%'";
         $num = odbc_num_rows (odbc_exec($conn,$count));
         $nums = $num * 60 * 24;
-
-        $sql="SELECT top $nums * FROM history where TagName like '".$sensor."_%' order by DataTime desc";
+        $dateo = date("Y-m-d",strtotime("-1 day"));
+        $sql="SELECT top $nums * FROM history where TagName like '".$sensor."_%' and DataTime > '".$dateo."' order by DataTime desc";
         $rs=odbc_exec($conn,$sql);
 
         if (!$rs)
@@ -535,7 +535,7 @@ class Real extends Common
         {
             exit("连接失败: " . $conn);
         }
-        $sql="SELECT * FROM realtime where TagName like 'WIN-JR1ULRL6E5T_".$sensor."%'";
+        $sql="SELECT * FROM realtime where TagName like '".$sensor."_%'";
         $rs=odbc_exec($conn,$sql);
 
         if (!$rs)
