@@ -7,7 +7,7 @@ let  dispatchArray = [],
     b = 0 , //右侧菜单选择
     c
 let  switchValue,  // 调度台显示
-    showHide = false  // 电话能否显示
+    showHide = new Array();  // 已拨号数组
 
 layui.use('layer',()=>{
     let layer = layui.layer
@@ -67,7 +67,7 @@ function dispatchItem(a,b){
         }else if(a[i]['分机状态'] == '正在呼叫'){
             dispatchState = 'callOut'
         }
-        numContent = ` <div class="${dispatchState}">
+        numContent = ` <div class="${dispatchState}"  data-name="${a[i]["分机号码"]}">
                               <div class="dispatch_div">
                                    <span>${a[i]["分机号码"]}</span>
                                    </br></br>
@@ -95,27 +95,23 @@ function dispatchClick(){
     }
 }
 dispatchClick()
-
 // 话机 单机事件
 function dispatchClickItem(a){
     $(`.dispatchShowHide:eq(${a}) .dispatchContent:eq(0) > div`).each(function(e){
         $(this).click(function(){
-            console.dir(showHide);
-            console.dir(showHide);
-            console.dir(showHide);
-            let itemData = dispatch[dispatchArray[a]]
+            let itemData = dispatch[dispatchArray[a]];
             if(switchValue == '8001' || switchValue == '8002'){
-                if(showHide){
+                if(!hasitem(showHide,itemData[e]["分机号码"])){
                     $.ajax({
                         url:`http://192.168.10.18/real/call_phone?type=调度单呼&from_num=${switchValue}&call=${itemData[e]["分机号码"]}`,
                         type:'get',
                         success:(res) => {
-                            console.log(res)
+                            console.log(res);
                         }
                     })
-                    // showHide = false
+                    showHide.push(itemData[e]["分机号码"]);
                 }else{
-                    layer.msg('调度电话已摘机！')
+                    layer.msg(itemData[e]["分机号码"]+'  已呼叫！')
                 }
             }else{
                 layer.msg('调度台未摘机！')
@@ -124,11 +120,30 @@ function dispatchClickItem(a){
     })
 }
 
+function hasitem(arr,value){
+    let res = false;
+    arr.forEach(item=>{
+        if(item == value){
+            res = true;
+        }
+    })
+    return res;
+}
+
+
+function delitem(arr,value){
+    let index = arr.indexOf(value);
+        arr.forEach(item=>{
+        if(index > -1){
+            arr.splice(index,1);
+        }
+    })
+}
 
 // 点击进行组呼
 $('.dispatchImg1').click(()=>{
     if(switchValue == 8001 || switchValue == 8002){
-        if(showHide){
+        if(!hasitem(showHide,dispatchArray[b])){
             $.ajax({
                 url:`http://192.168.10.18/real/call_phone?type=调度群呼&from_num=${switchValue}&call=${dispatchArray[b]}`,
                 type:'get',
@@ -136,9 +151,10 @@ $('.dispatchImg1').click(()=>{
                     console.log(data)
                 }
             })
-            // showHide = false
+            showHide.push(dispatchArray[b]);
         }else{
-            layer.msg('调度电话已摘机！')
+            layer.msg(dispatchArray[b]+'  已呼叫！')
+            delitem(showHide,dispatchArray[b])
         }
     }else{
         layer.msg('调度台未摘机！')
@@ -156,11 +172,9 @@ socket.on('new_msg',(data) => {
 
         if(c['号码'] == 8001){
             if(c['状态'] == "空闲"){
-                showHide = false;
                 switchValue = '';
                 $('#display1').css('backgroundColor','#00FFFF')
             }else if(c['状态'] == "摘机"){
-                showHide = true
                 switchValue = c['号码']
                 $('#display1').css('backgroundColor','#1ac036')
             }else{
@@ -168,11 +182,9 @@ socket.on('new_msg',(data) => {
             }
         }else if(c['号码'] == 8002){
             if(c['状态'] == '空闲'){
-                showHide = false;
                 switchValue = '';
                 $('#display2').css('backgroundColor','#00FFFF')
             }else if(c['状态'] == '摘机'){
-                showHide = true;
                 switchValue = c['号码'];
                 $('#display2').css('backgroundColor','#1ac036')
             }else{
@@ -193,7 +205,12 @@ socket.on('new_msg',(data) => {
 // 单个话机
 function core(a,b,c){
     switch(c['状态']){
+
         case '空闲':
+            // console.dir(showHide);
+            let values= $(`.dispatchShowHide:eq(${dispatchArray.indexOf(a)}) .dispatchContent:eq(0)> div:eq(${b})`)[0].dataset.name;
+            delitem(showHide,values)
+            // console.dir(showHide);
             $(`.dispatchShowHide:eq(${dispatchArray.indexOf(a)}) .dispatchContent:eq(0)> div:eq(${b})`).removeAttr('class').addClass('leisure')
             // showHide = true
             break;
@@ -206,6 +223,10 @@ function core(a,b,c){
             $(`.dispatchShowHide:eq(${dispatchArray.indexOf(a)}) .dispatchContent:eq(0)> div:eq(${b})`).removeAttr('class').addClass('callOut')
             break;
         case '呼叫失败':
+            // console.dir(showHide);
+            let value= $(`.dispatchShowHide:eq(${dispatchArray.indexOf(a)}) .dispatchContent:eq(0)> div:eq(${b})`)[0].dataset.name;
+            delitem(showHide,value)
+            // console.dir(showHide);
             $(`.dispatchShowHide:eq(${dispatchArray.indexOf(a)}) .dispatchContent:eq(0)> div:eq(${b})`).removeAttr('class').addClass('goUnder')
             // showHide = true
             break;
