@@ -7,7 +7,7 @@ let  dispatchArray = [],
     b = 0 , //右侧菜单选择
     c
 let  switchValue,  // 调度台显示
-    showHide = true  // 电话能否显示
+    showHide = false  // 电话能否显示
 
 layui.use('layer',()=>{
     let layer = layui.layer
@@ -100,6 +100,9 @@ dispatchClick()
 function dispatchClickItem(a){
     $(`.dispatchShowHide:eq(${a}) .dispatchContent:eq(0) > div`).each(function(e){
         $(this).click(function(){
+            console.dir(showHide);
+            console.dir(showHide);
+            console.dir(showHide);
             let itemData = dispatch[dispatchArray[a]]
             if(switchValue == '8001' || switchValue == '8002'){
                 if(showHide){
@@ -110,7 +113,7 @@ function dispatchClickItem(a){
                             console.log(res)
                         }
                     })
-                    showHide = false
+                    // showHide = false
                 }else{
                     layer.msg('调度电话已摘机！')
                 }
@@ -133,7 +136,7 @@ $('.dispatchImg1').click(()=>{
                     console.log(data)
                 }
             })
-            showHide = false
+            // showHide = false
         }else{
             layer.msg('调度电话已摘机！')
         }
@@ -147,13 +150,9 @@ var socket = io('http://192.168.10.18:2120');
 socket.emit('login',33333)
 socket.on('new_msg',(data) => {
     c = eval("("+data+")");
-    console.dir('aaaaaaaaaaaaaa');
-    console.dir(c);
     if(c.category == '号码更新'){
         ajax();
     }else if(c.category == '分机状态'){
-        console.dir('ccccccccccccccccccccc');
-        console.dir(c['号码']);
 
         if(c['号码'] == 8001){
             if(c['状态'] == "空闲"){
@@ -168,16 +167,11 @@ socket.on('new_msg',(data) => {
                 layer.msg('未找到该状态')
             }
         }else if(c['号码'] == 8002){
-            console.dir('dddddddddddddddddd');
-            console.dir(c['号码']);
-            console.dir(c['状态']);
             if(c['状态'] == '空闲'){
                 showHide = false;
                 switchValue = '';
                 $('#display2').css('backgroundColor','#00FFFF')
             }else if(c['状态'] == '摘机'){
-                console.dir('eeeeeeeeeee');
-                console.dir(c['状态']);
                 showHide = true;
                 switchValue = c['号码'];
                 $('#display2').css('backgroundColor','#1ac036')
@@ -201,19 +195,19 @@ function core(a,b,c){
     switch(c['状态']){
         case '空闲':
             $(`.dispatchShowHide:eq(${dispatchArray.indexOf(a)}) .dispatchContent:eq(0)> div:eq(${b})`).removeAttr('class').addClass('leisure')
-            showHide = true
+            // showHide = true
             break;
         case '摘机':
             $(`.dispatchShowHide:eq(${dispatchArray.indexOf(a)}) .dispatchContent:eq(0)> div:eq(${b})`).removeAttr('class').addClass('outboard')
-            showHide = false
+            // showHide = false
             break;
         case '正在呼叫':
-            showHide = false
+            // showHide = false
             $(`.dispatchShowHide:eq(${dispatchArray.indexOf(a)}) .dispatchContent:eq(0)> div:eq(${b})`).removeAttr('class').addClass('callOut')
             break;
         case '呼叫失败':
             $(`.dispatchShowHide:eq(${dispatchArray.indexOf(a)}) .dispatchContent:eq(0)> div:eq(${b})`).removeAttr('class').addClass('goUnder')
-            showHide = true
+            // showHide = true
             break;
         default:
             layer.msg('没有找到该状态！')
