@@ -7,6 +7,7 @@
     <script src="__STATIC__/h5splayer/bootstrap.js"></script>
 
     <script src="__STATIC__/h5splayer/bootstrap.js"></script>
+    <script src="__STATIC__/h5splayer/adapter.js"></script>
     <script src="__STATIC__/h5splayer/platform.js"></script>
     <script src="__STATIC__/h5splayer/h5splayer.js"></script>
     <script src="__STATIC__/h5splayer/h5splayerhelper.js"></script>
@@ -120,14 +121,14 @@
                     <div class="content2">
 
                             <div class="vid-wrapper">
-                                <video class="h5video" id="h5sVideo1" autoplay webkit-playsinline playsinline>
+                                <video muted class="h5video" id="h5sVideo1" autoplay webkit-playsinline playsinline>
                                 </video>
                                 <div class="playpause"></div>
                             </div>
 
 
                             <div class="vid-wrapper">
-                                <video class="h5video" id="h5sVideo6" autoplay webkit-playsinline playsinline>
+                                <video muted class="h5video" id="h5sVideo6" autoplay webkit-playsinline playsinline>
                                 </video>
                                 <div class="playpause"></div>
                             </div>
@@ -156,34 +157,34 @@
             <div class="contents">
                 <!--<div class="chart">-->
                 <div class="vid-wrapper2">
-                    <video class="h5video" style="width: 100%;height: 100%;" id="h5sVideo2"  autoplay webkit-playsinline playsinline>
+                    <video muted class="h5video" style="width: 100%;height: 100%;" id="h5sVideo2" webkit-playsinline playsinline>
 
                     </video>
-                    <div class="playpause"></div>
+<!--                    <div class="playpause"></div>-->
                 </div>
                 <!--</div>-->
                 <!--<div class="chart">-->
                 <div class="vid-wrapper2">
-                    <video class="h5video" style="width: 100%;height: 100%;" id="h5sVideo3"  autoplay webkit-playsinline playsinline>
+                    <video muted class="h5video" style="width: 100%;height: 100%;" id="h5sVideo3" webkit-playsinline playsinline>
 
                     </video>
-                    <div class="playpause"></div>
+<!--                    <div class="playpause"></div>-->
                 </div>
                 <!--</div>-->
                 <!--<div class="chart">-->
                 <div class="vid-wrapper2">
-                    <video class="h5video" style="width: 100%;height: 100%;" id="h5sVideo4"  autoplay webkit-playsinline playsinline>
+                    <video muted class="h5video" style="width: 100%;height: 100%;" id="h5sVideo4" webkit-playsinline playsinline>
 
                     </video>
-                    <div class="playpause"></div>
+<!--                    <div class="playpause"></div>-->
                 </div>
                 <!--</div>-->
                 <!--<div class="chart">-->
                 <div class="vid-wrapper2">
-                    <video class="h5video" style="width: 100%;height: 100%;" id="h5sVideo5"  autoplay webkit-playsinline playsinline>
+                    <video muted class="h5video" style="width: 100%;height: 100%;" id="h5sVideo5" webkit-playsinline playsinline>
 
                     </video>
-                    <div class="playpause"></div>
+<!--                    <div class="playpause"></div>-->
                 </div>
                 <!--</div>-->
             </div>
@@ -673,12 +674,23 @@
         session:'c1782caf-b670-42d8-ba90-2244d0b0ee83' //session got from login
     };
 
-    var v1 = H5sPlayerCreate(conf1);
-    var v2 = H5sPlayerCreate(conf2);
-    var v3 = H5sPlayerCreate(conf3);
-    var v4 = H5sPlayerCreate(conf4);
-    var v5 = H5sPlayerCreate(conf5);
-    var v6 = H5sPlayerCreate(conf6);
+    // var v1 = H5sPlayerCreate(conf1);
+    // var v2 =  new H5sPlayerWS(conf2);
+    // var v3 =  new H5sPlayerWS(conf3);
+    // var v4 =  new H5sPlayerWS(conf4);
+    // var v5 =  new H5sPlayerWS(conf5);
+    // var v6 = H5sPlayerCreate(conf6);
+
+    window.onload = function(){
+        v2 = H5sPlayerCreate(conf2);
+        v2.connect();
+        v3 = H5sPlayerCreate(conf3);
+        v3.connect();
+        v4 = H5sPlayerCreate(conf4);
+        v4.connect();
+        v5 = H5sPlayerCreate(conf5);
+        v5.connect();
+    };
 
     $('#h5sVideo1').parent().click(function () {
         if($(this).children(".h5video").get(0).paused){
