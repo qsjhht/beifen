@@ -20,7 +20,7 @@
         flex-wrap: wrap;
         align-items: center;
         width: 102%;
-        height: 95%;
+        height: 100%;
     }
     .content2 {
         display: flex;
@@ -610,12 +610,13 @@
         $('#h5sVideo5').prop("controls", true);
     }
     var videos = JSON.parse($('#videos').val());
+    console.dir(videos);
     var conf1 = {
         videoid:'h5sVideo1',
         protocol: window.location.protocol, //'http:' or 'https:'
         host: '192.168.10.18:8080', //'localhost:8080'
         rootpath:'/', // '/' or window.location.pathname
-        token:videos.h5sVideo1,
+        token:'a3db',
         //streamprofile: 'sub',
         hlsver:'v1', //v1 is for ts, v2 is for fmp4
         session:'c1782caf-b670-42d8-ba90-2244d0b0ee83' //session got from login
@@ -624,7 +625,7 @@
     var conf2 = {
         videoid:'h5sVideo2',
         protocol: window.location.protocol, //'http:' or 'https:'
-        host: '192.168.10.18:8080', //'localhost:8080'
+        host: '192.168.10.21:8080', //'localhost:8080'
         rootpath:'/', // '/' or window.location.pathname
         token:videos.h5sVideo2,
         streamprofile: 'sub',
@@ -634,7 +635,7 @@
     var conf3 = {
         videoid:'h5sVideo3',
         protocol: window.location.protocol, //'http:' or 'https:'
-        host: '192.168.10.18:8080', //'localhost:8080'
+        host: '192.168.10.21:8080', //'localhost:8080'
         rootpath:'/', // '/' or window.location.pathname
         token:videos.h5sVideo3,
         streamprofile: 'sub',
@@ -644,7 +645,7 @@
     var conf4 = {
         videoid:'h5sVideo4',
         protocol: window.location.protocol, //'http:' or 'https:'
-        host: '192.168.10.18:8080', //'localhost:8080'
+        host: '192.168.10.21:8080', //'localhost:8080'
         rootpath:'/', // '/' or window.location.pathname
         token:videos.h5sVideo4,
         streamprofile: 'sub',
@@ -654,7 +655,7 @@
     var conf5 = {
         videoid:'h5sVideo5',
         protocol: window.location.protocol, //'http:' or 'https:'
-        host: '192.168.10.18:8080', //'localhost:8080'
+        host: '192.168.10.21:8080', //'localhost:8080'
         rootpath:'/', // '/' or window.location.pathname
         token:videos.h5sVideo5,
         streamprofile: 'sub',
@@ -666,7 +667,7 @@
         protocol: window.location.protocol, //'http:' or 'https:'
         host: '192.168.10.18:8080', //'localhost:8080'
         rootpath:'/', // '/' or window.location.pathname
-        token:videos.h5sVideo6,
+        token:'0098',
         //streamprofile: 'sub',
         hlsver:'v1', //v1 is for ts, v2 is for fmp4
         session:'c1782caf-b670-42d8-ba90-2244d0b0ee83' //session got from login
