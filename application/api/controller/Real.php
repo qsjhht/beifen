@@ -140,7 +140,9 @@ class Real extends Common
         {
 //            $yk_arr[substr(odbc_result($rs,"TagName"),16)] =odbc_result($rs,"DataValue");
 //            $yk_arr[] =  array(odbc_result($rs,"DataTime") => odbc_result($rs,"DataValue"));
-            $yk_arr[odbc_result($rs,"DataTime")] = round(odbc_result($rs,"DataValue"),3);
+            if(odbc_result($rs,"DataValue") < 9000){
+                $yk_arr[odbc_result($rs,"DataTime")] = round(odbc_result($rs,"DataValue"),3);
+            }
 //            $name = substr(odbc_result($rs,"TagName"),-5);
             /* $compname=odbc_result($rs,"TagName");*/
             //$conname=odbc_result($rs,"DataTime");
@@ -222,7 +224,9 @@ class Real extends Common
         {
 //            $yk_arr[substr(odbc_result($rs,"TagName"),16)] =odbc_result($rs,"DataValue");
 //            $yk_arr[] =  array(odbc_result($rs,"DataTime") => odbc_result($rs,"DataValue"));
-            $yk_arr[] = ['time'=>odbc_result($rs,"DataTime"),'data'=>number_format(odbc_result($rs,"DataValue"),'3')];
+            if(odbc_result($rs,"DataValue") < 9000) {
+                $yk_arr[] = ['time' => odbc_result($rs, "DataTime"), 'data' => number_format(odbc_result($rs, "DataValue"), '3')];
+            }
 //            $yk_arr[odbc_result($rs,"DataTime")] = odbc_result($rs,"DataValue");
 //            $name = substr(odbc_result($rs,"TagName"),-5);
             /* $compname=odbc_result($rs,"TagName");*/
