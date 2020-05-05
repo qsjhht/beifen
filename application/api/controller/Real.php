@@ -62,7 +62,7 @@ class Real extends Common
             /* $compname=odbc_result($rs,"TagName");*/
             //$conname=odbc_result($rs,"DataTime");
 //            if($name == $zone){
-                $yk_arr[odbc_result($rs,"TagName")] = number_format(odbc_result($rs,"DataValue"),'3');
+                $yk_arr[odbc_result($rs,"TagName")] = round(odbc_result($rs,"DataValue"),3);
 //            }
 //            $yk_arr[$name]['TagName'] = $name;
 //            $yk_arr[$name]['DataTime'] = odbc_result($rs,"DataTime");
@@ -139,7 +139,7 @@ class Real extends Common
         {
 //            $yk_arr[substr(odbc_result($rs,"TagName"),16)] =odbc_result($rs,"DataValue");
 //            $yk_arr[] =  array(odbc_result($rs,"DataTime") => odbc_result($rs,"DataValue"));
-            $yk_arr[odbc_result($rs,"DataTime")] = number_format(odbc_result($rs,"DataValue"),'3');
+            $yk_arr[odbc_result($rs,"DataTime")] = round(odbc_result($rs,"DataValue"),3);
 //            $name = substr(odbc_result($rs,"TagName"),-5);
             /* $compname=odbc_result($rs,"TagName");*/
             //$conname=odbc_result($rs,"DataTime");
@@ -267,7 +267,7 @@ class Real extends Common
         $yk_arr = array();
         while (odbc_fetch_row($rs))
         {
-            $yk_arr[odbc_result($rs,"DataTime")] =number_format(odbc_result($rs,"DataValue"),'3');
+            $yk_arr[odbc_result($rs,"DataTime")] =round(odbc_result($rs,"DataValue"),3);
         }
         odbc_close($conn);
         /*dump($yk_arr);
@@ -509,7 +509,7 @@ class Real extends Common
         {
 //            dump(odbc_result($rs,"DataValue"));
             if (odbc_result($rs,"DataValue") < 9000){
-                $water_arr[odbc_result($rs,"DataTime")][] =number_format(odbc_result($rs,"DataValue"),'3');
+                $water_arr[odbc_result($rs,"DataTime")][] =round(odbc_result($rs,"DataValue"),3);
                 $logs['l_max'][odbc_result($rs,"DataTime")] = max($water_arr[odbc_result($rs,"DataTime")]);
                 $logs['l_min'][odbc_result($rs,"DataTime")] = min($water_arr[odbc_result($rs,"DataTime")]);
                 $logs['l_avg'][odbc_result($rs,"DataTime")] = array_sum($water_arr[odbc_result($rs,"DataTime")])/count($water_arr[odbc_result($rs,"DataTime")]);
@@ -548,7 +548,7 @@ class Real extends Common
         while (odbc_fetch_row($rs))
         {
             if(odbc_result($rs,"DataValue") < 9000){
-                $water_arr[] =number_format(odbc_result($rs,"DataValue"),'3');
+                $water_arr[] =round(odbc_result($rs,"DataValue"),3);
                 $date_time = odbc_result($rs,"DataTime");
             }
         }
