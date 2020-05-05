@@ -126,6 +126,7 @@ class Real extends Common
         }
         $dateo = date("Y-m-d",strtotime("-1 day"));
         $sql="SELECT top 200 * FROM history where TagName like '".$pars."' and DataTime > '".$dateo."'  order by DataTime desc";
+
         $rs=odbc_exec($conn,$sql);
 
         if (!$rs)
@@ -493,11 +494,11 @@ class Real extends Common
             exit("连接失败: " . $conn);
         }
         //一天所有数据
-        $count="SELECT * FROM realtime where TagName like '".$sensor."_%'";
+        $count="SELECT * FROM realtime where TagName like '".$sensor."/_%' ESCAPE '/'";
         $num = odbc_num_rows (odbc_exec($conn,$count));
         $nums = $num * 60 * 24;
         $dateo = date("Y-m-d",strtotime("-1 day"));
-        $sql="SELECT top $nums * FROM history where TagName like '".$sensor."_%' and DataTime > '".$dateo."' order by DataTime desc";
+        $sql="SELECT top $nums * FROM history where TagName like '".$sensor."/_%' ESCAPE '/' and DataTime > '".$dateo."' order by DataTime desc";
         $rs=odbc_exec($conn,$sql);
 
         if (!$rs)
@@ -537,7 +538,7 @@ class Real extends Common
         {
             exit("连接失败: " . $conn);
         }
-        $sql="SELECT * FROM realtime where TagName like '".$sensor."_%'";
+        $sql="SELECT * FROM realtime where TagName like '".$sensor."/_%' ESCAPE '/'";
         $rs=odbc_exec($conn,$sql);
 
         if (!$rs)
@@ -556,7 +557,7 @@ class Real extends Common
 
         $sensor_arr['s_max'] = array($date_time,max($water_arr));
         $sensor_arr['s_min'] = array($date_time,min($water_arr));
-        $sensor_arr['s_avg'] = array($date_time,array_sum($water_arr)/count($water_arr));
+        $sensor_arr['s_avg'] = array($date_time,round(array_sum($water_arr)/count($water_arr),3));
         $this->return_msg(200,'查询成功！',$sensor_arr);
     }
 
