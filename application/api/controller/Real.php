@@ -48,7 +48,7 @@ class Real extends Common
             exit("连接失败: " . $conn);
         }
 
-        $sql="SELECT * FROM realtime where TagName like 'WIN-JR1ULRL6E5T_%".$zone."%'";
+        $sql="SELECT * FROM realtime where TagName = 'M_".$zone."'OR TagName = 'T_".$zone."'OR TagName = 'LT_".$zone."'OR TagName = 'CH4_".$zone."'OR TagName = 'H2S_".$zone."'OR TagName = 'O2_".$zone."'";
         $rs=odbc_exec($conn,$sql);
 
         if (!$rs)
@@ -62,7 +62,7 @@ class Real extends Common
             /* $compname=odbc_result($rs,"TagName");*/
             //$conname=odbc_result($rs,"DataTime");
 //            if($name == $zone){
-                $yk_arr[substr(odbc_result($rs,"TagName"),16)] =odbc_result($rs,"DataValue");
+                $yk_arr[odbc_result($rs,"TagName")] = number_format(odbc_result($rs,"DataValue"),'3');
 //            }
 //            $yk_arr[$name]['TagName'] = $name;
 //            $yk_arr[$name]['DataTime'] = odbc_result($rs,"DataTime");
@@ -118,13 +118,14 @@ class Real extends Common
 //        }
 //        echo json_encode($realdata,JSON_UNESCAPED_UNICODE);die;
 
-        $pars = 'WIN-JR1ULRL6E5T_'.$name.'_'.$zone;  //区分 T LT
+        $pars = $name.'_'.$zone;  //区分 T LT
         $conn=odbc_connect('kinghistory','sa','sa');
         if (!$conn)
         {
             exit("连接失败: " . $conn);
         }
-        $sql="SELECT top 200 * FROM history where TagName like '%".$pars."' and DataTime > '2019-10-10' order by DataTime desc";
+        $dateo = date("Y-m-d",strtotime("-1 day"));
+        $sql="SELECT top 200 * FROM history where TagName like '".$pars."' and DataTime > '".$dateo."'  order by DataTime desc";
         $rs=odbc_exec($conn,$sql);
 
         if (!$rs)
@@ -138,7 +139,7 @@ class Real extends Common
         {
 //            $yk_arr[substr(odbc_result($rs,"TagName"),16)] =odbc_result($rs,"DataValue");
 //            $yk_arr[] =  array(odbc_result($rs,"DataTime") => odbc_result($rs,"DataValue"));
-            $yk_arr[odbc_result($rs,"DataTime")] = odbc_result($rs,"DataValue");
+            $yk_arr[odbc_result($rs,"DataTime")] = number_format(odbc_result($rs,"DataValue"),'3');
 //            $name = substr(odbc_result($rs,"TagName"),-5);
             /* $compname=odbc_result($rs,"TagName");*/
             //$conname=odbc_result($rs,"DataTime");
@@ -199,13 +200,14 @@ class Real extends Common
 //        }
 //        echo json_encode($realdata,JSON_UNESCAPED_UNICODE);die;
 
-        $pars = 'WIN-JR1ULRL6E5T_'.$name.'_'.$zone;  //区分 T LT
+        $pars = $name.'_'.$zone;  //区分 T LT
         $conn=odbc_connect('kinghistory','sa','sa');
         if (!$conn)
         {
             exit("连接失败: " . $conn);
         }
-        $sql="SELECT top 200 * FROM history where TagName like '%".$pars."' and DataTime > '2019-10-10' order by DataTime desc";
+        $dateo = date("Y-m-d",strtotime("-1 day"));
+        $sql="SELECT top 200 * FROM history where TagName like '".$pars."' and DataTime > '".$dateo."' order by DataTime desc";
         $rs=odbc_exec($conn,$sql);
 
         if (!$rs)
@@ -219,7 +221,7 @@ class Real extends Common
         {
 //            $yk_arr[substr(odbc_result($rs,"TagName"),16)] =odbc_result($rs,"DataValue");
 //            $yk_arr[] =  array(odbc_result($rs,"DataTime") => odbc_result($rs,"DataValue"));
-            $yk_arr[] = ['time'=>odbc_result($rs,"DataTime"),'data'=>odbc_result($rs,"DataValue")];
+            $yk_arr[] = ['time'=>odbc_result($rs,"DataTime"),'data'=>number_format(odbc_result($rs,"DataValue"),'3')];
 //            $yk_arr[odbc_result($rs,"DataTime")] = odbc_result($rs,"DataValue");
 //            $name = substr(odbc_result($rs,"TagName"),-5);
             /* $compname=odbc_result($rs,"TagName");*/
@@ -249,13 +251,13 @@ class Real extends Common
     {
         $zone = $this->request->param('zone');
         $name = $this->request->param('name');
-        $pars = 'WIN-JR1ULRL6E5T_'.$name.'_'.$zone; //区分 T LT
+        $pars = $name.'_'.$zone; //区分 T LT
         $conn=odbc_connect('kinghistory','sa','sa');
         if (!$conn)
         {
             exit("连接失败: " . $conn);
         }
-        $sql="SELECT * FROM realtime where TagName like '%".$pars."'";
+        $sql="SELECT * FROM realtime where TagName like '".$pars."'";
         $rs=odbc_exec($conn,$sql);
 
         if (!$rs)
@@ -265,7 +267,7 @@ class Real extends Common
         $yk_arr = array();
         while (odbc_fetch_row($rs))
         {
-            $yk_arr[odbc_result($rs,"DataTime")] =odbc_result($rs,"DataValue");
+            $yk_arr[odbc_result($rs,"DataTime")] =number_format(odbc_result($rs,"DataValue"),'3');
         }
         odbc_close($conn);
         /*dump($yk_arr);
@@ -507,7 +509,7 @@ class Real extends Common
         {
 //            dump(odbc_result($rs,"DataValue"));
             if (odbc_result($rs,"DataValue") < 9000){
-                $water_arr[odbc_result($rs,"DataTime")][] =odbc_result($rs,"DataValue");
+                $water_arr[odbc_result($rs,"DataTime")][] =number_format(odbc_result($rs,"DataValue"),'3');
                 $logs['l_max'][odbc_result($rs,"DataTime")] = max($water_arr[odbc_result($rs,"DataTime")]);
                 $logs['l_min'][odbc_result($rs,"DataTime")] = min($water_arr[odbc_result($rs,"DataTime")]);
                 $logs['l_avg'][odbc_result($rs,"DataTime")] = array_sum($water_arr[odbc_result($rs,"DataTime")])/count($water_arr[odbc_result($rs,"DataTime")]);
@@ -546,7 +548,7 @@ class Real extends Common
         while (odbc_fetch_row($rs))
         {
             if(odbc_result($rs,"DataValue") < 9000){
-                $water_arr[] =odbc_result($rs,"DataValue");
+                $water_arr[] =number_format(odbc_result($rs,"DataValue"),'3');
                 $date_time = odbc_result($rs,"DataTime");
             }
         }
