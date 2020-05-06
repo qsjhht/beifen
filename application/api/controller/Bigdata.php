@@ -411,7 +411,7 @@ class Bigdata extends Common
         $content = json_encode($content,JSON_UNESCAPED_UNICODE);
         $content =  str_replace('"',"'",$content);
         // 推送的url地址，使用自己的服务器地址
-        $push_api_url = "http://192.168.5.100:2121/";
+        $push_api_url = "http://192.168.10.18:2121/";
         $post_data = array(
             "type" => "publish",
             "content" => $content,
