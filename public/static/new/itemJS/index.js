@@ -744,6 +744,66 @@ function select(e){
 }
 // ------------------------------------设备使用率---------------------------
 // 设备使用率
+
+let num = [],streetMakeUp
+
+let xmlHttp=new XMLHttpRequest();
+xmlHttp.open("GET","http://192.168.10.21:8080/api/v1/GetSrc",false);
+xmlHttp.onreadystatechange=function(){
+    if(xmlHttp.readyState==4&&xmlHttp.status==200){
+        let data=JSON.parse(xmlHttp.responseText);
+        num = data.src
+    }
+}
+xmlHttp.send(null)
+
+function street(num1,num2){
+    let aaa = [],bbb = []
+    num.filter(data => {
+        if(data.strToken > num1 && data.strToken <= num2) {
+            aaa.push(data)
+        }
+    })
+    if(aaa.length == 0){
+        return 0;
+    }else{
+        aaa.filter((data) => {
+            if(data.bOnline){
+                bbb.push(data)
+            }
+        })
+        return parseFloat(((bbb.length)/(aaa.length)*100).toFixed(2)) /*+ "%"*/
+    }
+}
+
+streetMakeUp = [{name:'YBY',value:street(50,550)},
+    {name:'LX',value:street(550,1050)},
+    {name:'XC',value:street(1050,1550)},
+    {name:'TH',value:street(1550,2050)},
+    {name:'YX',value:street(2050,2550)},
+    {name:'YN',value:street(2550,3050)},
+    {name:'WT',value:street(3050,3550)},
+    {name:'TN',value:street(3550,4050)},
+    {name:'SP',value:street(4050,4550)},
+    {name:'HY',value:street(4550,5050)},
+    {name:'AT',value:street(5050,6000)}
+]
+eqptvalue = [
+    street(50,550),
+    street(550,1050),
+    street(1050,1550),
+    street(1550,2050),
+    street(2050,2550),
+    street(2550,3050),
+    street(3050,3550),
+    street(3550,4050),
+    street(4050,4550),
+    street(4550,5050),
+    street(5050,6000)
+]
+
+
+
 let botUse = echarts.init(document.getElementById('botUse'));
 let useOption = {
     title:{
@@ -778,23 +838,24 @@ let useOption = {
         },
         radius: '65%',
         indicator: [
-            { name: '顺平大街', max: 50},
-            { name: '园博园大街', max: 50},
-            { name: '安济路', max: 50},
-            { name: '隆兴路', max: 50},
-            { name: '华阳路', max:50},
-            { name: '尉佗路', max: 50},
-            { name: '迎旭路', max: 50},
-            { name: '奥体街', max: 50},
-            { name: '太行大街', max:50},
-            { name: '新城大道', max: 50}
-        ]
+            { name: '园博园大街', max:100},
+            { name: '隆兴路', max:100},
+            { name: '新城大街', max:100},
+            { name: '太行大街', max:100},
+            { name: '迎旭路', max:100},
+            { name: '永宁路', max:100},
+            { name: '尉佗街', max:100},
+            { name: '天宁路', max:100},
+            { name: '顺平大街', max:100},
+            { name: '华阳路', max:100},
+            { name: '奥体街', max:100}
+        ],
     },
     series: [{
         name: '设备使用量',
         type: 'radar',
         data : [{
-                value :[11.5, 13, 8, 0, 14.3, 7.8, 10.7,13,16, 14],
+                value :eqptvalue,
                 name : '使用智能照明（%）',
                 itemStyle:{
                     color:'yellow'
