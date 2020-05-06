@@ -513,16 +513,16 @@ class Real extends Common
         while (odbc_fetch_row($rs))
         {
 //            dump(odbc_result($rs,"DataValue"));
-//            if (odbc_result($rs,"DataValue") < 9000){
+            if (odbc_result($rs,"DataValue") < 9000){
                 $datatime = date("Y-m-d H:i",strtotime(odbc_result($rs,"DataTime")));
                 $water_arr[$datatime][] =round(odbc_result($rs,"DataValue"),3);
 //                $logs['l_max'][odbc_result($rs,"DataTime")] = max($water_arr[odbc_result($rs,"DataTime")]);
 //                $logs['l_min'][odbc_result($rs,"DataTime")] = min($water_arr[odbc_result($rs,"DataTime")]);
 //                $logs['l_avg'][odbc_result($rs,"DataTime")] = array_sum($water_arr[odbc_result($rs,"DataTime")])/count($water_arr[odbc_result($rs,"DataTime")]);
-//            }
+            }
         }
 
-        dump($water_arr);die;
+//        dump($water_arr);die;
         foreach ($water_arr as $key =>$item) {
             $logs['l_max'][$key] = max($item);
             $logs['l_min'][$key] = min($item);
@@ -562,7 +562,7 @@ class Real extends Common
         {
             if(odbc_result($rs,"DataValue") < 9000){
                 $water_arr[] =round(odbc_result($rs,"DataValue"),3);
-                $date_time = odbc_result($rs,"DataTime");
+                $date_time = date("Y-m-d H:i",strtotime(odbc_result($rs,"DataTime")));
             }
         }
         odbc_close($conn);
