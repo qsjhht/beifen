@@ -54,6 +54,10 @@
         width: 48.2%;
         height: 100%;
     }
+    .lampdiv{
+        width: 48.2%;
+        height: 100%;
+    }
 
     .div1 { grid-area: 1 / 1 / 2 / 2; }
     .div2 { grid-area: 1 / 2 / 2 / 3; }
@@ -175,8 +179,9 @@
                     <input type="checkbox" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF">
                 </div>
             </div>
-            <div class="parent">
-                <div class="div1 flexs">
+            <div class="lampdiv">
+                <div class="parent">
+                    <div class="div1 flexs">
 
                         <img src="__STATIC__/new/image/lamp-off.png" id="lamp_01" alt="当前没有图片" class="evirImg2"/>
                         <div class="divWidthInput">
@@ -184,8 +189,8 @@
                             <input type="checkbox" lay-skin="switch" lay-text="ON|OFF" id="01" class="switch_lamp" lay-filter="switch_lamp">
                         </div>
 
-                </div>
-                <div class="div2 flexs">
+                    </div>
+                    <div class="div2 flexs">
 
                         <img src="__STATIC__/new/image/lamp-off.png" id="lamp_02" alt="当前没有图片" class="evirImg2"/>
                         <div class="divWidthInput">
@@ -193,8 +198,8 @@
                             <input type="checkbox" lay-skin="switch" lay-text="ON|OFF" id="02" class="switch_lamp" lay-filter="switch_lamp">
 
                         </div>
-                </div>
-                <div class="div3 flexs">
+                    </div>
+                    <div class="div3 flexs">
 
                         <img src="__STATIC__/new/image/lamp-off.png" id="lamp_03" alt="当前没有图片" class="evirImg2"/>
                         <div class="divWidthInput">
@@ -202,8 +207,8 @@
                             <input type="checkbox" lay-skin="switch" lay-text="ON|OFF" id="03" class="switch_lamp" lay-filter="switch_lamp">
                         </div>
 
-                </div>
-                <div class="div4 flexs">
+                    </div>
+                    <div class="div4 flexs">
 
                         <img src="__STATIC__/new/image/lamp-off.png" id="lamp_04" alt="当前没有图片" class="evirImg2"/>
                         <div class="divWidthInput">
@@ -211,8 +216,8 @@
                             <input type="checkbox" lay-skin="switch" lay-text="ON|OFF" id="04" class="switch_lamp" lay-filter="switch_lamp">
                         </div>
 
-                </div>
-                <div class="div5 flexs">
+                    </div>
+                    <div class="div5 flexs">
 
                         <img src="__STATIC__/new/image/lamp-off.png" id="lamp_05" alt="当前没有图片" class="evirImg2"/>
                         <div class="divWidthInput">
@@ -220,8 +225,8 @@
                             <input type="checkbox" lay-skin="switch" lay-text="ON|OFF" id="05" class="switch_lamp" lay-filter="switch_lamp">
                         </div>
 
-                </div>
-                <div class="div6 flexs">
+                    </div>
+                    <div class="div6 flexs">
 
                         <img src="__STATIC__/new/image/lamp-off.png" id="lamp_06" alt="当前没有图片" class="evirImg2"/>
                         <div class="divWidthInput">
@@ -229,6 +234,7 @@
                             <input type="checkbox" lay-skin="switch" lay-text="ON|OFF" id="06" class="switch_lamp" lay-filter="switch_lamp">
                         </div>
 
+                    </div>
                 </div>
             </div>
 
@@ -339,45 +345,49 @@
                 // console.dir(zoneone);
                 // console.log(id);
                 lampname = zoneone+'_'+ id+'_C';
-
-                console.dir(lampname);
-                console.log(status);
                 let lamp = '{"'+lampname+'":"'+status+'"}';
-                $.get('http://192.168.5.100:1234/write',{ 'tags': lamp}, function(res) {
+                let x = obj.elem.checked;
+                $.get('http://10.3.100.7:1234/write',{ 'tags': lamp}, function(res) {
                     res = JSON.parse(res);
                     if(res.code == '200'){
+
                         layer.msg('成功！');
+                        // $('#')
+                        // obj.elem.checked = x;
                         if(id == '04'){
                             var btns = $('.switch_lamp');
                             var lampimgs = $('.evirImg2');
                             // btns.each(function(i, btn) {
-                            btns.attr('checked',obj.elem.checked);
-                            console.dir(obj.elem.checked);
+                            btns.attr('checked',x);
                             if(obj.elem.checked){
                                 lampimgs.attr("src", '__STATIC__/new/image/lamp-on.png');
-                                form.render('checkbox');
+
                             }else{
                                 lampimgs.attr("src", '__STATIC__/new/image/lamp-off.png');
-                                form.render('checkbox');
+
                             }
 
                             // });
                         }else{
+                            // obj.elem.checked = !x;
+
+                            $('#'+id+'').attr('checked',x);
+                            form.render('checkbox');
                             if(obj.elem.checked){
                                 $("#lamp_" + id + "").attr("src", '__STATIC__/new/image/lamp-on.png');
-                                form.render('checkbox');
+
                             }else{
                                 $("#lamp_" + id + "").attr("src", '__STATIC__/new/image/lamp-off.png');
-                                form.render('checkbox');
+
                             }
                         }
 
                     }else{
-                        obj.elem.checked = obj.elem.checked ? false : true;
-
+                        obj.elem.checked = !x;
+                        // obj.elem.checked = obj.elem.checked ? false : true;
                         layer.msg('失败！');
-                        form.render('checkbox');
                     }
+                    form.render('checkbox');
 
                 });
 
@@ -433,6 +443,8 @@
         var switch_lamp = $('.switch_lamp');
         switch_lamp.attr("disabled","disabled");
         interact.on('interact(test)',function(data){
+            console.dir('lllllllllllllllllllllllllll');
+            $(".lampdiv").load(location.href+" .parent");
             // checkbox.attr("disabled",false);
             //判断text是否含有中文
             var reg = new RegExp("[\\u4E00-\\u9FFF]+","g");
@@ -686,19 +698,18 @@
         let reg=/,$/gi;
         items=items.replace(reg,"");
         // console.dir(items);
-        $.get('http://192.168.5.100:1234/get',{ 'tags': items}, function(data) {
+        $.get('http://10.3.100.7:1234/get',{ 'tags': items}, function(data) {
             data = JSON.parse(data);
             // console.dir(data);
             if(data.code == '200'){
                 let datas = data.data;
-                // console.dir('数组数组');
                 // console.dir(datas.length);
                 if(datas.length !== 0){
                     let hidenum = 0;
                     jQuery.each(datas, function(i, val) {
-                        // console.dir(val);
+
+                        // $('#03').attr('checked',true);
                         for(var key in val){
-                            // console.dir(key);
                             matchResult = key.match(/_(\d+)_/)[1];
 
                             // console.dir(val[key]);
@@ -706,20 +717,21 @@
                             if(val[key] !== "null"){
                                 vals = val[key] == 1 ? true : false;
                                 $("#" + matchResult + "").attr('checked',vals);
-                                console.dir('matchResult:'+matchResult);
+                                form.render('checkbox');
                                 if(vals){
                                     $("#lamp_" + matchResult + "").attr("src", '__STATIC__/new/image/lamp-on.png');
+                                }else{
+                                    $("#lamp_" + matchResult + "").attr("src", '__STATIC__/new/image/lamp-off.png');
                                 }
                                 $("#" + matchResult + "").attr("disabled",false);
                                 $("#" + matchResult + "").parent().parent().show();
-                                console.dir(val[key]);
                             }else{
                                 ++hidenum;
 
                                 $("#" + matchResult + "").parent().parent().hide();
                                 $("#" + matchResult + "").attr("disabled",'disabled');
                             }
-                            form.render('checkbox');
+
 
                         }
                     });
@@ -820,19 +832,16 @@
                 // console.dir(result);
                 var res={};
                 $.each(result,function(key,value){    //objTmp对象数据
-                    value = parseFloat(value);
-                    res[key] = value.toFixed(2);
+                    // value = parseFloat(value);
+                    res[key] = value;
                 });
-                // console.dir(res);
+
                 let list = document.querySelectorAll('.contentDiv');
                 var m = 0;
                 for(var i = 0; i < list.length; i++){
                     var key = list[i].dataset.name+'_'+zones;
                     var ids = list[i].dataset.name;
-
-
-                    //console.dir(key);
-                    if(typeof(res[key]) !== 'undefined'){
+                    if(typeof(res[key]) !== 'undefined' && res[key] <= 9000){
                         document.getElementById(ids).innerText = res[key];
                     }else{
                         m++;
