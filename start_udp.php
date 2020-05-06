@@ -25,7 +25,7 @@ class Send
     {
         $content = json_encode($data,JSON_UNESCAPED_UNICODE);
         $content =  str_replace('"',"'",$content);
-        $push_api_url = "http://192.168.5.100:2121/";
+        $push_api_url = "http://192.168.10.18:2121/";
         $post_data = array(
             "type" => "publish",
             "content" => $content,
