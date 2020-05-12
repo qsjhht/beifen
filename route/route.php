@@ -61,6 +61,16 @@ Route::get('real/get_s_logs', 'api/real/get_s_logs')->allowCrossDomain();
 //获取指定传感器实时数据 最大最小平均值
 Route::get('real/get_sensor', 'api/real/get_sensor')->allowCrossDomain();
 
+//获取风机/水泵 状态
+Route::get('real/plc_get', 'api/real/plc_get')->allowCrossDomain();
+//设置风机/水泵 所处模式
+Route::get('real/plc_model_set', 'api/real/plc_model_set')->allowCrossDomain();
+//设置风机/水泵 起停状态
+Route::get('real/plc_set', 'api/real/plc_set')->allowCrossDomain();
+//获取 电能历史 及 实时数据总量
+Route::get('real/get_j_real', 'api/real/get_j_real')->allowCrossDomain();
+Route::get('real/get_j_log', 'api/real/get_j_log')->allowCrossDomain();
+
 
 
 Route::get('bigdata/date', 'api/bigdata/date')->allowCrossDomain();

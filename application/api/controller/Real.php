@@ -19,6 +19,7 @@ class Real extends Common
     protected function initialize()
     {
         parent::initialize();
+        $this->soap = new \SoapClient("http://192.168.10.30/Service.asmx?WSDL");
     }
     public function real_time()
     {
@@ -573,4 +574,234 @@ class Real extends Common
         $this->return_msg(200,'查询成功！',$sensor_arr);
     }
 
+
+    //获取风机/水泵 状态
+    public function plc_get()
+    {
+        $zone = $this->request->param('zone');
+        $plc = $this->request->param('plc');
+        if($plc == 'fan'){
+            $run = 'Run_Fan_'.$zone;
+            $model = 'Manual_MODE_Fan_'.$zone;
+            $msg = $zone.' 风机';
+            $remote = 'Remote_Fan_'.$zone;
+            $manual = 'Manual_MODE_Fan_'.$zone;
+            $auto = 'Auto_MODE_Fan_'.$zone;
+            $s_auto = 'Auto_CMD_Fan_'.$zone;
+            $s_manual = 'Manual_CMD_Fan_'.$zone;
+        }else if($plc == 'bump'){
+            $run = 'Run_Bump_'.$zone;
+            $model = 'Manual_MODE_Bump_'.$zone;
+            $msg = $zone.' 水泵';
+            $remote = 'Remote_Bump_'.$zone;
+            $manual = 'Manual_MODE_Bump_'.$zone;
+            $auto = 'Auto_MODE_Bump_'.$zone;
+            $s_auto = 'Auto_CMD_Bump_'.$zone;
+            $s_manual = 'Manual_CMD_Bump_'.$zone;
+        }
+
+        dump('远程就地状态为： '.$remote.'----------'.$this->soap->GetKsTagValue(array('cpTagName' => $remote))->GetKsTagValueResult);
+        dump('当前手动模式为：  '.$manual.'----------'.$this->soap->GetKsTagValue(array('cpTagName' => $manual))->GetKsTagValueResult);
+        dump('当前自动模式为：  '.$auto.'----------'.$this->soap->GetKsTagValue(array('cpTagName' => $auto))->GetKsTagValueResult);
+        dump('设置手动模式为：  '.$s_manual.'----------'.$this->soap->GetKsTagValue(array('cpTagName' => $s_manual))->GetKsTagValueResult);
+        dump('设置自动模式为：  '.$s_auto.'----------'.$this->soap->GetKsTagValue(array('cpTagName' => $s_auto))->GetKsTagValueResult);
+
+        $run_res =  $this->soap->GetKsTagValue(array('cpTagName' => $run));
+        $model_res =  $this->soap->GetKsTagValue(array('cpTagName' => $model));
+        $data['run_status'] = $run_res->GetKsTagValueResult;
+        $data['run_model'] = $model_res->GetKsTagValueResult;
+        if($run_res->GetKsTagValueResult !== 'ERROR' && $model_res->GetKsTagValueResult !== 'ERROR'){
+            $this->return_msg(200,$msg.'状态获取成功！',$data);
+        }
+        $this->return_msg(400,$msg.'状态获取失败');
+    }
+
+    //设置风机/水泵 起停状态
+    public function plc_set()
+    {
+        $zone = $this->request->param('zone');
+        $status = $this->request->param('status');
+        $plc = $this->request->param('plc');
+        if($plc == 'fan'){
+            $run = 'Run_Fan_'.$zone;
+            $remote = 'Remote_Fan_'.$zone;
+            $msg = $zone.' 风机修改状态成功！';
+            $manual = 'Manual_MODE_Fan_'.$zone;
+            $start = 'FanStart_Fan'.$zone;
+            $stop = 'FanStop_Fan_'.$zone;
+        }else if($plc == 'bump'){
+            $run = 'Run_Bump_'.$zone;
+            $remote = 'Remote_Bump_'.$zone;
+            $msg = $zone.' 水泵修改状态成功！';
+            $manual = 'Manual_MODE_Bump_'.$zone;
+            $start = 'BumpStart_Bump_'.$zone;
+            $stop = 'BumpStop_Bump_'.$zone;
+        }else{
+            $this->return_msg(400,'请传入正确plc参数！');
+        }
+        $remote_res =  $this->soap->GetKsTagValue(array('cpTagName' => $remote));
+        $manual_res =  $this->soap->GetKsTagValue(array('cpTagName' => $manual));
+        if($remote_res->GetKsTagValueResult == 'TRUE'){
+            if($manual_res->GetKsTagValueResult == 'TRUE'){
+//                dump($status);
+//                dump($stop);
+//                dump($start);
+//                die;
+                if($status == 'start'){
+                    $stop_res = $this->soap->SetKsTagValue(array('cpTagName' => $stop,'cpTagValue'=>0))->SetKsTagValueResult;
+                    if($stop_res == '0'){
+//                        $manual_res = $this->soap->SetKsTagValue(array('cpTagName' => $manual,'cpTagValue'=>'1'))->SetKsTagValueResult;
+                        $start_res = $this->soap->SetKsTagValue(array('cpTagName' => $start,'cpTagValue'=>1))->SetKsTagValueResult;
+                    }
+                }else if($status == 'stop'){
+                    $start_res = $this->soap->SetKsTagValue(array('cpTagName' => $start,'cpTagValue'=>0))->SetKsTagValueResult;
+                    if($start_res == '0'){
+//                        $auto_res = $this->soap->SetKsTagValue(array('cpTagName' => $auto,'cpTagValue'=>'1'))->SetKsTagValueResult;
+                        $stop_res = $this->soap->SetKsTagValue(array('cpTagName' => $stop,'cpTagValue'=>1))->SetKsTagValueResult;
+                    }
+                }else{
+                    $this->return_msg(400,'请传入正确model参数！');
+                }
+                if($start_res == '0' && $stop_res == '0'){
+                    $this->return_msg(200,$msg);
+                }
+                $this->return_msg(400,'修改模式失败！');
+            }else{
+                $this->return_msg(400,'请修改风机模式后再进行操作！');
+            }
+        }else{
+            $this->return_msg(400,'请现场操作！');
+        }
+    }
+
+    //设置风机/水泵 所处模式
+    public function plc_model_set()
+    {
+        $zone = $this->request->param('zone');
+        $model = $this->request->param('model');
+        $plc = $this->request->param('plc');
+        if($plc == 'fan'){
+            $remote = 'Remote_Fan_'.$zone;
+            $msg = $zone.' 风机模式修改成功！';
+            $auto = 'Auto_CMD_Fan_'.$zone;
+            $manual = 'Manual_CMD_Fan_'.$zone;
+        }else if($plc == 'bump'){
+            $remote = 'Remote_Bump_'.$zone;
+            $msg = $zone.' 水泵模式修改成功！';
+            $auto = 'Auto_CMD_Bump_'.$zone;
+            $manual = 'Manual_CMD_Bump_'.$zone;
+        }else{
+            $this->return_msg(400,'请传入正确plc参数！');
+        }
+        //判断 远程/就地
+        $remote_res =  $this->soap->GetKsTagValue(array('cpTagName' => $remote));
+        if($remote_res->GetKsTagValueResult == 'TRUE'){
+            if($model == 'manual'){
+                $auto_res = $this->soap->SetKsTagValue(array('cpTagName' => $auto,'cpTagValue'=>'0'))->SetKsTagValueResult;
+                if($auto_res == '0'){
+                    $manual_res = $this->soap->SetKsTagValue(array('cpTagName' => $manual,'cpTagValue'=>'1'))->SetKsTagValueResult;
+                }
+            }else if($model == 'auto'){
+                $manual_res = $this->soap->SetKsTagValue(array('cpTagName' => $manual,'cpTagValue'=>'0'))->SetKsTagValueResult;
+                if($manual_res == '0'){
+                    $auto_res = $this->soap->SetKsTagValue(array('cpTagName' => $auto,'cpTagValue'=>'1'))->SetKsTagValueResult;
+                }
+            }else{
+                $this->return_msg(400,'请传入正确model参数！');
+            }
+            if($auto_res == '0' && $manual_res == '0'){
+                $this->return_msg(200,$msg);
+            }
+            $this->return_msg(400,'修改模式失败！');
+        }else if($remote_res->GetKsTagValueResult == 'ERROR'){
+            $this->return_msg(400,'请检查传感器！');
+        }
+        else{
+            $this->return_msg(400,'请现场操作！');
+        }
+    }
+
+    //获取电能数据 历史
+    public function get_j_log()
+    {
+        $conn=odbc_connect('kinghistory','sa','sa');
+        if (!$conn)
+        {
+            exit("连接失败: " . $conn);
+        }
+        //一天所有数据
+        $count="SELECT * FROM realtime where TagName like 'j_%_AP' ESCAPE '/'";
+        $num = odbc_num_rows (odbc_exec($conn,$count));
+
+        $nums = $num * 60 * 24;
+        $dateo = date("Y-m-d",strtotime("-1 day"));
+        $sql="SELECT top $nums * FROM history where TagName like 'j_%_AP' ESCAPE '/' and DataTime > '".$dateo."' order by DataTime desc";
+        $rs=odbc_exec($conn,$sql);
+
+        if (!$rs)
+        {
+            exit("SQL 语句错误");
+        }
+        $item_arr = array();
+        while (odbc_fetch_row($rs))
+        {
+//            dump(odbc_result($rs,"DataValue"));
+            if (odbc_result($rs,"DataValue") < 9000){
+                $datatime = date("Y-m-d H:i",strtotime(odbc_result($rs,"DataTime")));
+                $item_arr[$datatime][odbc_result($rs,"tagname")] = (float)odbc_result($rs,"DataValue");
+//                dump($item_arr);
+//                $j_arr[$datatime][] =round(odbc_result($rs,"DataValue"),3);
+//                $logs['l_max'][odbc_result($rs,"DataTime")] = max($water_arr[odbc_result($rs,"DataTime")]);
+//                $logs['l_min'][odbc_result($rs,"DataTime")] = min($water_arr[odbc_result($rs,"DataTime")]);
+//                $logs['l_avg'][odbc_result($rs,"DataTime")] = array_sum($water_arr[odbc_result($rs,"DataTime")])/count($water_arr[odbc_result($rs,"DataTime")]);
+            }
+        }
+        foreach ($item_arr as $key=> $item) {
+            $log_arr[$key] = array_sum($item);
+        }
+//        dump($log_arr);die;
+        $this->return_msg(200,'查询成功！',$log_arr);
+    }
+
+
+
+
+
+    //获取电能数据 实时
+    public function get_j_real()
+    {
+        $conn=odbc_connect('kinghistory','sa','sa');
+        if (!$conn)
+        {
+            exit("连接失败: " . $conn);
+        }
+        $sqls = "SELECT CURRENT_TIMESTAMP";
+        $sql_date = odbc_exec($conn,$sqls);
+        if (!$sql_date)
+        {
+            exit("SQL 语句错误");
+        }
+        while(odbc_fetch_row($sql_date)){
+            $datatime = date("Y-m-d H:i",strtotime(odbc_result($sql_date,1)));
+//            $sql="SELECT * FROM realtime where TagName like 'j_%_AP' ESCAPE '/' and DataTime > DATEADD(MINUTE,-5,'".$datatime."')";
+//            $rs=odbc_exec($conn,$sql);
+        }
+        $sql="SELECT * FROM realtime where TagName like 'j_%_AP' ESCAPE '/'";
+        $rs=odbc_exec($conn,$sql);
+        if (!$rs)
+        {
+            exit("SQL 语句错误");
+        }
+        $j_arr = array();
+        $j = 0;
+        while (odbc_fetch_row($rs))
+        {
+//            $water_arr[$datatime][] =round(odbc_result($rs,"DataValue"),3);
+//            dump($datatime);
+            $j += (float)odbc_result($rs,"DataValue");
+        }
+        $j_arr[$datatime] = $j;
+        odbc_close($conn);
+        $this->return_msg(200,'查询成功！',$j_arr);
+    }
 }

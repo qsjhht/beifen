@@ -94,6 +94,24 @@ class Common extends Controller
             'get_sensor' => array(
                 'sensor' => 'require',  //传感器类别
             ),
+            'plc_get' => array(
+                'zone' => 'require',  //指定防火分区
+                'plc' => 'require',  //风机 / 水泵
+            ),
+            'plc_set' => array(
+                'zone' => 'require',  //指定防火分区
+                'plc' => 'require',  //风机 / 水泵
+                'status' => 'require',  //设置状态
+            ),
+            'plc_model_set' => array(
+                'zone' => 'require',  //指定防火分区
+                'plc' => 'require',  //风机 / 水泵
+                'model' => 'require',  //设置模式
+            ),
+            'get_j_real' => array(
+            ),
+            'get_j_log' => array(
+            ),
 
         ),
         'Master'    => array(
