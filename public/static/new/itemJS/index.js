@@ -150,69 +150,10 @@ let data = {
 };
 
 data.water(5,30);//用电量
-
+var ele_log;
 // 动力配电
     let contentEle = echarts.init(document.getElementById('contentEle'));
-    let eleOption = {
-        title:{
-            text:'动力配电监测',
-            textStyle:{
-                color:'#00ffff',
-                fontWeight:'normal',
-                fontSize:16
-            },
-            padding:[15,10]
-        },
-        tooltip: {
-            trigger: 'axis'
-        },
-        xAxis: {
-            name:'时间',
-            type: 'time',
-            axisLine:{
-                lineStyle:{
-                    color:'#FFFFFF'
-                }
-            },
-            splitLine: {
-                show: false
-            }
-        },
-        yAxis: {
-            name:'用电量（kw/h）',
-            type: 'value',
-            boundaryGap: ['20%', '100%'],
-            axisLine:{
-                lineStyle:{
-                    color:'#FFFFFF'
-                }
-            },
-            splitLine: {
-                show: false
-            },
-            inverse:false,
-            min:0
-        },
-        dataZoom:[{
-            start:95,
-            end:100,
-        backgroundColor:'rgb(ff,ff,ff)',
-        height:'15',
-        bottom:'3%'
-        },{
-            type:'slider',
-        height:'15',
-        bottom:'3%'
-        }],
-        series: [{
-            name: '用电量(kw/h)',
-            type: 'line',
-            showSymbol: false,
-            hoverAnimation: false,
-            data:data.arr10.slice(0,data.number())
-        }]
-    }
-contentEle.setOption(eleOption);
+
 
 
 let alarmnum = $('#alarmnum').val();
@@ -338,7 +279,107 @@ callIcon.setOption(alarmoption);
 
 // 水位监测
 //获取历史数据
-let sensor_waters = [];
+let eleobj = [];
+$.ajax({
+    url:"http://192.168.10.18/real/get_j_log",
+    async:true,
+    success:function(result){
+        let eleobj = JSON.parse(result).data;
+        // console.dir(firstr);
+        console.dir('eeeeeeeeeeeeeeeeeeeeeeeeeeeee');
+        console.dir(eleobj);
+        console.dir(eleobj);
+        console.dir(eleobj);
+        let eleOption = {
+            title:{
+                text:'动力配电监测',
+                textStyle:{
+                    color:'#00ffff',
+                    fontWeight:'normal',
+                    fontSize:16
+                },
+                padding:[15,10]
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            xAxis: {
+                name:'时间',
+                type: 'time',
+                axisLine:{
+                    lineStyle:{
+                        color:'#FFFFFF'
+                    }
+                },
+                splitLine: {
+                    show: false
+                }
+            },
+            yAxis: {
+                name:'用电量（kw/h）',
+                type: 'value',
+                boundaryGap: ['20%', '100%'],
+                axisLine:{
+                    lineStyle:{
+                        color:'#FFFFFF'
+                    }
+                },
+                splitLine: {
+                    show: false
+                },
+                inverse:false,
+                min:function (value) {
+                    return value.min - 200;
+                }
+            },
+            dataZoom:[{
+                start:95,
+                end:100,
+                backgroundColor:'rgb(ff,ff,ff)',
+                height:'15',
+                bottom:'3%'
+            },{
+                type:'slider',
+                height:'15',
+                bottom:'3%'
+            }],
+            series: [{
+                name: '用电量(kw/h)',
+                type: 'line',
+                showSymbol: false,
+                hoverAnimation: false,
+                data:eleobj
+            }]
+        }
+        contentEle.setOption(eleOption);
+        // 实时更新
+        setInterval(function(){
+            $.ajax({
+                url:"http://192.168.10.18/real/get_j_real",
+                async:true,
+                success:function(result){
+                    let ele_real = JSON.parse(result).data;
+                    let firstr =  eleobj[0][0];
+                    let firsto =  ele_real[0][0];
+                    console.dir('fffffffffffffffffffff');
+                    console.dir(firstr);
+                    console.dir(firsto);
+                    if(firsto !== firstr) {
+                        eleobj.unshift(ele_real[0]);
+                        eleobj.pop();
+                        // 水位更新
+                        contentEle.setOption({
+                            series: [{
+                                data: eleobj
+                            }]
+                        });
+                    }
+                    console.dir(eleobj);
+                }
+            });
+        },60000);
+    }
+});
 $.ajax({
     url:"http://192.168.10.18/real/get_s_logs?sensor=LT",
     async:true,
@@ -811,7 +852,7 @@ let useOption = {
         textStyle:{
             color:'#00ffff',
             fontWeight:'normal',
-            fontSize:16
+            fontSize:13
         },
         padding:[15,10]
     },
@@ -852,11 +893,11 @@ let useOption = {
         ],
     },
     series: [{
-        name: '设备使用量',
+        name: '在线IPC（%）',
         type: 'radar',
         data : [{
                 value :eqptvalue,
-                name : '使用智能照明（%）',
+                name : '摄像机（%）',
                 itemStyle:{
                     color:'yellow'
                 }

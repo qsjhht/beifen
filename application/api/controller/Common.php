@@ -97,16 +97,19 @@ class Common extends Controller
             'plc_get' => array(
                 'zone' => 'require',  //指定防火分区
                 'plc' => 'require',  //风机 / 水泵
+                'pump_num' => 'number|length:2',  //水泵编号
             ),
             'plc_set' => array(
                 'zone' => 'require',  //指定防火分区
                 'plc' => 'require',  //风机 / 水泵
                 'status' => 'require',  //设置状态
+                'pump_num' => 'number|length:2',  //设置模式
             ),
             'plc_model_set' => array(
                 'zone' => 'require',  //指定防火分区
                 'plc' => 'require',  //风机 / 水泵
                 'model' => 'require',  //设置模式
+                'pump_num' => 'number|length:2',  //设置模式
             ),
             'get_j_real' => array(
             ),

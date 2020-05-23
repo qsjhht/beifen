@@ -203,7 +203,7 @@
         授权期限：永久授权<br>
         授权单位：求实科技集团有限公司<br>
         <div  style="text-align: center">
-            <img style="" layer-pid="1" layer-src="url('/qrcode/Reimg.jpeg')" src="/qrcode/qrcodes.png" alt="图片名">
+            <img style="" layer-pid="1" src="/qrcode/qrcodes.png" alt="图片名">
         </div>
         扫描下载安卓版app
     </div>
@@ -217,6 +217,7 @@
 <script>
     var socket = io('http://192.168.10.18:2120');
     socket.emit('login',2333);
+    let partition , d
     var audio = document.getElementById("myAudio");
     // 收取后端数据
     new Vue({
@@ -226,11 +227,13 @@
                 visible: false ,
                 dialogVisible:false,
                 alarm_tips:'',
-                audio:''
+                audio:'',
+                // url:'./h5s/ind.html?'
             }
         },
         created(){
             let ccc = this.$options.methods.alarm_tips.bind(this);
+            d = this.$options.methods.ddd.bind(this);
             socket.on('new_msg',(data) => {
                 ccc(data)
             })
@@ -240,6 +243,7 @@
                 let _this = this;
                 let evala = eval('('+ a +')').real_alarm;
                 _this.alarm_tips = evala;
+                partition = evala.zone.replace('/','');
                 if(evala.lvlcontent == '普通'){
                     // return;
                 }else if(evala.lvlcontent == '设备'){
@@ -250,6 +254,7 @@
                     _this.$notify({
                         title:`${evala.lvlcontent}报警`,
                         message:`${new Date(evala.alarm_time*1000).toLocaleString()}\r ${evala.zone}\r ${evala.cate_name}
+                                <a href="#" onclick="videoData()">[视频联动]</a>
                               <a style="float: right" href="javascript:void(0)" onclick="alarmtips(${evala.id},${evala.is_manage})">[详情]</a>`,
                         duration:0,
                         dangerouslyUseHTMLString:true,
@@ -275,7 +280,8 @@
                     _this.$notify({
                         title:`${evala.lvlcontent}报警`,
                         message:`${new Date(evala.alarm_time*1000).toLocaleString()}\r ${evala.zone}\r ${evala.cate_name}
-                              <a style="float: right" href="javascript:void(0)" onclick="alarmtips(${evala.id},${evala.is_manage})">[详情]</a>`,
+                              <a href="#" onclick="videoData()">[视频联动]</a>
+                               <a style="float: right" href="javascript:void(0)" onclick="alarmtips(${evala.id},${evala.is_manage})">[详情]</a>`,
                         duration:0,
                         dangerouslyUseHTMLString:true,
                         iconClass:'el-icon-bell',
@@ -302,12 +308,73 @@
                     _this.alarm_tips.is_manage = '是'
                 }
 
+            },
+            ddd(d){
+
+                this.dialogVisible = true;
+
+                this.url += d
             }
         }
     })
 </script>
 
 <script>
+    function videoData(){
+
+
+        fetch('http://192.168.10.21:8080/api/v1/GetSrc').then(res => res.json())
+            .then(data => {
+                console.dir('DDDDDDDDDDDDDDDDDDDDDDDDDDD');
+                console.dir(data);
+                let sendData = []
+                let strName = data.src.filter((fil) => {
+                    if(fil.strName.indexOf(partition) != -1){
+                        return fil['bOnline'] == true
+                    }
+                })
+                console.dir(strName);
+                console.dir(strName);
+                for(let y in strName){
+                    sendData.push({"name":strName[y].strName,"token":strName[y].strToken})
+                }
+                if(sendData != []){
+                    let strData = encodeURIComponent(JSON.stringify(sendData))
+                    console.dir(sendData);
+                    console.dir(strData);
+                    console.dir(strData);
+                    layui.use('layer', function(){
+                        var layer = layui.layer;
+                        //console.dir(data);
+                        //window.open('{:url("eqpt/eqpt_details")}' + "?id=" + data.eqpt_id, '_self');
+                        layer.open({
+                            title:"实时视频",
+                            title:false,
+                            type: 2,
+                            offset: ['100px', '250px'],
+                            area: ['1070px', '655px'],
+                            fixed: true, //不固定
+                            maxmin: false,
+                            content: ['{:url("index/ind")}' + "?" + strData, 'no'],
+                            shade: [0.8, '#393D49'],
+                            cancel: function(){
+                                //右上角关闭回调  刷新父页面
+                                // window.parent.location.reload();
+                                //return false 开启该代码可禁止点击该按钮关闭
+                            }
+                        });
+                    });
+                    // d(strData)
+                }else{
+                    alert('摄像机信息获取失败！');
+                }
+            }).catch((err) => {
+            console.log('eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee')
+            alert('获取数据失败！');
+            console.log(err)
+
+        })
+    }
     $(function () {
         /* $(".headerNav li").click(function () {
             $(this).siblings('span').css("color", "black");
@@ -372,10 +439,10 @@
             //window.open('{:url("eqpt/eqpt_details")}' + "?id=" + data.eqpt_id, '_self');
             if(is_manage){
                 layer.open({
-                    title:"设备详情",
+                    title:"报警详情",
                     title:false,
                     type: 2,
-                    offset: ['200px', '400px'],
+                    offset: ['100px', '250px'],
                     area: ['1070px', '655px'],
                     fixed: true, //不固定
                     maxmin: false,
@@ -389,10 +456,10 @@
                 });
             }else{
                 layer.open({
-                    title:"设备详情",
+                    title:"报警详情",
                     title:false,
                     type: 2,
-                    offset: ['200px', '400px'],
+                    offset: ['100px', '250px'],
                     area: ['1070px', '655px'],
                     fixed: true, //不固定
                     maxmin: false,

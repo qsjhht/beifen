@@ -58,6 +58,10 @@
         width: 48.2%;
         height: 100%;
     }
+    .plcdiv{
+        width: 50%;
+        height: 100%;
+    }
 
     .div1 { grid-area: 1 / 1 / 2 / 2; }
     .div2 { grid-area: 1 / 2 / 2 / 3; }
@@ -115,11 +119,26 @@
                 <div class="contentHead">
                     水位 <img src="__STATIC__/new/image/c14.png" alt="/" width="30  ">
                 </div>
-                <div class="contentDiv" data-name="LT" id="LT">
-                    <!-- 20cm -->
-                    ----
+                <div class="pumpdiv">
+                    <div class="contentDiv width30 LT01" data-name="LT01">
+                        <!-- 20cm -->
+                        <div class="pumpcolumn">水泵01</div>
+                        <div class="pumpcolumn LT01" id="LT01">----</div>
+                    </div>
+                    <div class="contentDiv width30 LT02" data-name="LT02">
+                        <div class="pumpcolumn">水泵02</div>
+                        <div class="pumpcolumn LT02" id="LT02">----</div>
+                    </div>
+                    <div class="contentDiv width30 LT03" data-name="LT03">
+                        <div class="pumpcolumn">水泵03</div>
+                        <div class="pumpcolumn LT03" id="LT03">----</div>
+                    </div>
+                    <div class="contentDivhide">
+                        ----
+                        <!-- 3 -->
+                    </div>
                 </div>
-                <div class="contentBelow">CM</div>
+                <div class="contentBelow">M</div>
             </div>
             <div class="evirMainDiv mainBor">
                 <div class="contentHead">
@@ -156,27 +175,43 @@
             </div>
         </div>
         <div class="evirMain2 layui-form flex" >
-            <div class="main2Con">
-                <div class="divWidth flex">
-                    <img src="__STATIC__/new/image/c1.png" alt="当前没有图片" class="evirImg "/>
-                    <div class="divWidthInput">
-                        水舱排风</br>
-                        <input type="checkbox"  lay-skin="switch"  lay-filter="fan_switch1" lay-text="ON|OFF"/>
+            <div class="plcdiv flex">
+                <div class="main2Con" style="width: 50%">
+                    <div class="divWidth flex flexend" id="fan">
+                        <img src="__STATIC__/new/image/c1.png" alt="当前没有图片" class="evirImg"/>
+                        <div class="divWidthInput">
+                            风机状态：&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" id="fan_status" lay-skin="switch"  lay-filter="plc_status" lay-text="运行|停止"/></br>
+                            运行模式：&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" id="fan_mode" lay-skin="switch"  lay-filter="plc_cmd" lay-text="平台手动|plc自动"/></br></br>
+                            <button type="button"  lay-filter="plc_set" style="float: right;" data-name="fan" class="layui-btn layui-btn-xs layui-btn-radius layui-btn-danger btn_m_r">故障重置！</button>
+                        </div>
+                    </div>
+                    <div class="divWidth flex flexend" style="border-top:1px dashed #ffffff" id="pump02">
+                        <img src="__STATIC__/new/image/c3.png" alt="当前没有图片" class="evirImg"/>
+                        <div class="divWidthInput">
+                            02水泵状态：&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" id="pump02_status" lay-skin="switch"  lay-filter="plc_status" lay-text="运行|停止"/></br>
+                            运行模式：&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" id="pump02_mode" lay-skin="switch"  lay-filter="plc_cmd" lay-text="平台手动|plc自动"/></br></br>
+                            <button type="button"  lay-filter="plc_set" style="float: right;" data-name="pump" data-value="02" class="layui-btn layui-btn-xs layui-btn-radius layui-btn-danger btn_m_r">故障重置！</button>
+                        </div>
                     </div>
                 </div>
-                <div class="divWidth flex" style="border-top:1px dashed #ffffff">
-                    <img src="__STATIC__/new/image/c1.png" alt="当前没有图片" class="evirImg"/>
-                    <div class="divWidthInput">
-                        电舱排风</br>
-                        <input type="checkbox" lay-skin="switch"  lay-filter="fan_switch2" lay-text="ON|OFF">
+
+                <div class="main2Con" style="width: 50%">
+                    <div class="divWidth flex flexend" id="pump01">
+                        <img src="__STATIC__/new/image/c3.png" alt="当前没有图片" class="evirImg"/>
+                        <div class="divWidthInput">
+                            01水泵状态：&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" id="pump01_status" lay-skin="switch"  lay-filter="plc_status" lay-text="运行|停止"/></br>
+                            运行模式：&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" id="pump01_mode" lay-skin="switch"  lay-filter="plc_cmd" lay-text="平台手动|plc自动"/></br></br>
+                            <button type="button"  lay-filter="plc_set" style="float: right;" data-name="pump" data-value="01"  class="layui-btn layui-btn-xs layui-btn-radius layui-btn-danger btn_m_r">故障重置！</button>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="main2Con flex" style="border-left:1px solid #ffffff;border-right:1px solid #ffffff; margin:0 4px">
-                <img src="__STATIC__/new/image/c3.png" alt="当前没有图片" class="evirImg"/>
-                <div class="divWidthInput">
-                    水泵</br>
-                    <input type="checkbox" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF">
+                    <div class="divWidth flex flexend" style="border-top:1px dashed #ffffff" id="pump03">
+                        <img src="__STATIC__/new/image/c3.png" alt="当前没有图片" class="evirImg"/>
+                        <div class="divWidthInput">
+                            03水泵状态：&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" id="pump03_status" lay-skin="switch"  lay-filter="plc_status" lay-text="运行|停止"/></br>
+                            运行模式：&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" id="pump03_mode" lay-skin="switch"  lay-filter="plc_cmd" lay-text="平台手动|plc自动"/></br></br>
+                            <button type="button"  lay-filter="plc_set" style="float: right;" data-name="pump" data-value="03"  class="layui-btn layui-btn-xs layui-btn-radius layui-btn-danger btn_m_r">故障重置！</button>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="lampdiv">
@@ -290,45 +325,128 @@
         var site_data = JSON.parse($('#sitesdata').val());
         var site_hk = JSON.parse($('#sitehk').val());
         // console.dir(site_data);
-        form.on('switch(fan_switch1)',function(){
-            if(this.checked ? true : false == true){
-                setTimeout(function() {
-                    layer.msg('成功！');
-                    evirImg[0].classList.add('evirImgKey')
-                }, 1000);
-            }else if(this.checked ? trun : false == false){
-                setTimeout(function() {
-                    layer.msg('成功！');
-                    evirImg[0].classList.remove('evirImgKey')
-                }, 1000);
+        form.on('switch(plc_status)',function(obj){
+            if(zone1){
+                let x = obj.elem.checked;
+                let pump_num = this.id.split("_")[0].replace(/[^0-9]/ig,"");
+                if(pump_num){
+                    plc = 'pump';
+                }else{
+                    plc = 'fan';
+                }
+                var status = obj.elem.checked ? status="start" : status="stop";
+                $.ajax({
+                    url:"http://192.168.10.18/real/plc_set",
+                    data:{"plc":plc,"zone":zoneone,"pump_num":pump_num,"status":status},
+                    type:'get',
+                    async:false,
+                    success:(data) => {
+                        datas = JSON.parse(data)  // 获取信息
+                        if(datas.code == '200'){
+                            layer.msg(datas.msg);
+                        }else{
+
+                            // obj.elem.checked = obj.elem.checked ? false : true;
+                            layer.msg(datas.msg);
+                        }
+                        console.dir(datas);
+                    },
+                    error:(err) => {
+                        console.dir('ajax报错！');
+                    }
+                })
+                console.dir(this);
+                console.dir(plc);
+                console.dir(pump_num);
+                console.dir(status);
+            }else{
+                layer.msg('请先选择防火分区后再进行操作！');
+
             }
+
+            // if(this.checked ? true : false == true){
+            //     setTimeout(function() {
+            //         layer.msg('成功！');
+            //         evirImg[0].classList.add('evirImgKey')
+            //     }, 1000);
+            // }else if(this.checked ? trun : false == false){
+            //     setTimeout(function() {
+            //         layer.msg('成功！');
+            //         evirImg[0].classList.remove('evirImgKey')
+            //     }, 1000);
+            // }
         })
-        form.on('switch(fan_switch2)',function(){
-            if(this.checked ? true : false == true){
-                setTimeout(function() {
-                    layer.msg('成功！');
-                    evirImg[1].classList.add('evirImgKey');
-                }, 1000);
-            }else if(this.checked ? trun : false == false){
-                setTimeout(function() {
-                    layer.msg('成功！');
-                    evirImg[1].classList.remove('evirImgKey');
-                }, 1000);
+        form.on('switch(plc_cmd)',function(obj){
+            if(zone1){
+                let x = obj.elem.checked;
+                let pump_num = this.id.split("_")[0].replace(/[^0-9]/ig,"");
+                if(pump_num){
+                    plc = 'pump';
+                }else{
+                    plc = 'fan';
+                }
+                console.dir('aaaaaaaaaaaaaaaaaaaaaaa');
+                console.dir(zoneone);
+                console.dir(plc);
+                console.dir(pump_num);
+                console.dir('aaaaaaaaaaaaaaaaaaaaaaa');
+                var model = obj.elem.checked ? status="manual" : status="auto";
+                console.dir(model);
+                $.ajax({
+                    url:"http://192.168.10.18/real/plc_model_set",
+                    data:{"plc":plc,"zone":zoneone,"pump_num":pump_num,"model":model},
+                    type:'get',
+                    async:false,
+                    success:(data) => {
+                        datas = JSON.parse(data)  // 获取信息
+                        if(datas.code == '200'){
+                            layer.msg(datas.msg);
+                        }else{
+
+                            // obj.elem.checked = obj.elem.checked ? false : true;
+                            layer.msg(datas.msg);
+                        }
+                        console.dir(datas);
+                    },
+                    error:(err) => {
+                        console.dir('ajax报错！');
+                    }
+                })
+
+                console.dir(this);
+                console.dir(plc);
+                console.dir(pump_num);
+                console.dir(model);
+            }else{
+                layer.msg('请先选择防火分区后再进行操作！');
+
             }
+
+            // if(this.checked ? true : false == true){
+            //     setTimeout(function() {
+            //         layer.msg('成功！');
+            //         evirImg[1].classList.add('evirImgKey');
+            //     }, 1000);
+            // }else if(this.checked ? trun : false == false){
+            //     setTimeout(function() {
+            //         layer.msg('成功！');
+            //         evirImg[1].classList.remove('evirImgKey');
+            //     }, 1000);
+            // }
         })
-        form.on('switch(switchTest)',function(){
-            if(this.checked ? true : false == true){
-                setTimeout(function() {
-                    layer.msg('成功！');
-                    // evirImg[1].classList.add('evirImgKey');
-                }, 1000);
-            }else if(this.checked ? trun : false == false){
-                setTimeout(function() {
-                    layer.msg('成功！');
-                    // evirImg[1].classList.remove('evirImgKey');
-                }, 1000);
-            }
-        })
+        // form.on('switch(switchTest)',function(){
+        //     if(this.checked ? true : false == true){
+        //         setTimeout(function() {
+        //             layer.msg('成功！');
+        //             // evirImg[1].classList.add('evirImgKey');
+        //         }, 1000);
+        //     }else if(this.checked ? trun : false == false){
+        //         setTimeout(function() {
+        //             layer.msg('成功！');
+        //             // evirImg[1].classList.remove('evirImgKey');
+        //         }, 1000);
+        //     }
+        // })
         form.on('switch(switch_lamp)', function(obj){
             //layer.tips(this.name + '：'+ obj.elem.checked, obj.othis);
             // console.dir(this.name);
@@ -443,8 +561,6 @@
         var switch_lamp = $('.switch_lamp');
         switch_lamp.attr("disabled","disabled");
         interact.on('interact(test)',function(data){
-            console.dir('lllllllllllllllllllllllllll');
-            $(".lampdiv").load(location.href+" .parent");
             // checkbox.attr("disabled",false);
             //判断text是否含有中文
             var reg = new RegExp("[\\u4E00-\\u9FFF]+","g");
@@ -480,6 +596,7 @@
 
                     //获取分区信息 转换小写 去掉/
                     zoneone = zone1.replace('/','')/*.toLowerCase()*/;
+                    get_plc_status();
                     // console.dir(zoneone);
                     get_lamp();
                     real_time(zone);
@@ -552,14 +669,15 @@
                     },60000)
 
                 }else{
+                    console.dir('lllllllllllllllllllllllllll');
+                    // $(".lampdiv").load(location.href+".parent");
                     // console.dir(zone);
                     arrDate = [];
                     arrData = [];
                     // 删除旧定时器
                     window.clearInterval(Interval);
                     window.clearInterval(Reallog);
-
-
+                    // $(".plcdiv").load(location.href+".plcdiv");
 
                     $("#seleTwo").val('T');
                     zone = data.text;
@@ -580,6 +698,7 @@
                     //获取分区信息 转换小写 去掉/
                     zoneone = zone.replace('/','')/*.toLowerCase()*/;
                     // console.dir(zoneone);
+                    get_plc_status();
                     get_lamp();
                     real_time(zone);
                     realtimes(zone);
@@ -682,10 +801,54 @@
                     });
                 },60000)
             }
+        }
+    });
+    function get_plc_status() {
+        let list = document.querySelectorAll('.flexend');
+        for(var i = 0; i < list.length; i++){
+            var ids = list[i].id;
+            console.dir(ids);
+            if(ids == 'fan'){
+                plc = 'fan';
+                pump_num = '';
+            }else{
+                pump_num = ids.replace(/[^0-9]/ig,"");
+                plc = 'pump';
+                // pump_num = pumpnum;
+            }
+            let div_id = plc+pump_num;
+            console.dir(div_id);
+            $.ajax({
+                url:"http://192.168.10.18/real/plc_get?zone="+zoneone+"&plc="+plc+"&pump_num="+pump_num,
+                // data:{"plc":plc,"zone":zoneone,"pump_num":pump_num},
+                type:'get',
+                async:false,
+                timeout: 0,
+                success:(data) => {
+                    datas = JSON.parse(data)  // 获取信息
+                    console.dir(datas);
+                    console.dir(datas);
+                    let is_run = datas.data.is_run == 'true' ? true : false;
+                    let is_manual = datas.data.is_manual == 'true' ? true : false;
+                    if(datas.code == '200'){
+                        $('#'+div_id).css('display','inline-block');
+                        $('#'+div_id+'_status'+'').attr('checked',is_run);
+                        $('#'+div_id+'_mode'+'').attr('checked',is_manual);
+                        form.render('checkbox');
+                    }else{
+                        $('#'+div_id).css('display','none');
+                    }
+                    console.dir(datas);
+                    console.dir('ssssssssssssssssss'+div_id);
+                }
+                ,error:function(xhr){
+                    $('#'+div_id).css('display','none');
+                    console.dir(xhr);
+                    console.dir(xhr)}
+            })
 
         }
-
-    });
+    }
     function get_lamp() {
         var btns = $('.switch_lamp');
         let items='';
@@ -697,7 +860,7 @@
         });
         let reg=/,$/gi;
         items=items.replace(reg,"");
-        // console.dir(items);
+        console.dir(items);
         $.get('http://10.3.100.7:1234/get',{ 'tags': items}, function(data) {
             data = JSON.parse(data);
             // console.dir(data);
@@ -716,6 +879,11 @@
 
                             if(val[key] !== "null"){
                                 vals = val[key] == 1 ? true : false;
+                                console.dir(matchResult);
+                                console.dir(vals);
+                                console.dir(vals);
+                                console.dir(vals);
+                                console.dir(vals);
                                 $("#" + matchResult + "").attr('checked',vals);
                                 form.render('checkbox');
                                 if(vals){
@@ -838,15 +1006,52 @@
 
                 let list = document.querySelectorAll('.contentDiv');
                 var m = 0;
+                console.dir(list.length);
+                var pumpnum = '';
+                var pm = 0;
                 for(var i = 0; i < list.length; i++){
-                    var key = list[i].dataset.name+'_'+zones;
                     var ids = list[i].dataset.name;
+
+                    if(ids.indexOf("LT") != -1 ){
+                        pumpnum = ids.replace(/[^0-9]/ig,"");
+                        var key = 'LT_'+zones+'_'+pumpnum;
+                    }else{
+                        pumpnum = '';
+                        var key = ids+'_'+zones;
+                    }
+
                     if(typeof(res[key]) !== 'undefined' && res[key] <= 9000){
+                        // if(pumpnum){
+                        //     $('.contentDivhide').css('display','none');
+                            if(ids.indexOf("LT") != -1){
+                                pm++;
+                            }
+                            $('.'+ids).css('display','inline-block');
+
+                        // }else{
+                        //     $('.'+ids).css('display','none');
+                        // }
                         document.getElementById(ids).innerText = res[key];
                     }else{
-                        m++;
+                            m++;
+                        // if(pumpnum){
+                        //     $('.'+ids).css('display','display');
+                        // }else{
+                            $('.'+ids).css('display','none');
+                            // $('.contentDivhide').css('display','inline-block');
+                        // }
+                        // $('.LT01').css('display','none');
                         document.getElementById(ids).innerText = '----';
                     }
+                    console.dir('idsssssssssssssss');
+                    console.dir(ids);
+                }
+                console.dir('pm');
+                console.dir(pm);
+                if(pm == 0){
+                    $('.contentDivhide').css('display','block');
+                }else{
+                    $('.contentDivhide').css('display','none');
                 }
                 if(m == 6){
                     $(".evirEchart").hide();
@@ -1032,8 +1237,8 @@
 
 
     //设置参数
-    let username = 'lshengh626'; //账户名
-    let userpass = '312650221'; // 密码
+    let username = 'admin'; //账户名
+    let userpass = 'admin'; // 密码
 
 
 
@@ -1073,17 +1278,17 @@
         // zonenum = zonenum.replace(/\b(0+)/gi,"");
         // ajxa 使用
         const XML = new XMLHttpRequest();
-        let url = `https://www.civildata.cn/api/OpenPlatform/openApi?u=${username}&p=${userpass}&did=${did}&date=${getDate}`;
+        let url = `http://10.3.100.8:88/OpenPlatform/openApi?u=${username}&p=${userpass}&did=${did}&date=${getDate}`;
         XML.open('POST',url,false);
 
         XML.onreadystatechange = function(){
             if (XML.readyState == 4 && XML.status == 200) { //回传成功
+                console.dir(JSON.parse(XML.responseText).result);
                 // console.dir(url);
                 let evirData = JSON.parse(XML.responseText).result.data;
                 let device = JSON.parse(XML.responseText).result.device;
-                // console.dir(evirData);
                 // console.dir(device);
-                // console.dir(zonenum);
+                console.dir(zonenum+'防火分区沉降');
 
 
                 for(let i in device){
@@ -1176,7 +1381,7 @@
         evirEchart('settling4','倾角-Y（度）',angle_Y);
     }
     // webSocket  使用
-    wsUrl = 'ws://192.168.5.100:88/OpenPlatform/webSocket?projectId=211';
+    wsUrl = 'ws://10.3.100.8:88/OpenPlatform/webSocket?projectId=211'
     ws = new WebSocket(wsUrl);
     ws.onopen = function(){
         console.log("client:打开链接");
@@ -1198,6 +1403,7 @@
                 // console.dir(Ynum);
                 // console.dir(num);
                 // console.dir(socketData.data[num].data);
+                console.dir(socketData);
                 if(Datanum >= 0){
                     numData.push([oo,socketData.data[Datanum].data]);
                     numData.shift();

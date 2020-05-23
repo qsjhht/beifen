@@ -24,6 +24,10 @@ class Index extends Adminbase
         $this->apk = ROOT_PATH.'qrcode\innowis.apk';
         $this->url = 'http://'.$_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'].'/index/index/download';
     }
+    public function ind()
+    {
+        return $this->fetch();
+    }
     public function index()
     {
 //dump($this->url);die;

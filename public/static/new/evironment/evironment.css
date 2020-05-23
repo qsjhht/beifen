@@ -29,12 +29,25 @@
     height:18.8vh;
 }
 .divWidthInput{
-    min-width:58px;
+    /*min-width:58px;*/
+    padding-left: 1vh;
+    width: 100%;
+
+}
+.btn_m_r{
+    margin-right: 3.2vh;
 }
 .flex{
     display:flex;
     justify-content: center ;
     align-items: center;
+}
+.flexend{
+    flex-direction: column;
+    align-items: end;
+    justify-content: end;
+    height: 50%;
+    border-right: 1px solid #ffffff;
 }
 .main2Con{
     width:24.1%;
@@ -54,6 +67,7 @@
 .evirSelect{
     height:30px;
     width:120px;
+    padding: 0 2%;
     border-radius:3px;
     border:1px solid #00ffff;
     appearance:none;
@@ -85,6 +99,31 @@
     color:#ffffff;
     
 }
+.contentDivhide{
+    font-weight:700;
+    font-size:1.5rem;
+    text-align:center;
+    line-height:9vh;
+    color:#ffffff;
+    display: none;
+}
+.width30{
+    text-align: center;
+    display: inline-flex;
+    flex-direction: column;
+}
+.pumpdiv{
+    display: flex;
+    justify-content:space-around;
+    height: 9vh
+}
+.pumpcolumn{
+    font-size:1rem;
+    height: 3vh;
+    line-height: 3vh;
+    color:#ffffff;
+    padding: 1vh;
+}
 .contentBelow{
     text-align:center;
     padding:1vh 0;
@@ -95,6 +134,7 @@
     width:50px;
     height:50px;
     margin:0 10px;
+    padding-top: 1vh;
 }
 
 /* 动画 */

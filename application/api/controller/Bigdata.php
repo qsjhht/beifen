@@ -251,7 +251,8 @@ class Bigdata extends Common
 //        dump('----------------------');
 //        dump($callback);
 //        dump('----------------------');
-//        dump($sign);
+//        dump($signs);
+//        dump($sign);die;
 //        dump('----------------------');
 //        dump($signs);
 //        dump($this->params);

@@ -220,11 +220,13 @@
             }
         })
     var eventV;
+    var cameraName;
     map.on('click',function (e) {
         var sele = false;
         var innerHTML;
         map.forEachFeatureAtPixel(e.pixel, function (feature) {
             eventV = e;
+            cameraName = feature.N.Name;
             console.log(feature);
             sele = true;
             //无设置SmUserID情况
@@ -262,7 +264,7 @@
                             innerHTML +="设备位置："+ feature.N.Street+"'/'"+feature.N.Section+"'/'"+feature.N.Cang+"<br>";
                             console.log(innerHTML);
                         }else {
-                            alert('3')
+
                             innerHTML = "设备名称："+eqpInfo.equipment_name+"<br>";
                             innerHTML +="设备编号："+ eqpInfo.equipment_code+"<br>";
                             innerHTML +="设备系统："+ eqpInfo.catalogue_value+"<br>";
@@ -301,38 +303,84 @@
             map.addOverlay(overlay2);
             videoStart()
         }
+    var v1;
+    var conf1;
 
-        var v1;
-        var conf1 = {
-            videoid: 'h5sVideo1',
-            protocol: 'http:', //'http:' or 'https:'
-            host: '192.168.10.21:8080', //'localhost:8080'
-            rootpath: '/', // '/'
-            token: 'a55b',
-            hlsver: 'v1', //v1 is for ts, v2 is for fmp4
-            session: 'c1782caf-b670-42d8-ba90-2244d0b0ee83' //session got from login
-        };
+    var CameraUrl = 'http://192.168.10.21:8080/api/v1/GetSrc'
 
-        function videoStart() {
-            if (conf1.token == '') {
-                // alert('请选择设备');
-                return false;
-            } else {
-                if (v1 != null) {
-                    v1.disconnect();
-                    delete v1;
-                    v1 = null;
-                }
-                if (H5siOS() === true) {
-                    // console.log('H5siOS() === true');
-                    v1 = new H5sPlayerRTC(conf1);
-                } else {
-                    // console.log('H5siOS() === true else');
-                    v1 = new H5sPlayerWS(conf1);
-                }
-                v1.connect();
+    function videoStart() {
+        // alert(cameraName);
+        var ept = cameraName;
+        // XC05D-AF-SPJK-SXJ-03
+
+        var eptNew = '';
+        var eptArr = ept.split('/');
+        for(var i=0;i<eptArr.length;i++){
+            if(i==1||i==2){
+                eptNew += eptArr[i]+'-';
+            }else if(i==3){
+                eptArr[i] = eptArr[i].split('-')[0]+'-'+eptArr[i].split('-')[1].substring(1);
+                eptNew += eptArr[i];
             }
+            else{
+                eptNew += eptArr[i];
+            }
+
         }
+
+        console.log(eptNew);
+        $.ajax({
+            url:CameraUrl,
+            async:false,
+            success:function(data){
+                var arrData = data.src;
+                // console.log(Array.isArray(data.src));
+                // console.log(arrData.length);
+                for(var i =0;i<arrData.length;i++){
+
+                    // console.log(data.src[i].strName);
+                    if(arrData[i].strName == eptNew){
+                        //    alert(arrData[i].strToken)
+                        conf1 = {
+                            videoid:'h5sVideo1',
+                            protocol: 'http:', //'http:' or 'https:'
+                            host: '192.168.10.21:8080', //'localhost:8080'
+                            rootpath:'/', // '/'
+                            token:arrData[i].strToken,
+                            hlsver:'v1', //v1 is for ts, v2 is for fmp4
+                            session:'c1782caf-b670-42d8-ba90-2244d0b0ee83' //session got from login
+                        };
+                    }
+
+                }
+
+
+            }
+        })
+        // console.log(conf1);
+
+        if(conf1.token == ''){
+            // alert('请选择设备');
+            return false;
+        }else{
+            if(v1 != null)
+            {
+                v1.disconnect();
+                delete v1;
+                v1 = null;
+            }
+            if (H5siOS() === true)
+            {
+                console.log('H5siOS() === true');
+                v1 = new H5sPlayerRTC(conf1);
+            }else
+            {
+                console.log('H5siOS() === true else');
+                v1 = new H5sPlayerWS(conf1);
+            }
+            v1.connect();
+        }
+    }
 </script>
 
 <script>

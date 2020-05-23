@@ -10,6 +10,7 @@ input:-moz-placeholder { /* Mozilla Firefox 4 to 18 适配火狐 */  color: #CCC
 .ol-popup-closer {text-decoration: none;  position: absolute;  top: 2px;  right: 8px;  color:#113c58 ;}
 .ol-popup-closer:after {content: "✖";}
 .ol-popup-closer:hover {color:white ;}
+#popup-content{font-size: 16px;line-height: 2}
 #popup2{min-width: 500px;height: 339px;padding: 2px;border: 1px;solid-color: #C0C4CC;background-color: #333333 }
 #backBIM{width: 32px;height: 32px;background-image: url("../../../static/images/gis-img/back.png");position: absolute;
     top: 10px;right: 10px;border: none;background-color: transparent}

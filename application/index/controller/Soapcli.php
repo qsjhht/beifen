@@ -27,14 +27,17 @@ class Soapcli extends Adminbase
         $val = $this->request->param('val');
 //        dump($tags);
 //        dump($val);
-        $soap = new \SoapClient("http://192.168.5.100:5678/Service.asmx?WSDL");
+        $soap = new \SoapClient("http://192.168.10.30/Service.asmx?WSDL");
 
-//        print_r($soap->__getFunctions());
-        $param = array("cpTagName"=>$tags,"cpTagValue"=>$val);
-        $out = $soap->SetKsTagValue($param);
-        $data = $out->SetKsTagValueResult;
-        dump($out);
-        dump($data);
+        print_r($soap->__getFunctions());
+
+//        $tags = $soap->GetTagsList();
+//        dump($tags);
+//        $param = array("cpTagName"=>$tags,"cpTagValue"=>$val);
+//        $out = $soap->SetKsTagValue($param);
+//        $data = $out->SetKsTagValueResult;
+//        dump($out);
+//        dump($data);
 
     }
 

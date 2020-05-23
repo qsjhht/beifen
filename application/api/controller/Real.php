@@ -19,7 +19,6 @@ class Real extends Common
     protected function initialize()
     {
         parent::initialize();
-        $this->soap = new \SoapClient("http://192.168.10.30/Service.asmx?WSDL");
     }
     public function real_time()
     {
@@ -48,8 +47,7 @@ class Real extends Common
         {
             exit("连接失败: " . $conn);
         }
-
-        $sql="SELECT * FROM realtime where TagName = 'M_".$zone."'OR TagName = 'T_".$zone."'OR TagName = 'LT_".$zone."'OR TagName = 'CH4_".$zone."'OR TagName = 'H2S_".$zone."'OR TagName = 'O2_".$zone."'";
+        $sql="SELECT * FROM realtime where TagName = 'M_".$zone."'OR TagName = 'T_".$zone."'OR TagName like 'LT_".$zone."___'OR TagName = 'CH4_".$zone."'OR TagName = 'H2S_".$zone."'OR TagName = 'O2_".$zone."'";
         $rs=odbc_exec($conn,$sql);
 
         if (!$rs)
@@ -63,7 +61,19 @@ class Real extends Common
             /* $compname=odbc_result($rs,"TagName");*/
             //$conname=odbc_result($rs,"DataTime");
 //            if($name == $zone){
-                $yk_arr[odbc_result($rs,"TagName")] = round(odbc_result($rs,"DataValue"),3);
+//            dump($sql);
+//            dump(odbc_result($rs,"TagName"));
+            // 传感器数据小于0时 赋值为0
+
+            if(odbc_result($rs,"DataValue") < 0 || odbc_result($rs,"DataValue") > 9000){
+                $yk_arr[odbc_result($rs,"TagName")] = 0;
+            }else{
+                if(strpos(odbc_result($rs,"TagName"),'LT') !== false){
+                    $yk_arr[odbc_result($rs,"TagName")] = round(odbc_result($rs,"DataValue"),5) * 100;
+                }else{
+                    $yk_arr[odbc_result($rs,"TagName")] = round(odbc_result($rs,"DataValue"),3);
+                }
+            }
 //            }
 //            $yk_arr[$name]['TagName'] = $name;
 //            $yk_arr[$name]['DataTime'] = odbc_result($rs,"DataTime");
@@ -119,15 +129,22 @@ class Real extends Common
 //        }
 //        echo json_encode($realdata,JSON_UNESCAPED_UNICODE);die;
 
-        $pars = $name.'_'.$zone;  //区分 T LT
+
         $conn=odbc_connect('kinghistory','sa','sa');
         if (!$conn)
         {
             exit("连接失败: " . $conn);
         }
         $dateo = date("Y-m-d",strtotime("-1 day"));
+        if($name == 'LT'){
+            $pars ='LT_'.$zone.'___';  //区分 T LT
+        }else{
+            $pars = $name.'_'.$zone;  //区分 T LT
+        }
+
         $sql="SELECT top 200 * FROM history where TagName like '".$pars."' and DataTime > '".$dateo."'  order by DataTime desc";
 
+//        dump($sql);die;
         $rs=odbc_exec($conn,$sql);
 
         if (!$rs)
@@ -142,7 +159,13 @@ class Real extends Common
 //            $yk_arr[substr(odbc_result($rs,"TagName"),16)] =odbc_result($rs,"DataValue");
 //            $yk_arr[] =  array(odbc_result($rs,"DataTime") => odbc_result($rs,"DataValue"));
             if(odbc_result($rs,"DataValue") < 9000){
-                $yk_arr[odbc_result($rs,"DataTime")] = round(odbc_result($rs,"DataValue"),3);
+                // 传感器数据小于0时 赋值为0
+                if(odbc_result($rs,"DataValue") < 0){
+                    $yk_arr[odbc_result($rs,"DataTime")] = 0;
+                }else{
+                    $yk_arr[odbc_result($rs,"DataTime")] = round(odbc_result($rs,"DataValue"),3);
+                }
+//                $yk_arr[odbc_result($rs,"DataTime")] = round(odbc_result($rs,"DataValue"),3);
             }
 //            $name = substr(odbc_result($rs,"TagName"),-5);
             /* $compname=odbc_result($rs,"TagName");*/
@@ -204,7 +227,7 @@ class Real extends Common
 //        }
 //        echo json_encode($realdata,JSON_UNESCAPED_UNICODE);die;
 
-        $pars = $name.'_'.$zone;  //区分 T LT
+        $pars = $name.'_'.$zone.'___';  //区分 T LT
         $conn=odbc_connect('kinghistory','sa','sa');
         if (!$conn)
         {
@@ -226,7 +249,13 @@ class Real extends Common
 //            $yk_arr[substr(odbc_result($rs,"TagName"),16)] =odbc_result($rs,"DataValue");
 //            $yk_arr[] =  array(odbc_result($rs,"DataTime") => odbc_result($rs,"DataValue"));
             if(odbc_result($rs,"DataValue") < 9000) {
-                $yk_arr[] = ['time' => odbc_result($rs, "DataTime"), 'data' => number_format(odbc_result($rs, "DataValue"), '3')];
+
+                // 传感器数据小于0时 赋值为0
+                if(odbc_result($rs,"DataValue") < 0){
+                    $yk_arr[] = ['time' => odbc_result($rs, "DataTime"), 'data' => 0];
+                }else{
+                    $yk_arr[] = ['time' => odbc_result($rs, "DataTime"), 'data' => number_format(odbc_result($rs, "DataValue"), '3')];
+                }
             }
 //            $yk_arr[odbc_result($rs,"DataTime")] = odbc_result($rs,"DataValue");
 //            $name = substr(odbc_result($rs,"TagName"),-5);
@@ -273,7 +302,12 @@ class Real extends Common
         $yk_arr = array();
         while (odbc_fetch_row($rs))
         {
-            $yk_arr[odbc_result($rs,"DataTime")] =round(odbc_result($rs,"DataValue"),3);
+            if(odbc_result($rs,"DataValue") < 0){
+                $yk_arr[odbc_result($rs,"DataTime")] = 0;
+            }else{
+                $yk_arr[odbc_result($rs,"DataTime")] =round(odbc_result($rs,"DataValue"),3);
+            }
+
         }
         odbc_close($conn);
         /*dump($yk_arr);
@@ -514,13 +548,16 @@ class Real extends Common
         while (odbc_fetch_row($rs))
         {
 //            dump(odbc_result($rs,"DataValue"));
-            if (odbc_result($rs,"DataValue") < 9000){
-                $datatime = date("Y-m-d H:i",strtotime(odbc_result($rs,"DataTime")));
+            $datatime = date("Y-m-d H:i",strtotime(odbc_result($rs,"DataTime")));
+
+            if(odbc_result($rs,"DataValue") < 0 || odbc_result($rs,"DataValue") > 9000){
+                $water_arr[$datatime][] =0;
+            }else{
                 $water_arr[$datatime][] =round(odbc_result($rs,"DataValue"),3);
+            }
 //                $logs['l_max'][odbc_result($rs,"DataTime")] = max($water_arr[odbc_result($rs,"DataTime")]);
 //                $logs['l_min'][odbc_result($rs,"DataTime")] = min($water_arr[odbc_result($rs,"DataTime")]);
 //                $logs['l_avg'][odbc_result($rs,"DataTime")] = array_sum($water_arr[odbc_result($rs,"DataTime")])/count($water_arr[odbc_result($rs,"DataTime")]);
-            }
         }
 
 //        dump($water_arr);die;
@@ -561,7 +598,10 @@ class Real extends Common
         $water_arr = array();
         while (odbc_fetch_row($rs))
         {
-            if(odbc_result($rs,"DataValue") < 9000){
+
+            if(odbc_result($rs,"DataValue") < 0 || odbc_result($rs,"DataValue") > 9000){
+                $water_arr[] =0;
+            }else{
                 $water_arr[] =round(odbc_result($rs,"DataValue"),3);
                 $date_time = date("Y-m-d H:i",strtotime(odbc_result($rs,"DataTime")));
             }
@@ -578,8 +618,10 @@ class Real extends Common
     //获取风机/水泵 状态
     public function plc_get()
     {
+        $this->soap = new \SoapClient("http://192.168.10.30/Service.asmx?WSDL");
         $zone = $this->request->param('zone');
         $plc = $this->request->param('plc');
+        $pump_num = $this->request->param('pump_num');
         if($plc == 'fan'){
             $run = 'Run_Fan_'.$zone;
             $model = 'Manual_MODE_Fan_'.$zone;
@@ -589,28 +631,34 @@ class Real extends Common
             $auto = 'Auto_MODE_Fan_'.$zone;
             $s_auto = 'Auto_CMD_Fan_'.$zone;
             $s_manual = 'Manual_CMD_Fan_'.$zone;
-        }else if($plc == 'bump'){
-            $run = 'Run_Bump_'.$zone;
-            $model = 'Manual_MODE_Bump_'.$zone;
+        }else if($plc == 'pump'){
+            if(!$pump_num){
+                $this->return_msg(400,'请传入正确plc参！');
+            }
+            $zone = $zone.'_'.$pump_num;
+            $run = 'Run_Pump_'.$zone;
+            $model = 'Manual_MODE_Pump_'.$zone;
             $msg = $zone.' 水泵';
-            $remote = 'Remote_Bump_'.$zone;
-            $manual = 'Manual_MODE_Bump_'.$zone;
-            $auto = 'Auto_MODE_Bump_'.$zone;
-            $s_auto = 'Auto_CMD_Bump_'.$zone;
-            $s_manual = 'Manual_CMD_Bump_'.$zone;
+            $remote = 'Remote_Pump_'.$zone;
+            $manual = 'Manual_MODE_Pump_'.$zone;
+            $auto = 'Auto_MODE_Pump_'.$zone;
+            $s_auto = 'Auto_CMD_Pump_'.$zone;
+            $s_manual = 'Manual_CMD_Pump_'.$zone;
         }
 
-        dump('远程就地状态为： '.$remote.'----------'.$this->soap->GetKsTagValue(array('cpTagName' => $remote))->GetKsTagValueResult);
-        dump('当前手动模式为：  '.$manual.'----------'.$this->soap->GetKsTagValue(array('cpTagName' => $manual))->GetKsTagValueResult);
-        dump('当前自动模式为：  '.$auto.'----------'.$this->soap->GetKsTagValue(array('cpTagName' => $auto))->GetKsTagValueResult);
-        dump('设置手动模式为：  '.$s_manual.'----------'.$this->soap->GetKsTagValue(array('cpTagName' => $s_manual))->GetKsTagValueResult);
-        dump('设置自动模式为：  '.$s_auto.'----------'.$this->soap->GetKsTagValue(array('cpTagName' => $s_auto))->GetKsTagValueResult);
+//        dump('远程就地状态为： '.$remote.'----------'.$this->soap->GetKsTagValue(array('cpTagName' => $remote))->GetKsTagValueResult);
+//        dump('当前手动模式为：  '.$manual.'----------'.$this->soap->GetKsTagValue(array('cpTagName' => $manual))->GetKsTagValueResult);
+//        dump('当前自动模式为：  '.$auto.'----------'.$this->soap->GetKsTagValue(array('cpTagName' => $auto))->GetKsTagValueResult);
+//        dump('设置手动模式为：  '.$s_manual.'----------'.$this->soap->GetKsTagValue(array('cpTagName' => $s_manual))->GetKsTagValueResult);
+//        dump('设置自动模式为：  '.$s_auto.'----------'.$this->soap->GetKsTagValue(array('cpTagName' => $s_auto))->GetKsTagValueResult);
 
         $run_res =  $this->soap->GetKsTagValue(array('cpTagName' => $run));
-        $model_res =  $this->soap->GetKsTagValue(array('cpTagName' => $model));
-        $data['run_status'] = $run_res->GetKsTagValueResult;
-        $data['run_model'] = $model_res->GetKsTagValueResult;
-        if($run_res->GetKsTagValueResult !== 'ERROR' && $model_res->GetKsTagValueResult !== 'ERROR'){
+        $manual_res =  $this->soap->GetKsTagValue(array('cpTagName' => $manual));
+        //运行状态 是否启动
+        $data['is_run'] = strtolower($run_res->GetKsTagValueResult);
+        //运行模式 是否手动
+        $data['is_manual'] = strtolower($manual_res->GetKsTagValueResult);
+        if($run_res->GetKsTagValueResult !== 'ERROR' || $manual_res->GetKsTagValueResult !== 'ERROR'){
             $this->return_msg(200,$msg.'状态获取成功！',$data);
         }
         $this->return_msg(400,$msg.'状态获取失败');
@@ -619,23 +667,29 @@ class Real extends Common
     //设置风机/水泵 起停状态
     public function plc_set()
     {
+        $this->soap = new \SoapClient("http://192.168.10.30/Service.asmx?WSDL");
         $zone = $this->request->param('zone');
         $status = $this->request->param('status');
         $plc = $this->request->param('plc');
+        $pump_num = $this->request->param('pump_num');
         if($plc == 'fan'){
             $run = 'Run_Fan_'.$zone;
             $remote = 'Remote_Fan_'.$zone;
             $msg = $zone.' 风机修改状态成功！';
             $manual = 'Manual_MODE_Fan_'.$zone;
-            $start = 'FanStart_Fan'.$zone;
-            $stop = 'FanStop_Fan_'.$zone;
-        }else if($plc == 'bump'){
-            $run = 'Run_Bump_'.$zone;
-            $remote = 'Remote_Bump_'.$zone;
+            $start = 'Start_CMD_Fan_'.$zone;
+            $stop = 'Stop_CMD_Fan_'.$zone;
+        }else if($plc == 'pump'){
+            if(!$pump_num){
+                $this->return_msg(400,'请传入正确plc参！');
+            }
+            $zone = $zone.'_'.$pump_num;
+            $run = 'Run_Pump_'.$zone;
+            $remote = 'Remote_Pump_'.$zone;
             $msg = $zone.' 水泵修改状态成功！';
-            $manual = 'Manual_MODE_Bump_'.$zone;
-            $start = 'BumpStart_Bump_'.$zone;
-            $stop = 'BumpStop_Bump_'.$zone;
+            $manual = 'Manual_MODE_Pump_'.$zone;
+            $start = 'Start_CMD_Pump_'.$zone;
+            $stop = 'Stop_CMD_Pump_'.$zone;
         }else{
             $this->return_msg(400,'请传入正确plc参数！');
         }
@@ -648,24 +702,38 @@ class Real extends Common
 //                dump($start);
 //                die;
                 if($status == 'start'){
-                    $stop_res = $this->soap->SetKsTagValue(array('cpTagName' => $stop,'cpTagValue'=>0))->SetKsTagValueResult;
-                    if($stop_res == '0'){
-//                        $manual_res = $this->soap->SetKsTagValue(array('cpTagName' => $manual,'cpTagValue'=>'1'))->SetKsTagValueResult;
-                        $start_res = $this->soap->SetKsTagValue(array('cpTagName' => $start,'cpTagValue'=>1))->SetKsTagValueResult;
-                    }
-                }else if($status == 'stop'){
-                    $start_res = $this->soap->SetKsTagValue(array('cpTagName' => $start,'cpTagValue'=>0))->SetKsTagValueResult;
+//                    $stop_res = $this->soap->SetKsTagValue(array('cpTagName' => $stop,'cpTagValue'=>0))->SetKsTagValueResult;
+//                    dump($stop_res);
+//                    die;
+//                    if($stop_res == '0'){
+//                    $stop_res = $this->soap->SetKsTagValue(array('cpTagName' => $stop,'cpTagValue'=>0))->SetKsTagValueResult;
+//                    if($stop_res == '0'){
+                    $start_res = $this->soap->SetKsTagValue(array('cpTagName' => $start,'cpTagValue'=>'1'))->SetKsTagValueResult;
+                    sleep(2);
+                    $start_res = $this->soap->SetKsTagValue(array('cpTagName' => $start,'cpTagValue'=>'0'))->SetKsTagValueResult;
                     if($start_res == '0'){
-//                        $auto_res = $this->soap->SetKsTagValue(array('cpTagName' => $auto,'cpTagValue'=>'1'))->SetKsTagValueResult;
-                        $stop_res = $this->soap->SetKsTagValue(array('cpTagName' => $stop,'cpTagValue'=>1))->SetKsTagValueResult;
+                        $this->return_msg(200,$msg);
                     }
+                    $this->return_msg(400,'修改模式失败！');
+//                    }
+//                        $start_res = $this->soap->SetKsTagValue(array('cpTagName' => $start,'cpTagValue'=>1))->SetKsTagValueResult;
+//                    }
+                }else if($status == 'stop'){
+//                    $start_res = $this->soap->SetKsTagValue(array('cpTagName' => $start,'cpTagValue'=>0))->SetKsTagValueResult;
+//                    if($start_res == '0'){
+//                        $auto_res = $this->soap->SetKsTagValue(array('cpTagName' => $auto,'cpTagValue'=>'1'))->SetKsTagValueResult;
+                    $stop_res = $this->soap->SetKsTagValue(array('cpTagName' => $stop,'cpTagValue'=>'1'))->SetKsTagValueResult;
+                    sleep(2);
+                    $stop_res = $this->soap->SetKsTagValue(array('cpTagName' => $stop,'cpTagValue'=>'0'))->SetKsTagValueResult;
+                    if($stop_res == '0'){
+                        $this->return_msg(200,$msg);
+                    }
+                    $this->return_msg(400,'修改模式失败！');
+//                    }
                 }else{
                     $this->return_msg(400,'请传入正确model参数！');
                 }
-                if($start_res == '0' && $stop_res == '0'){
-                    $this->return_msg(200,$msg);
-                }
-                $this->return_msg(400,'修改模式失败！');
+
             }else{
                 $this->return_msg(400,'请修改风机模式后再进行操作！');
             }
@@ -677,19 +745,25 @@ class Real extends Common
     //设置风机/水泵 所处模式
     public function plc_model_set()
     {
+        $this->soap = new \SoapClient("http://192.168.10.30/Service.asmx?WSDL");
         $zone = $this->request->param('zone');
         $model = $this->request->param('model');
         $plc = $this->request->param('plc');
+        $pump_num = $this->request->param('pump_num');
         if($plc == 'fan'){
             $remote = 'Remote_Fan_'.$zone;
             $msg = $zone.' 风机模式修改成功！';
             $auto = 'Auto_CMD_Fan_'.$zone;
             $manual = 'Manual_CMD_Fan_'.$zone;
-        }else if($plc == 'bump'){
-            $remote = 'Remote_Bump_'.$zone;
+        }else if($plc == 'pump'){
+            if(!$pump_num){
+                $this->return_msg(400,'请传入正确plc参数！');
+            }
+            $zone = $zone.'_'.$pump_num;
+            $remote = 'Remote_Pump_'.$zone;
             $msg = $zone.' 水泵模式修改成功！';
-            $auto = 'Auto_CMD_Bump_'.$zone;
-            $manual = 'Manual_CMD_Bump_'.$zone;
+            $auto = 'Auto_CMD_Pump_'.$zone;
+            $manual = 'Manual_CMD_Pump_'.$zone;
         }else{
             $this->return_msg(400,'请传入正确plc参数！');
         }
@@ -697,22 +771,34 @@ class Real extends Common
         $remote_res =  $this->soap->GetKsTagValue(array('cpTagName' => $remote));
         if($remote_res->GetKsTagValueResult == 'TRUE'){
             if($model == 'manual'){
-                $auto_res = $this->soap->SetKsTagValue(array('cpTagName' => $auto,'cpTagValue'=>'0'))->SetKsTagValueResult;
-                if($auto_res == '0'){
+//                $auto_res = $this->soap->SetKsTagValue(array('cpTagName' => $auto,'cpTagValue'=>'0'))->SetKsTagValueResult;
+//                if($auto_res == '0'){
                     $manual_res = $this->soap->SetKsTagValue(array('cpTagName' => $manual,'cpTagValue'=>'1'))->SetKsTagValueResult;
+                    sleep(2);
+                    $manual_res = $this->soap->SetKsTagValue(array('cpTagName' => $manual,'cpTagValue'=>'0'))->SetKsTagValueResult;
+//                }
+                if($manual_res == '0'){
+                    $this->return_msg(200,$msg);
+                }else{
+                    $this->return_msg(400,'修改模式失败！');
                 }
             }else if($model == 'auto'){
-                $manual_res = $this->soap->SetKsTagValue(array('cpTagName' => $manual,'cpTagValue'=>'0'))->SetKsTagValueResult;
-                if($manual_res == '0'){
+//                $manual_res = $this->soap->SetKsTagValue(array('cpTagName' => $manual,'cpTagValue'=>'0'))->SetKsTagValueResult;
+//                if($manual_res == '0'){
                     $auto_res = $this->soap->SetKsTagValue(array('cpTagName' => $auto,'cpTagValue'=>'1'))->SetKsTagValueResult;
+                    sleep(2);
+                    $auto_res = $this->soap->SetKsTagValue(array('cpTagName' => $auto,'cpTagValue'=>'0'))->SetKsTagValueResult;
+//                }
+                if($auto_res == '0'){
+                    $this->return_msg(200,$msg);
+                }else{
+                    $this->return_msg(400,'修改模式失败！');
                 }
             }else{
                 $this->return_msg(400,'请传入正确model参数！');
             }
-            if($auto_res == '0' && $manual_res == '0'){
-                $this->return_msg(200,$msg);
-            }
-            $this->return_msg(400,'修改模式失败！');
+
+
         }else if($remote_res->GetKsTagValueResult == 'ERROR'){
             $this->return_msg(400,'请检查传感器！');
         }
@@ -748,7 +834,7 @@ class Real extends Common
 //            dump(odbc_result($rs,"DataValue"));
             if (odbc_result($rs,"DataValue") < 9000){
                 $datatime = date("Y-m-d H:i",strtotime(odbc_result($rs,"DataTime")));
-                $item_arr[$datatime][odbc_result($rs,"tagname")] = (float)odbc_result($rs,"DataValue");
+                $item_arr[$datatime][odbc_result($rs,"tagname")] = round((float)odbc_result($rs,"DataValue"),3);
 //                dump($item_arr);
 //                $j_arr[$datatime][] =round(odbc_result($rs,"DataValue"),3);
 //                $logs['l_max'][odbc_result($rs,"DataTime")] = max($water_arr[odbc_result($rs,"DataTime")]);
@@ -757,7 +843,7 @@ class Real extends Common
             }
         }
         foreach ($item_arr as $key=> $item) {
-            $log_arr[$key] = array_sum($item);
+            $log_arr[] = array($key,array_sum($item));
         }
 //        dump($log_arr);die;
         $this->return_msg(200,'查询成功！',$log_arr);
@@ -800,7 +886,7 @@ class Real extends Common
 //            dump($datatime);
             $j += (float)odbc_result($rs,"DataValue");
         }
-        $j_arr[$datatime] = $j;
+        $j_arr[] = [$datatime,round($j,3)];
         odbc_close($conn);
         $this->return_msg(200,'查询成功！',$j_arr);
     }
